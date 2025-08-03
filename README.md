@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 IndieBox
 
-## Getting Started
+**IndieBox** é uma plataforma web inspirada no [itch.io](https://itch.io), dedicada exclusivamente a **jogos indie gratuitos**. Nosso objetivo é criar um espaço acessível onde desenvolvedores independentes possam compartilhar suas criações e jogadores descubram experiências únicas, criativas e **100% sem custo**.
 
-First, run the development server:
+---
+
+## 🌟 Visão Geral
+
+* 🎯 **Foco**: Jogos indie gratuitos
+* 🛠️ **Para quem desenvolve**: Um ambiente amigável para publicar, atualizar e divulgar seus projetos
+* 🕹️ **Para quem joga**: Um catálogo curado de jogos independentes com foco na diversidade e originalidade
+* 💬 **Comunidade**: Espaço para avaliações, comentários e apoio mútuo entre devs e jogadores
+
+---
+
+## 📷 Capturas de Tela (opcional)
+
+> *Adicione imagens aqui se já houver protótipo/interface pronta.*
+
+---
+
+## 🚀 Funcionalidades Principais
+
+* ✅ Cadastro e login de usuários (devs e jogadores)
+* ✅ Upload e gerenciamento de projetos
+* ✅ Página de perfil para desenvolvedores
+* ✅ Sistema de busca e filtros por gênero, plataforma e popularidade
+* ✅ Visualização de detalhes do jogo com screenshots, descrição, e link para download ou jogatina online
+* ✅ Avaliações e comentários da comunidade
+* ✅ Integração com redes sociais (futuramente)
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+> Substitua conforme o stack usado
+
+* Front-end: Next.js + Tailwind CSS
+* Back-end: Next.js
+* Banco de Dados: Firestore 🔥
+* Autenticação: Firebase 🧑🏻‍💻
+* Hospedagem: GitHub Pages
+
+---
+
+## 📦 Como rodar o projeto localmente
 
 ```bash
+# Clone este repositório
+git clone https://github.com/Victor-Gabriel-Barbosa/indibox.git
+
+# Acesse a pasta do projeto
+cd indibox
+
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🤝 Contribuições
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sinta-se à vontade para abrir **issues**, enviar **pull requests** ou sugerir ideias. A IndieBox é um projeto comunitário, feito para devs e por devs!
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Licença
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este projeto está licenciado sob a [MIT License](LICENSE).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💡 Ideias Futuras
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* 💾 Galeria de jogos para baixar direto do navegador
+* 🌐 Sistema de tags e curadoria por temas
+* 📈 Métricas para desenvolvedores acompanharem o desempenho de seus jogos
+* 🧑‍🤝‍🧑 Rankings e recomendações personalizadas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ✨ Entre em Contato
+
+> Links de contato
+
+* GitHub: [@Victor-Gabriel-Barbosa](https://github.com/Victor-Gabriel-Barbosa)
+* GitHub: [@Guiscoob7](https://github.com/Guiscoob7)
+* GitHub: [@Maria-Eduarda-FT](https://github.com/Maria-Eduarda-FT)
