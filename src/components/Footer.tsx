@@ -5,13 +5,13 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <h5 className="font-bold text-lg mb-4">IndieBox</h5>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
+            <p className="text-gray-600 dark:text-gray-300 text-md">
               A plataforma definitiva para jogos indie gratuitos, conectando desenvolvedores e jogadores apaixonados.
             </p>
           </div>
           <div>
             <h6 className="font-semibold mb-4">Jogadores</h6>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+            <ul className="space-y-2 text-md text-gray-600 dark:text-gray-300">
               <li><a href="#" className="hover:text-blue-600 transition-colors">Explorar Jogos</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Gêneros</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Novidades</a></li>
@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
           <div>
             <h6 className="font-semibold mb-4">Desenvolvedores</h6>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+            <ul className="space-y-2 text-md text-gray-600 dark:text-gray-300">
               <li><a href="#" className="hover:text-blue-600 transition-colors">Publicar Jogo</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Documentação</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Comunidade</a></li>
@@ -27,14 +27,14 @@ export default function Footer() {
           </div>
           <div>
             <h6 className="font-semibold mb-4">Suporte</h6>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+            <ul className="space-y-2 text-md text-gray-600 dark:text-gray-300">
               <li><a href="#" className="hover:text-blue-600 transition-colors">Ajuda</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Contato</a></li>
               <li><a href="#" className="hover:text-blue-600 transition-colors">Reportar Bug</a></li>
             </ul>
           </div>
         </div>
-        <div className="border-t mt-8 pt-8 text-center text-sm text-gray-600 dark:text-gray-300">
+        <div className="border-t mt-8 pt-8 text-center text-md text-gray-600 dark:text-gray-300">
           <p>&copy; 2025 IndieBox. Todos os direitos reservados.</p>
         </div>
       </div>
