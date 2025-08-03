@@ -1,10 +1,15 @@
+import Image from 'next/image';
+
 export default function Footer() {
   return (
     <footer className="border-t py-12 px-4">
       <div className="container mx-auto">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <h5 className="font-bold text-lg mb-4">IndieBox</h5>
+            <div className="flex items-center space-x-2 mb-4">
+              <Image src="/assets/favicon/favicon.svg" alt="IndiBox" width={64} height={64} />
+              <h5 className="font-bold text-lg">IndiBox</h5>
+            </div>
             <p className="text-gray-600 dark:text-gray-300 text-md">
               A plataforma definitiva para jogos indie gratuitos, conectando desenvolvedores e jogadores apaixonados.
             </p>
@@ -35,7 +40,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t mt-8 pt-8 text-center text-md text-gray-600 dark:text-gray-300">
-          <p>&copy; 2025 IndieBox. Todos os direitos reservados.</p>
+          <p>&copy; 2025 IndiBox. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
