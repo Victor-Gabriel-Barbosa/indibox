@@ -1,9 +1,11 @@
 export { default as Header } from './Header';
 export { default as Footer } from './Footer';
 export { default as Layout } from './Layout';
+export { default as LoginModal } from './LoginModal';
+export { default as Providers } from './Providers';
 
 import { BsEmojiLaughingFill, BsStars, BsController, BsPersonCircle, BsFillPlusCircleFill, BsCloudArrowUp } from "react-icons/bs";
-import { FaPeopleGroup, FaArrowRightToBracket } from "react-icons/fa6";
+import { FaPeopleGroup, FaArrowRightToBracket, FaGoogle, FaGithub } from "react-icons/fa6";
 
 export const Icons = {
   BsEmojiLaughingFill,
@@ -14,4 +16,6 @@ export const Icons = {
   FaArrowRightToBracket,
   BsFillPlusCircleFill,
   BsCloudArrowUp,
+  FaGoogle,
+  FaGithub,
 };
