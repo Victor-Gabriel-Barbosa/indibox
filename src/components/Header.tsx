@@ -128,10 +128,26 @@ export default function Header() {
             {/* Botão do Menu - Mobile */}
             <button
               onClick={() => setMenuMobileAtivo(!menuMobileAtivo)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors relative w-10 h-10 flex items-center justify-center"
               aria-label="Menu"
             >
-              {menuMobileAtivo ? (<Icons.FaXmark className="w-6 h-6" />) : (<Icons.FaBars className="w-6 h-6" />)}
+              <div className="w-6 h-6 flex flex-col justify-center items-center">
+                <span
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${
+                    menuMobileAtivo ? 'rotate-45 translate-y-1.5' : 'rotate-0 translate-y-0'
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out my-1 ${
+                    menuMobileAtivo ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${
+                    menuMobileAtivo ? '-rotate-45 -translate-y-1.5' : 'rotate-0 translate-y-0'
+                  }`}
+                />
+              </div>
             </button>
           </div>
 
