@@ -40,7 +40,7 @@ export default function Header() {
   return (
     <>
       <header className="border-b bg-background sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-2 md:py-3">
+        <div className="container mx-auto px-4 py-1 md:py-2">
           {/* Linha Principal do Cabeçalho */}
           <div className="flex items-center justify-between">
             {/* Seção da Logo */}

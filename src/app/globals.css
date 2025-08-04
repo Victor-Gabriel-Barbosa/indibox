@@ -87,3 +87,37 @@ body {
   padding: 0; 
   overflow: hidden;
 }
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover\:scale-150 {
+  transform: scale(1.5);
+}
+
+.group .w-16.h-16 {
+  position: relative;
+}
+
+.group .w-16.h-16::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: inherit;
+  opacity: 0;
+  animation: shine 2s infinite;
+}
+
+.group:hover .w-16.h-16::before {
+  opacity: 1;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}

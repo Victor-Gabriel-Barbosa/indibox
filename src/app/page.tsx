@@ -91,33 +91,65 @@ export default function Home() {
               A plataforma perfeita para descobrir e compartilhar jogos indie gratuitos, criada por e para a comunidade.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-blue-700 p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
-                <Icons.BsEmojiLaughingFill className="w-8 h-8 text-blue-600" />
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-blue-600 overflow-hidden">
+              {/* Gradiente sutil de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Icons.BsEmojiLaughingFill className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300">
+                  100% Gratuito
+                </h4>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed text-base">
+                  Todos os jogos são completamente gratuitos. Sem taxa, sem pegadinhas, sem compras obrigatórias.
+                </p>
               </div>
-              <h4 className="text-xl font-semibold mb-2 text-white">100% Gratuito</h4>
-              <p className="text-gray-600 dark:text-gray-200">
-                Todos os jogos são completamente gratuitos. Sem taxa, sem pegadinhas, sem compras obrigatórias.
-              </p>
+              
+              {/* Elemento decorativo */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-blue-100 dark:bg-blue-800 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
             </div>
-            <div className="bg-white dark:bg-blue-700 p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
-                <Icons.FaPeopleGroup className="w-8 h-8 text-green-600" />
+            
+            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-blue-600 overflow-hidden">
+              {/* Gradiente sutil de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Icons.FaPeopleGroup className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors duration-300">
+                  Comunidade
+                </h4>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed text-base">
+                  Conecte-se com desenvolvedores e jogadores apaixonados por experiências criativas e inovadoras.
+                </p>
               </div>
-              <h4 className="text-xl font-semibold mb-2 text-white">Comunidade</h4>
-              <p className="text-gray-600 dark:text-gray-200">
-                Conecte-se com desenvolvedores e jogadores apaixonados por experiências criativas e inovadoras.
-              </p>
+              
+              {/* Elemento decorativo */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-green-100 dark:bg-green-800 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
             </div>
-            <div className="bg-white dark:bg-blue-700 p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
-                <Icons.BsStars className="w-8 h-8 text-purple-600" />
+            
+            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-blue-600 overflow-hidden">
+              {/* Gradiente sutil de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Icons.BsStars className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-300">
+                  Criatividade
+                </h4>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed text-base">
+                  Descubra experiências únicas e experimentais que só o desenvolvimento indie pode oferecer.
+                </p>
               </div>
-              <h4 className="text-xl font-semibold mb-2 text-white">Criatividade</h4>
-              <p className="text-gray-600 dark:text-gray-200">
-                Descubra experiências únicas e experimentais que só o desenvolvimento indie pode oferecer.
-              </p>
+              
+              {/* Elemento decorativo */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-purple-100 dark:bg-purple-800 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
             </div>
           </div>
         </div>
