@@ -4,7 +4,7 @@ export { default as Layout } from './Layout';
 export { default as LoginModal } from './LoginModal';
 export { default as Providers } from './Providers';
 
-import { BsEmojiLaughingFill, BsStars, BsController, BsPersonCircle, BsFillPlusCircleFill, BsCloudArrowUp } from "react-icons/bs";
+import { BsEmojiLaughingFill, BsStars, BsController, BsPersonCircle, BsFillPlusCircleFill, BsCloudArrowUp, BsSunFill, BsFillMoonStarsFill, BsLaptopFill } from "react-icons/bs";
 import { FaPeopleGroup, FaArrowRightToBracket, FaGoogle, FaGithub, FaBars, FaXmark } from "react-icons/fa6";
 
 export const Icons = {
@@ -20,4 +20,7 @@ export const Icons = {
   FaGithub,
   FaBars,
   FaXmark,
+  BsSunFill,
+  BsFillMoonStarsFill,
+  BsLaptopFill,
 };
