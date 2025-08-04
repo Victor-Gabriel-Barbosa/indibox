@@ -1,4 +1,9 @@
+'use client';
+
+import Image from 'next/image';
 import { Header, Footer, Icons } from '@/components';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 
 export default function Home() {
   return (
@@ -27,7 +32,7 @@ export default function Home() {
       </section>
 
       {/* Seção de Informações */}
-      <section id="jogos" className="py-20 px-4 bg-gray-50 dark:bg-blue-600">
+      <section id="jogos" className="py-20 px-4 bg-gray-50 dark:bg-blue-600 mb-4">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold mb-4 text-white">Por que IndiBox?</h3>
@@ -67,6 +72,57 @@ export default function Home() {
         </div>
       </section>
 
+      <Swiper
+        effect={'coverflow'}
+        grabCursor={true}
+        loop={true}
+        centeredSlides={true}
+        slidesPerView={3}
+        spaceBetween={10}
+        coverflowEffect={{
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 0.5,
+          slideShadows: true
+        }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        pagination={true}
+        modules={[EffectCoverflow, Pagination, Autoplay]}
+        className="swiper-top-games"
+      >
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Game showcase 1" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-2.jpg" alt="Game showcase 2" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-3.jpg" alt="Game showcase 3" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-4.jpg" alt="Game showcase 4" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-5.jpg" alt="Game showcase 5" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-6.jpg" alt="Game showcase 6" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-7.jpg" alt="Game showcase 7" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-8.jpg" alt="Game showcase 8" width={300} height={300} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Image src="https://swiperjs.com/demos/images/nature-9.jpg" alt="Game showcase 9" width={300} height={300} />
+        </SwiperSlide>
+      </Swiper>
+
       {/* Seção de Exploração */}
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
@@ -75,7 +131,7 @@ export default function Home() {
             Junte-se à nossa comunidade de jogadores e desenvolvedores apaixonados por jogos indie gratuitos.
           </p>
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
-            <div className="flex items-center space-x-2 "> 
+            <div className="flex items-center space-x-2 ">
               <Icons.BsController className="w-8 h-8" />
               <span>Explorar Jogos Agora</span>
             </div>

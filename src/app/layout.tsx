@@ -3,6 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components";
 import "./globals.css";
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import 'swiper/css/effect-coverflow';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
