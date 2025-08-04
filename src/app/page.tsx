@@ -36,13 +36,13 @@ export default function Home() {
         grabCursor={true}
         loop={true}
         centeredSlides={true}
-        slidesPerView={3}
+        slidesPerView={5}
         spaceBetween={10}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
           depth: 100,
-          modifier: 0.5,
+          modifier: 1,
           slideShadows: true
         }}
         autoplay={{
