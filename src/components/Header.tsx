@@ -200,7 +200,7 @@ export default function Header() {
                           className={`flex flex-col items-center space-y-1 p-3 rounded-lg transition-colors ${
                             tema === itemTema.id
                               ? 'text-blue-600 border border-blue-200'
-                              : 'text-gray-600'
+                              : 'text-gray-600 hover:bg-gray-100'
                           }`}
                         >
                           <IconeTema className="w-5 h-5" />
