@@ -36,7 +36,7 @@ export default function Home() {
         grabCursor={true}
         loop={true}
         centeredSlides={true}
-        slidesPerView={5}
+        slidesPerView={3}
         spaceBetween={10}
         coverflowEffect={{
           rotate: 50,
@@ -54,31 +54,31 @@ export default function Home() {
         className="swiper-top-games mb-20 mx-auto"
       >
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Game showcase 1" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Game showcase 1" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-2.jpg" alt="Game showcase 2" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-2.jpg" alt="Game showcase 2" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-3.jpg" alt="Game showcase 3" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-3.jpg" alt="Game showcase 3" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-4.jpg" alt="Game showcase 4" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-4.jpg" alt="Game showcase 4" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-5.jpg" alt="Game showcase 5" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-5.jpg" alt="Game showcase 5" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-6.jpg" alt="Game showcase 6" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-6.jpg" alt="Game showcase 6" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-7.jpg" alt="Game showcase 7" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-7.jpg" alt="Game showcase 7" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-8.jpg" alt="Game showcase 8" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-8.jpg" alt="Game showcase 8" fill />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-9.jpg" alt="Game showcase 9" width={300} height={300} />
+          <Image src="https://swiperjs.com/demos/images/nature-9.jpg" alt="Game showcase 9" fill />
         </SwiperSlide>
       </Swiper>
 
