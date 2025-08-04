@@ -5,7 +5,7 @@ export { default as LoginModal } from './LoginModal';
 export { default as Providers } from './Providers';
 
 import { BsEmojiLaughingFill, BsStars, BsController, BsPersonCircle, BsFillPlusCircleFill, BsCloudArrowUp } from "react-icons/bs";
-import { FaPeopleGroup, FaArrowRightToBracket, FaGoogle, FaGithub } from "react-icons/fa6";
+import { FaPeopleGroup, FaArrowRightToBracket, FaGoogle, FaGithub, FaBars, FaXmark } from "react-icons/fa6";
 
 export const Icons = {
   BsEmojiLaughingFill,
@@ -18,4 +18,6 @@ export const Icons = {
   BsCloudArrowUp,
   FaGoogle,
   FaGithub,
+  FaBars,
+  FaXmark,
 };
