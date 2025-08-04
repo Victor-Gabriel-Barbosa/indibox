@@ -29,7 +29,7 @@ export default function Header() {
             </div>
 
             {/* Barra de Navegação - Desktop */}
-            <nav className="hidden lg:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center space-x-6">
               <a href="#jogos" className="text-sm md:text-base hover:text-blue-600 transition-colors">
                 Jogos
               </a>
