@@ -128,7 +128,7 @@ export default function Header() {
             {/* Botão do Menu - Mobile */}
             <button
               onClick={() => setMenuMobileAtivo(!menuMobileAtivo)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors relative w-10 h-10 flex items-center justify-center"
+              className="md:hidden p-2 rounded-lg transition-colors relative w-10 h-10 flex items-center justify-center"
               aria-label="Menu"
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
@@ -200,7 +200,7 @@ export default function Header() {
                           className={`flex flex-col items-center space-y-1 p-3 rounded-lg transition-colors ${
                             tema === itemTema.id
                               ? 'text-blue-600 border border-blue-200'
-                              : 'text-gray-600 hover:bg-gray-100'
+                              : 'text-gray-600'
                           }`}
                         >
                           <IconeTema className="w-5 h-5" />
