@@ -51,4 +51,4 @@ export const testarConexao = async () => {
 };
 
 // Exporta status de configuração
-export const configurado = supabaseConfigurado;
+export const estaConfigurado = supabaseConfigurado;

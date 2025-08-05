@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
-import { supabase, configurado } from '@/lib/supabase';
+import { supabase, estaConfigurado } from '@/lib/supabase';
 import { upsertUsuario } from '@/lib/database';
 import { gerarUsuarioUUID } from '@/lib/uuid';
 
@@ -25,12 +25,12 @@ const handler = NextAuth({
     async signIn({ user, account, profile }) {
       try {
         // Se Supabase não estiver configurado, apenas permite o login
-        if (!configurado || !supabase) {
+        if (!estaConfigurado || !supabase) {
           console.warn('⚠️ Supabase não configurado. Login permitido sem sincronização.');
           return true;
         }
 
-        // Criar ou atualizar usuário no Supabase
+        // Cria ou atualiza usuário no Supabase
         const dadosUsuario = {
           id: gerarUsuarioUUID(user.email!), // Gerar UUID baseado no email
           email: user.email!,
@@ -56,13 +56,13 @@ const handler = NextAuth({
         return true;
       }
     },
-    async session({ session, token }) {
-      // Adicionar ID do usuário à sessão
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
+    async session({ session: sessao, token }) {
+      // Adiciona ID do usuário à sessão
+      if (sessao.user && token.sub) {
+        sessao.user.id = token.sub;
         
-        // Buscar dados atualizados do usuário no Supabase (se configurado)
-        if (configurado && supabase) {
+        // Busca dados atualizados do usuário no Supabase (se configurado)
+        if (estaConfigurado && supabase) {
           try {
             const { data: dadosUsuario } = await supabase
               .from('usuarios')
@@ -71,11 +71,11 @@ const handler = NextAuth({
               .single();
             
             if (dadosUsuario) {
-              session.user.papel = dadosUsuario.papel;
-              session.user.biografia = dadosUsuario.biografia;
-              session.user.site = dadosUsuario.site;
-              session.user.nome_usuario_github = dadosUsuario.nome_usuario_github;
-              session.user.nome_usuario_twitter = dadosUsuario.nome_usuario_twitter;
+              sessao.user.papel = dadosUsuario.papel;
+              sessao.user.biografia = dadosUsuario.biografia;
+              sessao.user.site = dadosUsuario.site;
+              sessao.user.nome_usuario_github = dadosUsuario.nome_usuario_github;
+              sessao.user.nome_usuario_twitter = dadosUsuario.nome_usuario_twitter;
             }
           } catch (error) {
             console.error('Erro ao buscar dados do usuário:', error);
@@ -83,21 +83,13 @@ const handler = NextAuth({
         }
       }
       
-      return session;
+      return sessao;
     },
     async jwt({ token, user }) {
-      // Persistir o ID do usuário no token
-      if (user) {
-        token.sub = user.id;
-      }
+      // Persiste o ID do usuário no token
+      if (user) token.sub = user.id;
       
       return token;
-    },
-  },
-  events: {
-    async signOut({ token }) {
-      // Log de logout (opcional)
-      console.log('Usuário fez logout:', token.sub);
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

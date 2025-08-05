@@ -161,17 +161,17 @@ export function useBuscaJogos() {
 
 // Hook para gerenciar favoritos
 export function useFavoritos() {
-  const { data: secao } = useSession();
+  const { data: sessao } = useSession();
   const [favoritos, setFavoritos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchFavoritos = async () => {
-    if (!secao?.user?.id) return;
+    if (!sessao?.user?.id) return;
 
     try {
       setLoading(true);
-      const { data, error } = await getFavoritosUsuario(secao.user.id);
+      const { data, error } = await getFavoritosUsuario(sessao.user.id);
       
       if (error) {
         setError(error.message);
@@ -191,18 +191,18 @@ export function useFavoritos() {
   };
 
   const alternarFavorito = async (idJogo: string) => {
-    if (!secao?.user?.id) return false;
+    if (!sessao?.user?.id) return false;
 
     try {
-      const { ehFavorito } = await ehJogoFavoritado(secao.user.id, idJogo);
+      const { ehFavorito } = await ehJogoFavoritado(sessao.user.id, idJogo);
       
       if (ehFavorito) {
-        const { success, error } = await removerDosFavoritos(secao.user.id, idJogo);
+        const { success, error } = await removerDosFavoritos(sessao.user.id, idJogo);
         if (error) throw error;
         await fetchFavoritos(); // Recarrega favoritos
         return !success;
       } else {
-        const { data, error } = await adicionarAosFavoritos(secao.user.id, idJogo);
+        const { data, error } = await adicionarAosFavoritos(sessao.user.id, idJogo);
         if (error) throw error;
         await fetchFavoritos(); // Recarrega favoritos
         return !!data;
@@ -214,10 +214,10 @@ export function useFavoritos() {
   };
 
   const verificarSeFavoritado = async (idJogo: string): Promise<boolean> => {
-    if (!secao?.user?.id) return false;
+    if (!sessao?.user?.id) return false;
 
     try {
-      const { ehFavorito } = await ehJogoFavoritado(secao.user.id, idJogo);
+      const { ehFavorito } = await ehJogoFavoritado(sessao.user.id, idJogo);
       return ehFavorito;
     } catch (err) {
       console.error('Erro ao verificar favorito:', err);
@@ -226,9 +226,9 @@ export function useFavoritos() {
   };
 
   useEffect(() => {
-    if (secao?.user?.id) fetchFavoritos();
+    if (sessao?.user?.id) fetchFavoritos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secao?.user?.id]);
+  }, [sessao?.user?.id]);
 
   return { 
     favoritos, 

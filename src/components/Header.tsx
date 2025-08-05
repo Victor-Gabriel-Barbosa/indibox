@@ -7,7 +7,7 @@ import { Icons, LoginModal } from '@/components';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function Header() {
-  const { data: session } = useSession();
+  const { data: sessao } = useSession();
   const { tema, setTema } = useTheme();
   const [modalDeLoginAberto, setModalDeLoginAberto] = useState(false);
   const [menuMobileAtivo, setMenuMobileAtivo] = useState(false);
@@ -112,8 +112,8 @@ export default function Header() {
                 className="text-sm lg:text-base hover:text-blue-600 transition-colors"
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
-                  <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${session ? 'rotate-180' : ''}`} />
-                  <span className="hidden lg:inline">{session ? session.user?.name : 'Entrar'}</span>
+                  <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
+                  <span className="hidden lg:inline">{sessao ? sessao.user?.name : 'Entrar'}</span>
                 </div>
               </button>
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-sm lg:text-base transition-colors">
@@ -216,8 +216,8 @@ export default function Header() {
                   }}
                   className="flex items-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
                 >
-                  <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${session ? 'rotate-180' : ''}`} />
-                  <span>{session ? session.user?.name : 'Entrar'}</span>
+                  <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
+                  <span>{sessao ? sessao.user?.name : 'Entrar'}</span>
                 </button>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full">
                   <div className="flex items-center justify-center space-x-2">
@@ -232,8 +232,8 @@ export default function Header() {
       </header>
 
       <LoginModal
-        isOpen={modalDeLoginAberto}
-        onClose={() => setModalDeLoginAberto(false)}
+        estaAberto={modalDeLoginAberto}
+        aoFechar={() => setModalDeLoginAberto(false)}
       />
     </>
   );

@@ -35,7 +35,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
     setTemaEfetivo(temaParaAplicar);
 
-    // Aplicar no documento
+    // Aplica no documento
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
       

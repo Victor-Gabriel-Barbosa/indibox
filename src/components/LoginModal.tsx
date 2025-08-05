@@ -7,36 +7,36 @@ import { Icons } from '@/components';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  estaAberto: boolean;
+  aoFechar: () => void;
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const { data: session, status } = useSession();
-  const [isLoading, setIsLoading] = useState<string | null>(null);
+export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
+  const { data: sessao, status } = useSession();
+  const [estaCarregando, setEstaCarregando] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  if (!estaAberto) return null;
 
-  const handleSignIn = async (provider: string) => {
-    setIsLoading(provider);
+  const handleSignIn = async (provedor: string) => {
+    setEstaCarregando(provedor);
     try {
-      await signIn(provider, { callbackUrl: '/' });
+      await signIn(provedor, { callbackUrl: '/' });
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     } finally {
-      setIsLoading(null);
+      setEstaCarregando(null);
     }
   };
 
   const handleSignOut = async () => {
-    setIsLoading('signout');
+    setEstaCarregando('signout');
     try {
       await signOut({ callbackUrl: '/' });
-      onClose();
+      aoFechar();
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     } finally {
-      setIsLoading(null);
+      setEstaCarregando(null);
     }
   };
 
@@ -45,10 +45,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
         <div className="relative mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
-            {session ? 'Minha Conta' : 'Entrar'}
+            {sessao ? 'Minha Conta' : 'Entrar'}
           </h2>
           <button
-            onClick={onClose}
+            onClick={aoFechar}
             className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,12 +61,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-        ) : session ? (
+        ) : sessao ? (
           <div className="text-center">
             <div className="mb-4">
-              {session.user?.image && (
+              {sessao.user?.image && (
                 <Image
-                  src={session.user.image}
+                  src={sessao.user.image}
                   alt="Avatar"
                   width={64}
                   height={64}
@@ -74,16 +74,16 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 />
               )}
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Olá, {session.user?.name}!
+                Olá, {sessao.user?.name}!
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">{session.user?.email}</p>
+              <p className="text-gray-600 dark:text-gray-300">{sessao.user?.email}</p>
             </div>
             <button
               onClick={handleSignOut}
-              disabled={isLoading === 'signout'}
+              disabled={estaCarregando === 'signout'}
               className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
             >
-              {isLoading === 'signout' ? (
+              {estaCarregando === 'signout' ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
               ) : (
                 <>
@@ -101,10 +101,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
             <button
               onClick={() => handleSignIn('google')}
-              disabled={isLoading !== null}
+              disabled={estaCarregando !== null}
               className="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-3 disabled:opacity-50"
             >
-              {isLoading === 'google' ? (
+              {estaCarregando === 'google' ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
               ) : (
                 <>
@@ -116,10 +116,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
             <button
               onClick={() => handleSignIn('github')}
-              disabled={isLoading !== null}
+              disabled={estaCarregando !== null}
               className="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-3 disabled:opacity-50"
             >
-              {isLoading === 'github' ? (
+              {estaCarregando === 'github' ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
                 <>

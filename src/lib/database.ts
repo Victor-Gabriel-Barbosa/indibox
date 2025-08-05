@@ -1,4 +1,4 @@
-import { supabase, supabaseAdmin, configurado } from './supabase';
+import { supabase, supabaseAdmin, estaConfigurado } from './supabase';
 import type { Database } from '@/types/supabase';
 import { ehValidoUUID, gerarUsuarioUUID } from './uuid';
 
@@ -67,7 +67,7 @@ const jogosMock = [
  * Busca todos os jogos publicados
  */
 export async function getJogosPublicados() {
-  if (!configurado || !supabase) return { data: jogosMock, error: null };
+  if (!estaConfigurado || !supabase) return { data: jogosMock, error: null };
 
   try {
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export async function getJogosPublicados() {
  * Busca jogos em destaque
  */
 export async function getJogosEmDestaque() {
-  if (!configurado || !supabase) return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
+  if (!estaConfigurado || !supabase) return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
 
   try {
     const { data, error } = await supabase
@@ -119,7 +119,7 @@ export async function getJogosEmDestaque() {
  * Busca um jogo por ID
  */
 export async function getJogoPorID(id: string) {
-  if (!configurado || !supabase) {
+  if (!estaConfigurado || !supabase) {
     const jogo = jogosMock.find(j => j.id === id);
     return { data: jogo || null, error: null };
   }
@@ -148,7 +148,7 @@ export async function getJogoPorID(id: string) {
  * Busca jogos por texto
  */
 export async function buscarJogos(query: string) {
-  if (!configurado || !supabase) {
+  if (!estaConfigurado || !supabase) {
     const filtrado = jogosMock.filter(jogo => 
       jogo.titulo.toLowerCase().includes(query.toLowerCase()) ||
       jogo.descricao.toLowerCase().includes(query.toLowerCase()) ||
@@ -190,7 +190,7 @@ export async function buscarJogos(query: string) {
  * Cria ou atualiza um usuário
  */
 export async function upsertUsuario(usuario: UsuarioInserido) {
-  if (!configurado || !supabase) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
+  if (!estaConfigurado || !supabase) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
 
   try {
     // Valida e corrige ID se necessário
@@ -202,10 +202,10 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
     const dadosUsuario = { ...usuario, id: usuarioId };
 
     // Usa supabaseAdmin para contornar políticas RLS durante criação inicial
-    const clienteParaUsar = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
+    const clienteDB = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
 
     // Usa upsert nativo do Supabase com email como chave de conflito
-    const { data, error } = await clienteParaUsar
+    const { data, error } = await clienteDB
       .from('usuarios')
       .upsert(dadosUsuario, {
         onConflict: 'email',
@@ -216,7 +216,7 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
 
     if (error) {
       // Se foi erro de RLS com cliente normal tenta com admin
-      if (error?.code === '42501' && clienteParaUsar === supabase && supabaseAdmin) {
+      if (error?.code === '42501' && clienteDB === supabase && supabaseAdmin) {
         const { data: adminData, error: adminError } = await supabaseAdmin
           .from('usuarios')
           .upsert(dadosUsuario, {
@@ -259,7 +259,7 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
  * Busca jogos favoritos do usuário
  */
 export async function getFavoritosUsuario(idUsuario: string) {
-  if (!configurado || !supabase) {
+  if (!estaConfigurado || !supabase) {
     // Retorna alguns favoritos mock
     return { 
       data: [
@@ -293,7 +293,7 @@ export async function getFavoritosUsuario(idUsuario: string) {
  * Verifica se jogo está nos favoritos
  */
 export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
-  if (!configurado || !supabase) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
+  if (!estaConfigurado || !supabase) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
 
   try {
     const { data, error } = await supabase
@@ -319,7 +319,7 @@ export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
  * Adiciona jogo aos favoritos
  */
 export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
-  if (!configurado || !supabase) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
+  if (!estaConfigurado || !supabase) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
 
   try {
     const { data, error } = await supabase
@@ -344,7 +344,7 @@ export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
  * Remove jogo dos favoritos
  */
 export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
-  if (!configurado || !supabase) return { success: true, error: null };
+  if (!estaConfigurado || !supabase) return { success: true, error: null };
 
   try {
     const { error } = await supabase
