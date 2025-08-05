@@ -87,14 +87,14 @@ export default function Header() {
 
                 {/* Dropdown do Seletor de Tema */}
                 {seletorTemaAberto && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border border-gray-200 rounded-lg shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-background border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
                       return (
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors ${
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${
                             tema === itemTema.id ? 'text-blue-600' : 'text-gray-600'
                           } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
@@ -112,7 +112,7 @@ export default function Header() {
                 className="text-sm lg:text-base hover:text-blue-600 transition-colors"
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
-                  <Icons.FaArrowRightToBracket className="w-5 h-5 lg:w-6 lg:h-6" />
+                  <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${session ? 'rotate-180' : ''}`} />
                   <span className="hidden lg:inline">{session ? session.user?.name : 'Entrar'}</span>
                 </div>
               </button>
@@ -197,7 +197,7 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors ${
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${
                             tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-gray-600 '
                           }`}
                         >
@@ -216,7 +216,7 @@ export default function Header() {
                   }}
                   className="flex items-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
                 >
-                  <Icons.FaArrowRightToBracket className="w-6 h-6" />
+                  <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${session ? 'rotate-180' : ''}`} />
                   <span>{session ? session.user?.name : 'Entrar'}</span>
                 </button>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full">
