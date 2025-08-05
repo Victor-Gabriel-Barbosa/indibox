@@ -1,61 +1,61 @@
-import { supabase, supabaseAdmin, isConfigured } from './supabase';
+import { supabase, supabaseAdmin, configurado } from './supabase';
 import type { Database } from '@/types/supabase';
-import { isValidUUID, generateUserUUID } from './uuid';
+import { ehValidoUUID, gerarUsuarioUUID } from './uuid';
 
-type GameInsert = Database['public']['Tables']['games']['Insert'];
-type GameUpdate = Database['public']['Tables']['games']['Update'];
-type UserInsert = Database['public']['Tables']['users']['Insert'];
-type ReviewInsert = Database['public']['Tables']['reviews']['Insert'];
+type JogoInsert = Database['public']['Tables']['jogos']['Insert'];
+type JogoUpdate = Database['public']['Tables']['jogos']['Update'];
+type UsuarioInserido = Database['public']['Tables']['usuarios']['Insert'];
+type AvaliacaoInsert = Database['public']['Tables']['avaliacoes']['Insert'];
 
 // Dados mock para desenvolvimento
-const mockGames = [
+const jogosMock = [
   {
     id: '1',
-    title: 'Aventura Espacial',
-    description: 'Um jogo de aventura espacial emocionante com gráficos retrô.',
-    short_description: 'Aventura espacial retrô',
-    developer: 'Indie Dev Studio',
-    release_date: '2024-01-15',
-    genre: ['Aventura', 'Ação'],
+    titulo: 'Aventura Espacial',
+    descricao: 'Um jogo de aventura espacial emocionante com gráficos retrô.',
+    descricao_curta: 'Aventura espacial retrô',
+    desenvolvedor: 'Indie Dev Studio',
+    data_lancamento: '2024-01-15',
+    genero: ['Aventura', 'Ação'],
     tags: ['indie', 'retro', 'space'],
-    download_url: 'https://example.com/download1',
-    website_url: 'https://example.com',
-    github_url: null,
-    cover_image: 'https://swiperjs.com/demos/images/nature-1.jpg',
-    screenshots: ['https://swiperjs.com/demos/images/nature-1.jpg'],
-    rating: 4.5,
-    download_count: 1250,
-    file_size: '150MB',
-    platform: ['Windows', 'Linux'],
-    status: 'published' as const,
-    featured: true,
-    created_at: '2024-01-15T10:00:00Z',
-    updated_at: '2024-01-15T10:00:00Z',
-    user_id: '1'
+    url_download: 'https://example.com/download1',
+    url_site: 'https://example.com',
+    url_github: null,
+    imagem_capa: 'https://swiperjs.com/demos/images/nature-1.jpg',
+    capturas_tela: ['https://swiperjs.com/demos/images/nature-1.jpg'],
+    avaliacao: 4.5,
+    contador_download: 1250,
+    tamanho_arquivo: '150MB',
+    plataforma: ['Windows', 'Linux'],
+    status: 'publicado' as const,
+    destaque: true,
+    criado_em: '2024-01-15T10:00:00Z',
+    atualizado_em: '2024-01-15T10:00:00Z',
+    id_usuario: '1'
   },
   {
     id: '2',
-    title: 'Puzzle Master',
-    description: 'Desafie sua mente com quebra-cabeças únicos e criativos.',
-    short_description: 'Quebra-cabeças desafiadores',
-    developer: 'Brain Games Co',
-    release_date: '2024-02-01',
-    genre: ['Puzzle', 'Casual'],
+    titulo: 'Puzzle Master',
+    descricao: 'Desafie sua mente com quebra-cabeças únicos e criativos.',
+    descricao_curta: 'Quebra-cabeças desafiadores',
+    desenvolvedor: 'Brain Games Co',
+    data_lancamento: '2024-02-01',
+    genero: ['Puzzle', 'Casual'],
     tags: ['puzzle', 'brain', 'casual'],
-    download_url: 'https://example.com/download2',
-    website_url: 'https://example.com',
-    github_url: null,
-    cover_image: 'https://swiperjs.com/demos/images/nature-2.jpg',
-    screenshots: ['https://swiperjs.com/demos/images/nature-2.jpg'],
-    rating: 4.2,
-    download_count: 890,
-    file_size: '80MB',
-    platform: ['Windows', 'Mac', 'Linux'],
-    status: 'published' as const,
-    featured: true,
-    created_at: '2024-02-01T10:00:00Z',
-    updated_at: '2024-02-01T10:00:00Z',
-    user_id: '1'
+    url_download: 'https://example.com/download2',
+    url_site: 'https://example.com',
+    url_github: null,
+    imagem_capa: 'https://swiperjs.com/demos/images/nature-2.jpg',
+    capturas_tela: ['https://swiperjs.com/demos/images/nature-2.jpg'],
+    avaliacao: 4.2,
+    contador_download: 890,
+    tamanho_arquivo: '80MB',
+    plataforma: ['Windows', 'Mac', 'Linux'],
+    status: 'publicado' as const,
+    destaque: true,
+    criado_em: '2024-02-01T10:00:00Z',
+    atualizado_em: '2024-02-01T10:00:00Z',
+    id_usuario: '1'
   }
 ];
 
@@ -66,15 +66,15 @@ const mockGames = [
 /**
  * Busca todos os jogos publicados
  */
-export async function getPublishedGames() {
-  if (!isConfigured || !supabase) return { data: mockGames, error: null };
+export async function getJogosPublicados() {
+  if (!configurado || !supabase) return { data: jogosMock, error: null };
 
   try {
     const { data, error } = await supabase
-      .from('games')
+      .from('jogos')
       .select('*')
-      .eq('status', 'published')
-      .order('created_at', { ascending: false });
+      .eq('status', 'publicado')
+      .order('criado_em', { ascending: false });
 
     if (error) {
       console.error('Erro ao buscar jogos:', error);
@@ -84,23 +84,23 @@ export async function getPublishedGames() {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogos:', error);
-    return { data: mockGames, error: null }; // Fallback para dados mock
+    return { data: jogosMock, error: null }; // Fallback para dados mock
   }
 }
 
 /**
  * Busca jogos em destaque
  */
-export async function getFeaturedGames() {
-  if (!isConfigured || !supabase) return { data: mockGames.filter(game => game.featured), error: null };
+export async function getJogosEmDestaque() {
+  if (!configurado || !supabase) return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
 
   try {
     const { data, error } = await supabase
-      .from('games')
+      .from('jogos')
       .select('*')
-      .eq('status', 'published')
-      .eq('featured', true)
-      .order('download_count', { ascending: false })
+      .eq('status', 'publicado')
+      .eq('destaque', true)
+      .order('contador_download', { ascending: false })
       .limit(10);
 
     if (error) {
@@ -111,23 +111,23 @@ export async function getFeaturedGames() {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogos em destaque:', error);
-    return { data: mockGames.filter(game => game.featured), error: null };
+    return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
   }
 }
 
 /**
  * Busca um jogo por ID
  */
-export async function getGameById(id: string) {
-  if (!isConfigured || !supabase) {
-    const game = mockGames.find(g => g.id === id);
-    return { data: game || null, error: null };
+export async function getJogoPorID(id: string) {
+  if (!configurado || !supabase) {
+    const jogo = jogosMock.find(j => j.id === id);
+    return { data: jogo || null, error: null };
   }
 
   try {
     const { data, error } = await supabase
-      .from('games')
-      .select('*, users(*)')
+      .from('jogos')
+      .select('*, usuarios(*)')
       .eq('id', id)
       .single();
 
@@ -139,31 +139,31 @@ export async function getGameById(id: string) {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogo:', error);
-    const game = mockGames.find(g => g.id === id);
-    return { data: game || null, error: null };
+    const jogo = jogosMock.find(j => j.id === id);
+    return { data: jogo || null, error: null };
   }
 }
 
 /**
  * Busca jogos por texto
  */
-export async function searchGames(query: string) {
-  if (!isConfigured || !supabase) {
-    const filtered = mockGames.filter(game => 
-      game.title.toLowerCase().includes(query.toLowerCase()) ||
-      game.description.toLowerCase().includes(query.toLowerCase()) ||
-      game.developer.toLowerCase().includes(query.toLowerCase())
+export async function buscarJogos(query: string) {
+  if (!configurado || !supabase) {
+    const filtrado = jogosMock.filter(jogo => 
+      jogo.titulo.toLowerCase().includes(query.toLowerCase()) ||
+      jogo.descricao.toLowerCase().includes(query.toLowerCase()) ||
+      jogo.desenvolvedor.toLowerCase().includes(query.toLowerCase())
     );
-    return { data: filtered, error: null };
+    return { data: filtrado, error: null };
   }
 
   try {
     const { data, error } = await supabase
-      .from('games')
+      .from('jogos')
       .select('*')
-      .eq('status', 'published')
-      .or(`title.ilike.%${query}%, description.ilike.%${query}%, developer.ilike.%${query}%`)
-      .order('download_count', { ascending: false });
+      .eq('status', 'publicado')
+      .or(`titulo.ilike.%${query}%, descricao.ilike.%${query}%, desenvolvedor.ilike.%${query}%`)
+      .order('contador_download', { ascending: false });
 
     if (error) {
       console.error('Erro na busca de jogos:', error);
@@ -173,12 +173,12 @@ export async function searchGames(query: string) {
     return { data, error: null };
   } catch (error) {
     console.error('Erro na busca de jogos:', error);
-    const filtered = mockGames.filter(game => 
-      game.title.toLowerCase().includes(query.toLowerCase()) ||
-      game.description.toLowerCase().includes(query.toLowerCase()) ||
-      game.developer.toLowerCase().includes(query.toLowerCase())
+    const filtrado = jogosMock.filter(jogo => 
+      jogo.titulo.toLowerCase().includes(query.toLowerCase()) ||
+      jogo.descricao.toLowerCase().includes(query.toLowerCase()) ||
+      jogo.desenvolvedor.toLowerCase().includes(query.toLowerCase())
     );
-    return { data: filtered, error: null };
+    return { data: filtrado, error: null };
   }
 }
 
@@ -189,25 +189,25 @@ export async function searchGames(query: string) {
 /**
  * Cria ou atualiza um usuário
  */
-export async function upsertUser(user: UserInsert) {
-  if (!isConfigured || !supabase) return { data: { ...user, role: 'user' as const }, error: null };
+export async function upsertUsuario(usuario: UsuarioInserido) {
+  if (!configurado || !supabase) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
 
   try {
     // Valida e corrige ID se necessário
-    let userId = user.id;
+    let usuarioId = usuario.id;
     
-    if (!userId || typeof userId !== 'string' || userId === '{}' || userId === '[object Object]' || !isValidUUID(userId)) userId = generateUserUUID(user.email);
+    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !ehValidoUUID(usuarioId)) usuarioId = gerarUsuarioUUID(usuario.email);
 
-    // Cria objeto user com ID corrigido
-    const userData = { ...user, id: userId };
+    // Cria objeto usuario com ID corrigido
+    const dadosUsuario = { ...usuario, id: usuarioId };
 
     // Usa supabaseAdmin para contornar políticas RLS durante criação inicial
-    const clientToUse = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
+    const clienteParaUsar = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
 
     // Usa upsert nativo do Supabase com email como chave de conflito
-    const { data, error } = await clientToUse
-      .from('users')
-      .upsert(userData, {
+    const { data, error } = await clienteParaUsar
+      .from('usuarios')
+      .upsert(dadosUsuario, {
         onConflict: 'email',
         ignoreDuplicates: false
       })
@@ -216,10 +216,10 @@ export async function upsertUser(user: UserInsert) {
 
     if (error) {
       // Se foi erro de RLS com cliente normal tenta com admin
-      if (error?.code === '42501' && clientToUse === supabase && supabaseAdmin) {
+      if (error?.code === '42501' && clienteParaUsar === supabase && supabaseAdmin) {
         const { data: adminData, error: adminError } = await supabaseAdmin
-          .from('users')
-          .upsert(userData, {
+          .from('usuarios')
+          .upsert(dadosUsuario, {
             onConflict: 'email',
             ignoreDuplicates: false
           })
@@ -245,7 +245,7 @@ export async function upsertUser(user: UserInsert) {
     
     // Fallback para dados mock em caso de erro
     return { 
-      data: { ...user, role: 'user' as const, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }, 
+      data: { ...usuario, papel: 'usuario' as const, criado_em: new Date().toISOString(), atualizado_em: new Date().toISOString() }, 
       error: null 
     };
   }
@@ -258,13 +258,13 @@ export async function upsertUser(user: UserInsert) {
 /**
  * Busca jogos favoritos do usuário
  */
-export async function getUserFavorites(userId: string) {
-  if (!isConfigured || !supabase) {
+export async function getFavoritosUsuario(idUsuario: string) {
+  if (!configurado || !supabase) {
     // Retorna alguns favoritos mock
     return { 
       data: [
-        { id: '1', user_id: userId, game_id: '1', created_at: '2024-01-01', games: mockGames[0] },
-        { id: '2', user_id: userId, game_id: '2', created_at: '2024-01-02', games: mockGames[1] }
+        { id: '1', id_usuario: idUsuario, id_jogo: '1', criado_em: '2024-01-01', jogos: jogosMock[0] },
+        { id: '2', id_usuario: idUsuario, id_jogo: '2', criado_em: '2024-01-02', jogos: jogosMock[1] }
       ], 
       error: null 
     };
@@ -272,10 +272,10 @@ export async function getUserFavorites(userId: string) {
 
   try {
     const { data, error } = await supabase
-      .from('favorites')
-      .select('*, games(*)')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+      .from('favoritos')
+      .select('*, jogos(*)')
+      .eq('id_usuario', idUsuario)
+      .order('criado_em', { ascending: false });
 
     if (error) {
       console.error('Erro ao buscar favoritos:', error);
@@ -292,15 +292,15 @@ export async function getUserFavorites(userId: string) {
 /**
  * Verifica se jogo está nos favoritos
  */
-export async function isGameFavorited(userId: string, gameId: string) {
-  if (!isConfigured || !supabase) return { isFavorited: ['1', '2'].includes(gameId), error: null };
+export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
+  if (!configurado || !supabase) return { isFavorited: ['1', '2'].includes(idJogo), error: null };
 
   try {
     const { data, error } = await supabase
-      .from('favorites')
+      .from('favoritos')
       .select('id')
-      .eq('user_id', userId)
-      .eq('game_id', gameId)
+      .eq('id_usuario', idUsuario)
+      .eq('id_jogo', idJogo)
       .single();
 
     if (error && error.code !== 'PGRST116') {
@@ -318,13 +318,13 @@ export async function isGameFavorited(userId: string, gameId: string) {
 /**
  * Adiciona jogo aos favoritos
  */
-export async function addToFavorites(userId: string, gameId: string) {
-  if (!isConfigured || !supabase) return { data: { id: Date.now().toString(), user_id: userId, game_id: gameId }, error: null };
+export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
+  if (!configurado || !supabase) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
 
   try {
     const { data, error } = await supabase
-      .from('favorites')
-      .insert({ user_id: userId, game_id: gameId })
+      .from('favoritos')
+      .insert({ id_usuario: idUsuario, id_jogo: idJogo })
       .select()
       .single();
 
@@ -343,15 +343,15 @@ export async function addToFavorites(userId: string, gameId: string) {
 /**
  * Remove jogo dos favoritos
  */
-export async function removeFromFavorites(userId: string, gameId: string) {
-  if (!isConfigured || !supabase) return { success: true, error: null };
+export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
+  if (!configurado || !supabase) return { success: true, error: null };
 
   try {
     const { error } = await supabase
-      .from('favorites')
+      .from('favoritos')
       .delete()
-      .eq('user_id', userId)
-      .eq('game_id', gameId);
+      .eq('id_usuario', idUsuario)
+      .eq('id_jogo', idJogo);
 
     if (error) {
       console.error('Erro ao remover dos favoritos:', error);
@@ -366,4 +366,4 @@ export async function removeFromFavorites(userId: string, gameId: string) {
 }
 
 // Exporta dados mock para testes
-export { mockGames };
+export { jogosMock };

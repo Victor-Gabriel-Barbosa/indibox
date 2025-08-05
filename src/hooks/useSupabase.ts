@@ -3,36 +3,36 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { 
-  getPublishedGames, 
-  getFeaturedGames, 
-  getGameById, 
-  searchGames,
-  getUserFavorites,
-  isGameFavorited,
-  addToFavorites,
-  removeFromFavorites
+  getJogosPublicados, 
+  getJogosEmDestaque, 
+  getJogoPorID, 
+  buscarJogos,
+  getFavoritosUsuario,
+  ehJogoFavoritado,
+  adicionarAosFavoritos,
+  removerDosFavoritos
 } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
-type Game = Database['public']['Tables']['games']['Row'];
+type Jogo = Database['public']['Tables']['jogos']['Row'];
 
 // Hook para buscar jogos
-export function useGames() {
-  const [games, setGames] = useState<Game[]>([]);
+export function useJogos() {
+  const [jogos, setJogos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchGames = async () => {
+  const fetchJogos = async () => {
     try {
       setLoading(true);
-      const { data, error } = await getPublishedGames();
+      const { data, error } = await getJogosPublicados();
       
       if (error) {
         setError(error.message);
         return;
       }
 
-      setGames(data || []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos');
@@ -43,29 +43,29 @@ export function useGames() {
   };
 
   useEffect(() => {
-    fetchGames();
+    fetchJogos();
   }, []);
 
-  return { games, loading, error, refetch: fetchGames };
+  return { jogos, loading, error, refetch: fetchJogos };
 }
 
 // Hook para buscar jogos em destaque
-export function useFeaturedGames() {
-  const [games, setGames] = useState<Game[]>([]);
+export function useJogosEmDestaque() {
+  const [jogos, setJogos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchFeaturedGames = async () => {
+  const fetchJogosEmDestaque = async () => {
     try {
       setLoading(true);
-      const { data, error } = await getFeaturedGames();
+      const { data, error } = await getJogosEmDestaque();
       
       if (error) {
         setError(error.message);
         return;
       }
 
-      setGames(data || []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos em destaque');
@@ -76,34 +76,34 @@ export function useFeaturedGames() {
   };
 
   useEffect(() => {
-    fetchFeaturedGames();
+    fetchJogosEmDestaque();
   }, []);
 
-  return { games, loading, error, refetch: fetchFeaturedGames };
+  return { jogos, loading, error, refetch: fetchJogosEmDestaque };
 }
 
 // Hook para buscar um jogo específico
-export function useGame(gameId: string | null) {
-  const [game, setGame] = useState<Game | null>(null);
+export function useJogo(idJogo: string | null) {
+  const [jogo, setJogo] = useState<Jogo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchGame = async () => {
-    if (!gameId) {
+  const fetchJogo = async () => {
+    if (!idJogo) {
       setLoading(false);
       return;
     }
 
     try {
       setLoading(true);
-      const { data, error } = await getGameById(gameId);
+      const { data, error } = await getJogoPorID(idJogo);
       
       if (error) {
         setError(error.message);
         return;
       }
 
-      setGame(data);
+      setJogo(data);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogo');
@@ -114,39 +114,39 @@ export function useGame(gameId: string | null) {
   };
 
   useEffect(() => {
-    if (gameId) fetchGame();
+    if (idJogo) fetchJogo();
     else {
-      setGame(null);
+      setJogo(null);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId]);
+  }, [idJogo]);
 
-  return { game, loading, error, refetch: fetchGame };
+  return { jogo, loading, error, refetch: fetchJogo };
 }
 
 // Hook para pesquisar jogos
-export function useGameSearch() {
-  const [games, setGames] = useState<Game[]>([]);
+export function useBuscaJogos() {
+  const [jogos, setJogos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const searchGamesQuery = async (query: string) => {
+  const buscarJogosQuery = async (query: string) => {
     if (!query.trim()) {
-      setGames([]);
+      setJogos([]);
       return;
     }
 
     try {
       setLoading(true);
-      const { data, error } = await searchGames(query);
+      const { data, error } = await buscarJogos(query);
       
       if (error) {
         setError(error.message);
         return;
       }
 
-      setGames(data || []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro na pesquisa');
@@ -156,22 +156,22 @@ export function useGameSearch() {
     }
   };
 
-  return { games, loading, error, searchGames: searchGamesQuery };
+  return { jogos, loading, error, buscarJogos: buscarJogosQuery };
 }
 
 // Hook para gerenciar favoritos
-export function useFavorites() {
+export function useFavoritos() {
   const { data: session } = useSession();
-  const [favorites, setFavorites] = useState<Game[]>([]);
+  const [favoritos, setFavoritos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchFavorites = async () => {
+  const fetchFavoritos = async () => {
     if (!session?.user?.id) return;
 
     try {
       setLoading(true);
-      const { data, error } = await getUserFavorites(session.user.id);
+      const { data, error } = await getFavoritosUsuario(session.user.id);
       
       if (error) {
         setError(error.message);
@@ -179,8 +179,8 @@ export function useFavorites() {
       }
 
       // Extrai apenas os jogos dos favoritos
-      const favoriteGames = data?.map(fav => fav.games).filter(Boolean) || [];
-      setFavorites(favoriteGames as Game[]);
+      const jogosFavoritos = data?.map(fav => fav.jogos).filter(Boolean) || [];
+      setFavoritos(jogosFavoritos as Jogo[]);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar favoritos');
@@ -190,21 +190,21 @@ export function useFavorites() {
     }
   };
 
-  const toggleFavorite = async (gameId: string) => {
+  const alternarFavorito = async (idJogo: string) => {
     if (!session?.user?.id) return false;
 
     try {
-      const { isFavorited } = await isGameFavorited(session.user.id, gameId);
+      const { isFavorited } = await ehJogoFavoritado(session.user.id, idJogo);
       
       if (isFavorited) {
-        const { success, error } = await removeFromFavorites(session.user.id, gameId);
+        const { success, error } = await removerDosFavoritos(session.user.id, idJogo);
         if (error) throw error;
-        await fetchFavorites(); // Recarrega favoritos
+        await fetchFavoritos(); // Recarrega favoritos
         return !success;
       } else {
-        const { data, error } = await addToFavorites(session.user.id, gameId);
+        const { data, error } = await adicionarAosFavoritos(session.user.id, idJogo);
         if (error) throw error;
-        await fetchFavorites(); // Recarrega favoritos
+        await fetchFavoritos(); // Recarrega favoritos
         return !!data;
       }
     } catch (err) {
@@ -213,11 +213,11 @@ export function useFavorites() {
     }
   };
 
-  const checkIsFavorited = async (gameId: string): Promise<boolean> => {
+  const verificarSeFavoritado = async (idJogo: string): Promise<boolean> => {
     if (!session?.user?.id) return false;
 
     try {
-      const { isFavorited } = await isGameFavorited(session.user.id, gameId);
+      const { isFavorited } = await ehJogoFavoritado(session.user.id, idJogo);
       return isFavorited;
     } catch (err) {
       console.error('Erro ao verificar favorito:', err);
@@ -226,16 +226,16 @@ export function useFavorites() {
   };
 
   useEffect(() => {
-    if (session?.user?.id) fetchFavorites();
+    if (session?.user?.id) fetchFavoritos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
   return { 
-    favorites, 
+    favoritos, 
     loading, 
     error, 
-    toggleFavorite, 
-    checkIsFavorited,
-    refetch: fetchFavorites 
+    alternarFavorito, 
+    verificarSeFavoritado,
+    refetch: fetchFavoritos 
   };
 }

@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { upsertUser } from '@/lib/database';
-import { isConfigured } from '@/lib/supabase';
-import { generateUserUUID } from '@/lib/uuid';
+import { upsertUsuario } from '@/lib/database';
+import { configurado } from '@/lib/supabase';
+import { gerarUsuarioUUID } from '@/lib/uuid';
 
 /**
  * Hook para sincronizar usuário autenticado com Supabase
@@ -17,26 +17,24 @@ export function useUserSync() {
     async function syncUser() {
       if (status === 'authenticated' && session?.user) {
         // Só tenta sincronizar se o Supabase estiver configurado
-        if (!isConfigured) return;
+        if (!configurado) return;
 
         try {
           // Gera UUID válido se não houver ID ou se for inválido
-          let userId = session.user.id;
+          let usuarioId = session.user.id;
           
           // Verifica se o ID é válido
-          if (!userId || typeof userId !== 'string' || userId === '{}' || userId === '[object Object]') {
-            userId = generateUserUUID(session.user.email!);
-          }
+          if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]') usuarioId = gerarUsuarioUUID(session.user.email!);
 
-          const userData = {
-            id: userId,
+          const dadosUsuario = {
+            id: usuarioId,
             email: session.user.email!,
-            name: session.user.name,
-            avatar_url: session.user.image,
-            email_verified: true,
+            nome: session.user.name,
+            url_avatar: session.user.image,
+            email_verificado: true,
           };
 
-          const { error } = await upsertUser(userData);
+          const { error } = await upsertUsuario(dadosUsuario);
           
           if (error) {
             console.error('Erro ao sincronizar usuário com Supabase:', error);

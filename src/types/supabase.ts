@@ -9,211 +9,211 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      games: {
+      jogos: {
         Row: {
           id: string
-          title: string
-          description: string | null
-          short_description: string | null
-          developer: string
-          release_date: string | null
-          genre: string[]
+          titulo: string
+          descricao: string | null
+          descricao_curta: string | null
+          desenvolvedor: string
+          data_lancamento: string | null
+          genero: string[]
           tags: string[]
-          download_url: string | null
-          website_url: string | null
-          github_url: string | null
-          cover_image: string | null
-          screenshots: string[]
-          rating: number | null
-          download_count: number
-          file_size: string | null
-          platform: string[]
-          status: 'published' | 'draft' | 'archived'
-          featured: boolean
-          created_at: string
-          updated_at: string
-          user_id: string
+          url_download: string | null
+          url_site: string | null
+          url_github: string | null
+          imagem_capa: string | null
+          capturas_tela: string[]
+          avaliacao: number | null
+          contador_download: number
+          tamanho_arquivo: string | null
+          plataforma: string[]
+          status: 'publicado' | 'rascunho' | 'arquivado'
+          destaque: boolean
+          criado_em: string
+          atualizado_em: string
+          id_usuario: string
         }
         Insert: {
           id?: string
-          title: string
-          description?: string | null
-          short_description?: string | null
-          developer: string
-          release_date?: string | null
-          genre: string[]
+          titulo: string
+          descricao?: string | null
+          descricao_curta?: string | null
+          desenvolvedor: string
+          data_lancamento?: string | null
+          genero: string[]
           tags?: string[]
-          download_url?: string | null
-          website_url?: string | null
-          github_url?: string | null
-          cover_image?: string | null
-          screenshots?: string[]
-          rating?: number | null
-          download_count?: number
-          file_size?: string | null
-          platform: string[]
-          status?: 'published' | 'draft' | 'archived'
-          featured?: boolean
-          created_at?: string
-          updated_at?: string
-          user_id: string
+          url_download?: string | null
+          url_site?: string | null
+          url_github?: string | null
+          imagem_capa?: string | null
+          capturas_tela?: string[]
+          avaliacao?: number | null
+          contador_download?: number
+          tamanho_arquivo?: string | null
+          plataforma: string[]
+          status?: 'publicado' | 'rascunho' | 'arquivado'
+          destaque?: boolean
+          criado_em?: string
+          atualizado_em?: string
+          id_usuario: string
         }
         Update: {
           id?: string
-          title?: string
-          description?: string | null
-          short_description?: string | null
-          developer?: string
-          release_date?: string | null
-          genre?: string[]
+          titulo?: string
+          descricao?: string | null
+          descricao_curta?: string | null
+          desenvolvedor?: string
+          data_lancamento?: string | null
+          genero?: string[]
           tags?: string[]
-          download_url?: string | null
-          website_url?: string | null
-          github_url?: string | null
-          cover_image?: string | null
-          screenshots?: string[]
-          rating?: number | null
-          download_count?: number
-          file_size?: string | null
-          platform?: string[]
-          status?: 'published' | 'draft' | 'archived'
-          featured?: boolean
-          created_at?: string
-          updated_at?: string
-          user_id?: string
+          url_download?: string | null
+          url_site?: string | null
+          url_github?: string | null
+          imagem_capa?: string | null
+          capturas_tela?: string[]
+          avaliacao?: number | null
+          contador_download?: number
+          tamanho_arquivo?: string | null
+          plataforma?: string[]
+          status?: 'publicado' | 'rascunho' | 'arquivado'
+          destaque?: boolean
+          criado_em?: string
+          atualizado_em?: string
+          id_usuario?: string
         }
         Relationships: [
           {
-            foreignKeyName: "games_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "jogos_id_usuario_fkey"
+            columns: ["id_usuario"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           }
         ]
       }
-      users: {
+      usuarios: {
         Row: {
           id: string
           email: string
-          name: string | null
-          avatar_url: string | null
-          bio: string | null
-          website: string | null
-          github_username: string | null
-          twitter_username: string | null
-          role: 'user' | 'developer' | 'admin'
-          email_verified: boolean
-          created_at: string
-          updated_at: string
+          nome: string | null
+          url_avatar: string | null
+          biografia: string | null
+          site: string | null
+          nome_usuario_github: string | null
+          nome_usuario_twitter: string | null
+          papel: 'usuario' | 'desenvolvedor' | 'admin'
+          email_verificado: boolean
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
           email: string
-          name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          website?: string | null
-          github_username?: string | null
-          twitter_username?: string | null
-          role?: 'user' | 'developer' | 'admin'
-          email_verified?: boolean
-          created_at?: string
-          updated_at?: string
+          nome?: string | null
+          url_avatar?: string | null
+          biografia?: string | null
+          site?: string | null
+          nome_usuario_github?: string | null
+          nome_usuario_twitter?: string | null
+          papel?: 'usuario' | 'desenvolvedor' | 'admin'
+          email_verificado?: boolean
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           id?: string
           email?: string
-          name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          website?: string | null
-          github_username?: string | null
-          twitter_username?: string | null
-          role?: 'user' | 'developer' | 'admin'
-          email_verified?: boolean
-          created_at?: string
-          updated_at?: string
+          nome?: string | null
+          url_avatar?: string | null
+          biografia?: string | null
+          site?: string | null
+          nome_usuario_github?: string | null
+          nome_usuario_twitter?: string | null
+          papel?: 'usuario' | 'desenvolvedor' | 'admin'
+          email_verificado?: boolean
+          criado_em?: string
+          atualizado_em?: string
         }
         Relationships: []
       }
-      reviews: {
+      avaliacoes: {
         Row: {
           id: string
-          game_id: string
-          user_id: string
-          rating: number
-          comment: string | null
-          created_at: string
-          updated_at: string
+          id_jogo: string
+          id_usuario: string
+          avaliacao: number
+          comentario: string | null
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          game_id: string
-          user_id: string
-          rating: number
-          comment?: string | null
-          created_at?: string
-          updated_at?: string
+          id_jogo: string
+          id_usuario: string
+          avaliacao: number
+          comentario?: string | null
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           id?: string
-          game_id?: string
-          user_id?: string
-          rating?: number
-          comment?: string | null
-          created_at?: string
-          updated_at?: string
+          id_jogo?: string
+          id_usuario?: string
+          avaliacao?: number
+          comentario?: string | null
+          criado_em?: string
+          atualizado_em?: string
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_game_id_fkey"
-            columns: ["game_id"]
+            foreignKeyName: "avaliacoes_id_jogo_fkey"
+            columns: ["id_jogo"]
             isOneToOne: false
-            referencedRelation: "games"
+            referencedRelation: "jogos"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "reviews_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "avaliacoes_id_usuario_fkey"
+            columns: ["id_usuario"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           }
         ]
       }
-      favorites: {
+      favoritos: {
         Row: {
           id: string
-          user_id: string
-          game_id: string
-          created_at: string
+          id_usuario: string
+          id_jogo: string
+          criado_em: string
         }
         Insert: {
           id?: string
-          user_id: string
-          game_id: string
-          created_at?: string
+          id_usuario: string
+          id_jogo: string
+          criado_em?: string
         }
         Update: {
           id?: string
-          user_id?: string
-          game_id?: string
-          created_at?: string
+          id_usuario?: string
+          id_jogo?: string
+          criado_em?: string
         }
         Relationships: [
           {
-            foreignKeyName: "favorites_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "favoritos_id_usuario_fkey"
+            columns: ["id_usuario"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "favorites_game_id_fkey"
-            columns: ["game_id"]
+            foreignKeyName: "favoritos_id_jogo_fkey"
+            columns: ["id_jogo"]
             isOneToOne: false
-            referencedRelation: "games"
+            referencedRelation: "jogos"
             referencedColumns: ["id"]
           }
         ]
@@ -226,8 +226,8 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      user_role: 'user' | 'developer' | 'admin'
-      game_status: 'published' | 'draft' | 'archived'
+      papel_usuario: 'usuario' | 'desenvolvedor' | 'admin'
+      status_jogo: 'publicado' | 'rascunho' | 'arquivado'
     }
     CompositeTypes: {
       [_ in never]: never

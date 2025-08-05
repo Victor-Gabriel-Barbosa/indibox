@@ -3,257 +3,257 @@
 -- ================================
 
 -- Criação dos ENUMs
-CREATE TYPE user_role AS ENUM ('user', 'developer', 'admin');
-CREATE TYPE game_status AS ENUM ('published', 'draft', 'archived');
+CREATE TYPE papel_usuario AS ENUM ('usuario', 'desenvolvedor', 'admin');
+CREATE TYPE status_jogo AS ENUM ('publicado', 'rascunho', 'arquivado');
 
 -- ================================
 -- TABELA DE USUÁRIOS
 -- ================================
-CREATE TABLE users (
+CREATE TABLE usuarios (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255),
-    avatar_url TEXT,
-    bio TEXT,
-    website TEXT,
-    github_username VARCHAR(255),
-    twitter_username VARCHAR(255),
-    role user_role DEFAULT 'user',
-    email_verified BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    nome VARCHAR(255),
+    url_avatar TEXT,
+    biografia TEXT,
+    site TEXT,
+    nome_usuario_github VARCHAR(255),
+    nome_usuario_twitter VARCHAR(255),
+    papel papel_usuario DEFAULT 'usuario',
+    email_verificado BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMPTZ DEFAULT NOW(),
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Trigger para atualizar updated_at automaticamente
-CREATE OR REPLACE FUNCTION update_updated_at_column()
+-- Trigger para atualizar atualizado_em automaticamente
+CREATE OR REPLACE FUNCTION update_atualizado_em()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at = NOW();
+    NEW.atualizado_em = NOW();
     RETURN NEW;
 END;
 $$ language 'plpgsql';
 
-CREATE TRIGGER update_users_updated_at 
-    BEFORE UPDATE ON users 
+CREATE TRIGGER update_usuarios_atualizado_em 
+    BEFORE UPDATE ON usuarios 
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();
+    EXECUTE FUNCTION update_atualizado_em();
 
 -- ================================
 -- TABELA DE JOGOS
 -- ================================
-CREATE TABLE games (
+CREATE TABLE jogos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    short_description TEXT,
-    developer VARCHAR(255) NOT NULL,
-    release_date DATE,
-    genre TEXT[] NOT NULL DEFAULT '{}',
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    descricao_curta TEXT,
+    desenvolvedor VARCHAR(255) NOT NULL,
+    data_lancamento DATE,
+    genero TEXT[] NOT NULL DEFAULT '{}',
     tags TEXT[] DEFAULT '{}',
-    download_url TEXT,
-    website_url TEXT,
-    github_url TEXT,
-    cover_image TEXT,
-    screenshots TEXT[] DEFAULT '{}',
-    rating DECIMAL(3,2) DEFAULT 0,
-    download_count INTEGER DEFAULT 0,
-    file_size VARCHAR(50),
-    platform TEXT[] NOT NULL DEFAULT '{}',
-    status game_status DEFAULT 'draft',
-    featured BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    url_download TEXT,
+    url_site TEXT,
+    url_github TEXT,
+    imagem_capa TEXT,
+    capturas_tela TEXT[] DEFAULT '{}',
+    avaliacao DECIMAL(3,2) DEFAULT 0,
+    contador_download INTEGER DEFAULT 0,
+    tamanho_arquivo VARCHAR(50),
+    plataforma TEXT[] NOT NULL DEFAULT '{}',
+    status status_jogo DEFAULT 'rascunho',
+    destaque BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMPTZ DEFAULT NOW(),
+    atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+    id_usuario UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Trigger para atualizar updated_at
-CREATE TRIGGER update_games_updated_at 
-    BEFORE UPDATE ON games 
+-- Trigger para atualizar atualizado_em
+CREATE TRIGGER update_jogos_atualizado_em 
+    BEFORE UPDATE ON jogos 
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();
+    EXECUTE FUNCTION update_atualizado_em();
 
 -- Índices para melhor performance
-CREATE INDEX idx_games_status ON games(status);
-CREATE INDEX idx_games_featured ON games(featured);
-CREATE INDEX idx_games_genre ON games USING GIN(genre);
-CREATE INDEX idx_games_tags ON games USING GIN(tags);
-CREATE INDEX idx_games_platform ON games USING GIN(platform);
-CREATE INDEX idx_games_user_id ON games(user_id);
-CREATE INDEX idx_games_created_at ON games(created_at DESC);
-CREATE INDEX idx_games_download_count ON games(download_count DESC);
-CREATE INDEX idx_games_rating ON games(rating DESC);
+CREATE INDEX idx_jogos_status ON jogos(status);
+CREATE INDEX idx_jogos_destaque ON jogos(destaque);
+CREATE INDEX idx_jogos_genero ON jogos USING GIN(genero);
+CREATE INDEX idx_jogos_tags ON jogos USING GIN(tags);
+CREATE INDEX idx_jogos_plataforma ON jogos USING GIN(plataforma);
+CREATE INDEX idx_jogos_id_usuario ON jogos(id_usuario);
+CREATE INDEX idx_jogos_criado_em ON jogos(criado_em DESC);
+CREATE INDEX idx_jogos_contador_download ON jogos(contador_download DESC);
+CREATE INDEX idx_jogos_avaliacao ON jogos(avaliacao DESC);
 
 -- ================================
 -- TABELA DE AVALIAÇÕES
 -- ================================
-CREATE TABLE reviews (
+CREATE TABLE avaliacoes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    game_id UUID NOT NULL REFERENCES games(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-    comment TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(game_id, user_id) -- Um usuário só pode avaliar um jogo uma vez
+    id_jogo UUID NOT NULL REFERENCES jogos(id) ON DELETE CASCADE,
+    id_usuario UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    avaliacao INTEGER NOT NULL CHECK (avaliacao >= 1 AND avaliacao <= 5),
+    comentario TEXT,
+    criado_em TIMESTAMPTZ DEFAULT NOW(),
+    atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(id_jogo, id_usuario) -- Um usuário só pode avaliar um jogo uma vez
 );
 
--- Trigger para atualizar updated_at
-CREATE TRIGGER update_reviews_updated_at 
-    BEFORE UPDATE ON reviews 
+-- Trigger para atualizar atualizado_em
+CREATE TRIGGER update_avaliacoes_atualizado_em 
+    BEFORE UPDATE ON avaliacoes 
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();
+    EXECUTE FUNCTION update_atualizado_em();
 
 -- Índices
-CREATE INDEX idx_reviews_game_id ON reviews(game_id);
-CREATE INDEX idx_reviews_user_id ON reviews(user_id);
-CREATE INDEX idx_reviews_created_at ON reviews(created_at DESC);
+CREATE INDEX idx_avaliacoes_id_jogo ON avaliacoes(id_jogo);
+CREATE INDEX idx_avaliacoes_id_usuario ON avaliacoes(id_usuario);
+CREATE INDEX idx_avaliacoes_criado_em ON avaliacoes(criado_em DESC);
 
 -- ================================
 -- TABELA DE FAVORITOS
 -- ================================
-CREATE TABLE favorites (
+CREATE TABLE favoritos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    game_id UUID NOT NULL REFERENCES games(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(user_id, game_id) -- Um usuário só pode favoritar um jogo uma vez
+    id_usuario UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    id_jogo UUID NOT NULL REFERENCES jogos(id) ON DELETE CASCADE,
+    criado_em TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(id_usuario, id_jogo) -- Um usuário só pode favoritar um jogo uma vez
 );
 
 -- Índices
-CREATE INDEX idx_favorites_user_id ON favorites(user_id);
-CREATE INDEX idx_favorites_game_id ON favorites(game_id);
-CREATE INDEX idx_favorites_created_at ON favorites(created_at DESC);
+CREATE INDEX idx_favoritos_id_usuario ON favoritos(id_usuario);
+CREATE INDEX idx_favoritos_id_jogo ON favoritos(id_jogo);
+CREATE INDEX idx_favoritos_criado_em ON favoritos(criado_em DESC);
 
 -- ================================
 -- FUNÇÕES E PROCEDURES
 -- ================================
 
 -- Função para incrementar contador de downloads
-CREATE OR REPLACE FUNCTION increment_download_count(game_id UUID)
+CREATE OR REPLACE FUNCTION incrementar_contador_download(id_jogo UUID)
 RETURNS VOID AS $$
 BEGIN
-    UPDATE games 
-    SET download_count = download_count + 1,
-        updated_at = NOW()
-    WHERE id = game_id;
+    UPDATE jogos 
+    SET contador_download = contador_download + 1,
+        atualizado_em = NOW()
+    WHERE id = id_jogo;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Função para calcular rating médio dos jogos
-CREATE OR REPLACE FUNCTION calculate_game_rating(game_id UUID)
+-- Função para calcular avaliacao médio dos jogos
+CREATE OR REPLACE FUNCTION calcular_avaliacao_jogo(id_jogo UUID)
 RETURNS DECIMAL(3,2) AS $$
 DECLARE
-    avg_rating DECIMAL(3,2);
+    avaliacao_media DECIMAL(3,2);
 BEGIN
-    SELECT ROUND(AVG(rating)::numeric, 2) INTO avg_rating
-    FROM reviews 
-    WHERE reviews.game_id = calculate_game_rating.game_id;
+    SELECT ROUND(AVG(avaliacao)::numeric, 2) INTO avaliacao_media
+    FROM avaliacoes 
+    WHERE avaliacoes.id_jogo = calcular_avaliacao_jogo.id_jogo;
     
-    IF avg_rating IS NULL THEN
-        avg_rating := 0;
+    IF avaliacao_media IS NULL THEN
+        avaliacao_media := 0;
     END IF;
     
-    UPDATE games 
-    SET rating = avg_rating,
-        updated_at = NOW()
-    WHERE id = calculate_game_rating.game_id;
+    UPDATE jogos 
+    SET avaliacao = avaliacao_media,
+        atualizado_em = NOW()
+    WHERE id = calcular_avaliacao_jogo.id_jogo;
     
-    RETURN avg_rating;
+    RETURN avaliacao_media;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Trigger para recalcular rating quando uma review é inserida/atualizada/deletada
-CREATE OR REPLACE FUNCTION update_game_rating()
+-- Trigger para recalcular avaliacao quando uma avaliacao é inserida/atualizada/deletada
+CREATE OR REPLACE FUNCTION atualizar_avaliacao_jogo()
 RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'DELETE' THEN
-        PERFORM calculate_game_rating(OLD.game_id);
+        PERFORM calcular_avaliacao_jogo(OLD.id_jogo);
         RETURN OLD;
     ELSE
-        PERFORM calculate_game_rating(NEW.game_id);
+        PERFORM calcular_avaliacao_jogo(NEW.id_jogo);
         RETURN NEW;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_update_game_rating
-    AFTER INSERT OR UPDATE OR DELETE ON reviews
+CREATE TRIGGER trigger_atualizar_avaliacao_jogo
+    AFTER INSERT OR UPDATE OR DELETE ON avaliacoes
     FOR EACH ROW
-    EXECUTE FUNCTION update_game_rating();
+    EXECUTE FUNCTION atualizar_avaliacao_jogo();
 
 -- ================================
 -- POLÍTICAS RLS (Row Level Security)
 -- ================================
 
 -- Habilitar RLS
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE games ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
+ALTER TABLE usuarios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jogos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE avaliacoes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE favoritos ENABLE ROW LEVEL SECURITY;
 
--- Políticas para USERS
-CREATE POLICY "Usuários podem ver perfis públicos" ON users
+-- Políticas para USUARIOS
+CREATE POLICY "Usuários podem ver perfis públicos" ON usuarios
     FOR SELECT USING (true);
 
-CREATE POLICY "Usuários podem atualizar seu próprio perfil" ON users
+CREATE POLICY "Usuários podem atualizar seu próprio perfil" ON usuarios
     FOR UPDATE USING (auth.uid() = id);
 
--- Políticas para GAMES
-CREATE POLICY "Todos podem ver jogos publicados" ON games
-    FOR SELECT USING (status = 'published' OR auth.uid() = user_id);
+-- Políticas para JOGOS
+CREATE POLICY "Todos podem ver jogos publicados" ON jogos
+    FOR SELECT USING (status = 'publicado' OR auth.uid() = id_usuario);
 
-CREATE POLICY "Desenvolvedores podem inserir jogos" ON games
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Desenvolvedores podem inserir jogos" ON jogos
+    FOR INSERT WITH CHECK (auth.uid() = id_usuario);
 
-CREATE POLICY "Desenvolvedores podem atualizar seus jogos" ON games
-    FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Desenvolvedores podem atualizar seus jogos" ON jogos
+    FOR UPDATE USING (auth.uid() = id_usuario);
 
-CREATE POLICY "Desenvolvedores podem deletar seus jogos" ON games
-    FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY "Desenvolvedores podem deletar seus jogos" ON jogos
+    FOR DELETE USING (auth.uid() = id_usuario);
 
--- Políticas para REVIEWS
-CREATE POLICY "Todos podem ver reviews" ON reviews
+-- Políticas para AVALIACOES
+CREATE POLICY "Todos podem ver avaliacoes" ON avaliacoes
     FOR SELECT USING (true);
 
-CREATE POLICY "Usuários autenticados podem inserir reviews" ON reviews
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Usuários autenticados podem inserir avaliacoes" ON avaliacoes
+    FOR INSERT WITH CHECK (auth.uid() = id_usuario);
 
-CREATE POLICY "Usuários podem atualizar suas próprias reviews" ON reviews
-    FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Usuários podem atualizar suas próprias avaliacoes" ON avaliacoes
+    FOR UPDATE USING (auth.uid() = id_usuario);
 
-CREATE POLICY "Usuários podem deletar suas próprias reviews" ON reviews
-    FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY "Usuários podem deletar suas próprias avaliacoes" ON avaliacoes
+    FOR DELETE USING (auth.uid() = id_usuario);
 
--- Políticas para FAVORITES
-CREATE POLICY "Usuários podem ver seus próprios favoritos" ON favorites
-    FOR SELECT USING (auth.uid() = user_id);
+-- Políticas para FAVORITOS
+CREATE POLICY "Usuários podem ver seus próprios favoritos" ON favoritos
+    FOR SELECT USING (auth.uid() = id_usuario);
 
-CREATE POLICY "Usuários podem inserir favoritos" ON favorites
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Usuários podem inserir favoritos" ON favoritos
+    FOR INSERT WITH CHECK (auth.uid() = id_usuario);
 
-CREATE POLICY "Usuários podem deletar seus favoritos" ON favorites
-    FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY "Usuários podem deletar seus favoritos" ON favoritos
+    FOR DELETE USING (auth.uid() = id_usuario);
 
 -- ================================
 -- DADOS DE EXEMPLO (OPCIONAL)
 -- ================================
 
 -- Inserir usuário de exemplo (substitua pelos dados reais)
-INSERT INTO users (id, email, name, role) VALUES 
+INSERT INTO usuarios (id, email, nome, papel) VALUES 
     ('00000000-0000-0000-0000-000000000001', 'admin@indibox.com', 'Admin', 'admin');
 
 -- Inserir jogos de exemplo
-INSERT INTO games (
-    title, 
-    description, 
-    short_description,
-    developer, 
-    genre, 
-    platform, 
+INSERT INTO jogos (
+    titulo, 
+    descricao, 
+    descricao_curta,
+    desenvolvedor, 
+    genero, 
+    plataforma, 
     status, 
-    featured,
-    user_id,
-    cover_image
+    destaque,
+    id_usuario,
+    imagem_capa
 ) VALUES 
     (
         'Aventura Espacial',
@@ -262,7 +262,7 @@ INSERT INTO games (
         'Indie Dev Studio',
         ARRAY['Aventura', 'Ação'],
         ARRAY['Windows', 'Linux'],
-        'published',
+        'publicado',
         true,
         '00000000-0000-0000-0000-000000000001',
         'https://via.placeholder.com/400x300'
@@ -274,7 +274,7 @@ INSERT INTO games (
         'Brain Games Co',
         ARRAY['Puzzle', 'Casual'],
         ARRAY['Windows', 'Mac', 'Linux'],
-        'published',
+        'publicado',
         false,
         '00000000-0000-0000-0000-000000000001',
         'https://via.placeholder.com/400x300'
@@ -284,5 +284,5 @@ INSERT INTO games (
 -- Execute este script no editor SQL do Supabase
 -- Certifique-se de que a extensão 'uuid-ossp' está habilitada
 -- Para testar as funções, você pode usar:
--- SELECT increment_download_count('id-do-jogo-aqui');
--- SELECT calculate_game_rating('id-do-jogo-aqui');
+-- SELECT incrementar_contador_download('id-do-jogo-aqui');
+-- SELECT calcular_avaliacao_jogo('id-do-jogo-aqui');

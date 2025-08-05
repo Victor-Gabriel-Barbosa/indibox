@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
-import { supabase, isConfigured } from '@/lib/supabase';
-import { upsertUser } from '@/lib/database';
-import { generateUserUUID } from '@/lib/uuid';
+import { supabase, configurado } from '@/lib/supabase';
+import { upsertUsuario } from '@/lib/database';
+import { gerarUsuarioUUID } from '@/lib/uuid';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,22 +25,22 @@ const handler = NextAuth({
     async signIn({ user, account, profile }) {
       try {
         // Se Supabase não estiver configurado, apenas permite o login
-        if (!isConfigured || !supabase) {
+        if (!configurado || !supabase) {
           console.warn('⚠️ Supabase não configurado. Login permitido sem sincronização.');
           return true;
         }
 
         // Criar ou atualizar usuário no Supabase
-        const userData = {
-          id: generateUserUUID(user.email!), // Gerar UUID baseado no email
+        const dadosUsuario = {
+          id: gerarUsuarioUUID(user.email!), // Gerar UUID baseado no email
           email: user.email!,
-          name: user.name,
-          avatar_url: user.image,
-          github_username: account?.provider === 'github' ? (profile as { login?: string })?.login || null : null,
-          email_verified: true,
+          nome: user.name,
+          url_avatar: user.image,
+          nome_usuario_github: account?.provider === 'github' ? (profile as { login?: string })?.login || null : null,
+          email_verificado: true,
         };
 
-        const { data, error } = await upsertUser(userData);
+        const { data, error } = await upsertUsuario(dadosUsuario);
         
         if (error) {
           console.error('Erro ao criar/atualizar usuário no Supabase:', error);
@@ -62,20 +62,20 @@ const handler = NextAuth({
         session.user.id = token.sub;
         
         // Buscar dados atualizados do usuário no Supabase (se configurado)
-        if (isConfigured && supabase) {
+        if (configurado && supabase) {
           try {
-            const { data: userData } = await supabase
-              .from('users')
+            const { data: dadosUsuario } = await supabase
+              .from('usuarios')
               .select('*')
               .eq('id', token.sub)
               .single();
             
-            if (userData) {
-              session.user.role = userData.role;
-              session.user.bio = userData.bio;
-              session.user.website = userData.website;
-              session.user.github_username = userData.github_username;
-              session.user.twitter_username = userData.twitter_username;
+            if (dadosUsuario) {
+              session.user.papel = dadosUsuario.papel;
+              session.user.biografia = dadosUsuario.biografia;
+              session.user.site = dadosUsuario.site;
+              session.user.nome_usuario_github = dadosUsuario.nome_usuario_github;
+              session.user.nome_usuario_twitter = dadosUsuario.nome_usuario_twitter;
             }
           } catch (error) {
             console.error('Erro ao buscar dados do usuário:', error);

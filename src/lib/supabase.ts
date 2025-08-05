@@ -5,14 +5,14 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Verifica se as variáveis estão configuradas
-const isSupabaseConfigured = supabaseUrl && supabaseAnonKey && 
+const supabaseConfigurado = supabaseUrl && supabaseAnonKey && 
   supabaseUrl !== 'your_supabase_project_url' && 
   supabaseAnonKey !== 'your_supabase_anon_key';
 
-if (!isSupabaseConfigured) console.warn('⚠️ Supabase não configurado. Configure as variáveis de ambiente.');
+if (!supabaseConfigurado) console.warn('⚠️ Supabase não configurado. Configure as variáveis de ambiente.');
 
 // Cliente principal do Supabase (client-side)
-export const supabase = isSupabaseConfigured ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = supabaseConfigurado ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -21,7 +21,7 @@ export const supabase = isSupabaseConfigured ? createClient<Database>(supabaseUr
 }) : null;
 
 // Cliente com service role (server-side apenas)
-export const supabaseAdmin = isSupabaseConfigured && process.env.SUPABASE_SERVICE_ROLE_KEY ? 
+export const supabaseAdmin = supabaseConfigurado && process.env.SUPABASE_SERVICE_ROLE_KEY ? 
   createClient<Database>(
     supabaseUrl,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -34,14 +34,14 @@ export const supabaseAdmin = isSupabaseConfigured && process.env.SUPABASE_SERVIC
   ) : null;
 
 // Função para verificar conexão
-export const testConnection = async () => {
+export const testarConexao = async () => {
   if (!supabase) {
     console.warn('⚠️ Supabase não configurado. Pule este teste.');
     return false;
   }
 
   try {
-    const { error } = await supabase.from('games').select('count').limit(1);
+    const { error } = await supabase.from('jogos').select('count').limit(1);
     if (error) throw error;
     return true;
   } catch (error) {
@@ -51,4 +51,4 @@ export const testConnection = async () => {
 };
 
 // Exporta status de configuração
-export const isConfigured = isSupabaseConfigured;
+export const configurado = supabaseConfigurado;
