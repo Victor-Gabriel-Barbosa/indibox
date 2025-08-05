@@ -154,7 +154,7 @@ export default function Header() {
           {/* Menu - Mobile */}
           {menuMobileAtivo && (
             <div className="md:hidden mt-4 pt-4 border-t">
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-3 items-center text-center">
                 <a
                   href="#jogos"
                   className="text-base hover:text-blue-600 transition-colors py-2"
@@ -186,10 +186,10 @@ export default function Header() {
               </nav>
 
               {/* Botões de Ação - Mobile */}
-              <div className="flex flex-col space-y-3 mt-4 pt-4 border-t">
+              <div className="flex flex-col space-y-3 mt-4 pt-4 border-t items-center">
                 {/* Seletor de Tema - Mobile */}
-                <div className="border border-gray-200 rounded-lg p-3">
-                  <h3 className="text-lg font-medium mb-2">Tema</h3>
+                <div className="border border-gray-200 rounded-lg p-3 w-full max-w-sm">
+                  <h3 className="text-lg font-medium mb-2 text-center">Tema</h3>
                   <div className="grid grid-cols-3 gap-2">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
@@ -214,12 +214,12 @@ export default function Header() {
                     setModalDeLoginAberto(true);
                     setMenuMobileAtivo(false);
                   }}
-                  className="flex items-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
+                  className="flex items-center justify-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
                 >
                   <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
                   <span>{sessao ? sessao.user?.name : 'Entrar'}</span>
                 </button>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full max-w-sm">
                   <div className="flex items-center justify-center space-x-2">
                     <Icons.BsCloudArrowUp className="w-6 h-6" />
                     <span>Publicar Jogo</span>
