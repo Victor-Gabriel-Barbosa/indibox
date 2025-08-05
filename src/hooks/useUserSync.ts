@@ -24,7 +24,9 @@ export function useUserSync() {
           let userId = session.user.id;
           
           // Verifica se o ID é válido
-          if (!userId || typeof userId !== 'string' || userId === '{}' || userId === '[object Object]') userId = generateUserUUID(session.user.email!);
+          if (!userId || typeof userId !== 'string' || userId === '{}' || userId === '[object Object]') {
+            userId = generateUserUUID(session.user.email!);
+          }
 
           const userData = {
             id: userId,
@@ -36,7 +38,9 @@ export function useUserSync() {
 
           const { error } = await upsertUser(userData);
           
-          if (error) console.error('Erro ao sincronizar usuário com Supabase:', error);
+          if (error) {
+            console.error('Erro ao sincronizar usuário com Supabase:', error);
+          }
         } catch (error) {
           console.error('Erro na sincronização do usuário:', error);
         }

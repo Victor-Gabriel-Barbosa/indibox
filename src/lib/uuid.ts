@@ -30,16 +30,37 @@ export function isValidUUID(uuid: string): boolean {
  * Útil para manter consistência quando o mesmo usuário faz login múltiplas vezes
  */
 export function generateUserUUID(email: string): string {
+  // Normaliza o email para garantir consistência
+  const normalizedEmail = email.toLowerCase().trim();
+  
+  // Gera um hash mais robusto usando múltiplas iterações
   let hash = 0;
-  for (let i = 0; i < email.length; i++) {
-    const char = email.charCodeAt(i);
+  for (let i = 0; i < normalizedEmail.length; i++) {
+    const char = normalizedEmail.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Converte para 32bit integer
   }
   
-  // Converte hash para UUID format
-  const hashStr = Math.abs(hash).toString(16).padStart(8, '0');
-  return `${hashStr.slice(0, 8)}-${hashStr.slice(0, 4)}-4${hashStr.slice(1, 4)}-8${hashStr.slice(2, 5)}-${hashStr.padEnd(12, '0').slice(0, 12)}`;
+  // Cria um segundo hash para mais entropia
+  let hash2 = 5381;
+  for (let i = 0; i < normalizedEmail.length; i++) {
+    hash2 = ((hash2 << 5) + hash2) + normalizedEmail.charCodeAt(i);
+  }
+  
+  // Converte hashes para hexadecimal e constrói UUID v4
+  const h1 = Math.abs(hash).toString(16).padStart(8, '0');
+  const h2 = Math.abs(hash2).toString(16).padStart(8, '0');
+  
+  // Constrói UUID no formato correto (v4)
+  const uuid = [
+    h1.substring(0, 8),
+    h1.substring(0, 4),
+    '4' + h1.substring(1, 4), // Versão 4
+    '8' + h2.substring(1, 4), // Variante 8, 9, A ou B
+    h2.substring(0, 12).padEnd(12, '0')
+  ].join('-');
+  
+  return uuid;
 }
 
 /**

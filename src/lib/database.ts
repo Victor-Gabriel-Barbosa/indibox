@@ -204,58 +204,41 @@ export async function upsertUser(user: UserInsert) {
     // Usa supabaseAdmin para contornar políticas RLS durante criação inicial
     const clientToUse = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
 
-    // Primeiro tenta inserir o usuário
-    const { data: insertData, error: insertError } = await clientToUse
+    // Usa upsert nativo do Supabase com email como chave de conflito
+    const { data, error } = await clientToUse
       .from('users')
-      .insert(userData)
+      .upsert(userData, {
+        onConflict: 'email',
+        ignoreDuplicates: false
+      })
       .select()
       .single();
 
-    // Retorna se inserção foi bem-sucedida
-    if (!insertError && insertData) return { data: insertData, error: null };
+    if (error) {
+      // Se foi erro de RLS com cliente normal tenta com admin
+      if (error?.code === '42501' && clientToUse === supabase && supabaseAdmin) {
+        const { data: adminData, error: adminError } = await supabaseAdmin
+          .from('users')
+          .upsert(userData, {
+            onConflict: 'email',
+            ignoreDuplicates: false
+          })
+          .select()
+          .single();
 
-    // Se erro foi de duplicação (usuário já existe) tenta atualizar
-    if (insertError?.code === '23505' || insertError?.message?.includes('duplicate')) {
-      const { data: updateData, error: updateError } = await clientToUse
-        .from('users')
-        .update({
-          name: userData.name,
-          avatar_url: userData.avatar_url,
-          github_username: userData.github_username,
-          email_verified: userData.email_verified,
-          updated_at: new Date().toISOString()
-        })
-        .eq('email', userData.email)
-        .select()
-        .single();
+        if (adminError) {
+          console.error('❌ Erro mesmo com cliente Admin:', adminError);
+          return { data: null, error: adminError };
+        }
 
-      if (updateError) {
-        console.error('❌ Erro ao atualizar usuário:', updateError);
-        return { data: null, error: updateError };
+        return { data: adminData, error: null };
       }
 
-      return { data: updateData, error: null };
+      console.error('❌ Erro ao fazer upsert do usuário:', error);
+      return { data: null, error };
     }
 
-    // Se foi erro de RLS com cliente normal tenta com admin
-    if (insertError?.code === '42501' && clientToUse === supabase && supabaseAdmin) {
-      const { data: adminData, error: adminError } = await supabaseAdmin
-        .from('users')
-        .insert(userData)
-        .select()
-        .single();
-
-      if (adminError) {
-        console.error('❌ Erro mesmo com cliente Admin:', adminError);
-        return { data: null, error: adminError };
-      }
-
-      return { data: adminData, error: null };
-    }
-
-    // Se foi outro tipo de erro na inserção
-    console.error('❌ Erro desconhecido ao inserir usuário:', insertError);
-    return { data: null, error: insertError };
+    return { data, error: null };
 
   } catch (error) {
     console.error('❌ Erro exceção ao criar/atualizar usuário:', error);
