@@ -293,7 +293,7 @@ export async function getFavoritosUsuario(idUsuario: string) {
  * Verifica se jogo está nos favoritos
  */
 export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
-  if (!configurado || !supabase) return { isFavorited: ['1', '2'].includes(idJogo), error: null };
+  if (!configurado || !supabase) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
 
   try {
     const { data, error } = await supabase
@@ -305,13 +305,13 @@ export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
 
     if (error && error.code !== 'PGRST116') {
       console.error('Erro ao verificar favorito:', error);
-      return { isFavorited: false, error };
+      return { ehFavorito: false, error };
     }
 
-    return { isFavorited: !!data, error: null };
+    return { ehFavorito: !!data, error: null };
   } catch (error) {
     console.error('Erro ao verificar favorito:', error);
-    return { isFavorited: false, error: null };
+    return { ehFavorito: false, error: null };
   }
 }
 
