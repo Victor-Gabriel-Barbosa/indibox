@@ -36,10 +36,32 @@ export default function Home() {
         grabCursor={true}
         loop={true}
         centeredSlides={true}
-        slidesPerView={3}
+        slidesPerView={'auto'}
         spaceBetween={10}
         zoom={true}
         keyboard={{ enabled: true }}
+        breakpoints={{
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 15,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 25,
+          },
+          1280: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        }}
         coverflowEffect={{
           rotate: 25,
           stretch: 0,
