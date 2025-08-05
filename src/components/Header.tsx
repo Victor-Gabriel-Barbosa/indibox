@@ -50,7 +50,7 @@ export default function Header() {
                 alt="IndiBox"
                 width={48}
                 height={48}
-                className="md:w-16 md:h-16"
+                priority
               />
               <h1 className="text-xl md:text-2xl font-bold">Ind<span className="text-blue-600">iBox</span></h1>
             </div>
@@ -77,12 +77,12 @@ export default function Header() {
               <div className="relative" ref={seletorTemaRef}>
                 <button
                   onClick={() => setSeletorTemaAberto(!seletorTemaAberto)}
-                  className="p-2 rounded-lg transition-colors"
+                  className="p-2 rounded-lg hover:text-blue-600 transition-colors"
                   aria-label="Seletor de tema"
                 >
-                  {tema === 'light' && <Icons.BsSunFill className="w-5 h-5" />}
-                  {tema === 'dark' && <Icons.BsFillMoonStarsFill className="w-5 h-5" />}
-                  {tema === 'system' && <Icons.BsLaptopFill className="w-5 h-5" />}
+                  {tema === 'light' && <Icons.BsSunFill className="w-6 h-6" />}
+                  {tema === 'dark' && <Icons.BsFillMoonStarsFill className="w-6 h-6" />}
+                  {tema === 'system' && <Icons.BsLaptopFill className="w-6 h-6" />}
                 </button>
 
                 {/* Dropdown do Seletor de Tema */}
@@ -95,11 +95,11 @@ export default function Header() {
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
                           className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors ${
-                            tema === itemTema.id ? 'text-blue-600' : 'text-gray-700'
+                            tema === itemTema.id ? 'text-blue-600' : 'text-gray-600'
                           } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
-                          <span className="text-sm">{itemTema.nome}</span>
+                          <span className="text-lg">{itemTema.nome}</span>
                         </button>
                       );
                     })}
@@ -189,7 +189,7 @@ export default function Header() {
               <div className="flex flex-col space-y-3 mt-4 pt-4 border-t">
                 {/* Seletor de Tema - Mobile */}
                 <div className="border border-gray-200 rounded-lg p-3">
-                  <h3 className="text-sm font-medium mb-2">Tema</h3>
+                  <h3 className="text-lg font-medium mb-2">Tema</h3>
                   <div className="grid grid-cols-3 gap-2">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
@@ -197,13 +197,11 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg transition-colors ${
-                            tema === itemTema.id
-                              ? 'text-blue-600 border border-blue-200'
-                              : 'text-gray-600 hover:bg-gray-100'
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors ${
+                            tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-gray-600 '
                           }`}
                         >
-                          <IconeTema className="w-5 h-5" />
+                          <IconeTema className="w-6 h-6" />
                           <span className="text-xs">{itemTema.nome}</span>
                         </button>
                       );
@@ -218,12 +216,12 @@ export default function Header() {
                   }}
                   className="flex items-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
                 >
-                  <Icons.FaArrowRightToBracket className="w-5 h-5" />
+                  <Icons.FaArrowRightToBracket className="w-6 h-6" />
                   <span>{session ? session.user?.name : 'Entrar'}</span>
                 </button>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full">
                   <div className="flex items-center justify-center space-x-2">
-                    <Icons.BsCloudArrowUp className="w-5 h-5" />
+                    <Icons.BsCloudArrowUp className="w-6 h-6" />
                     <span>Publicar Jogo</span>
                   </div>
                 </button>

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Header, Footer, Icons } from '@/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
 
 export default function Home() {
   return (
@@ -38,6 +38,8 @@ export default function Home() {
         centeredSlides={true}
         slidesPerView={3}
         spaceBetween={10}
+        zoom={true}
+        keyboard={{ enabled: true }}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
@@ -48,9 +50,11 @@ export default function Home() {
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
+          pauseOnMouseEnter: true
         }}
-        pagination={true}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
+        pagination={{ clickable: true }}
+        navigation={true}
+        modules={[EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard]}
         className="swiper-top-games mb-20 mx-auto"
       >
         <SwiperSlide>

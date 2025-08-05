@@ -5,7 +5,7 @@
   --foreground: #171717;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-hover: #f5f5f5;
+  --color-hover: #EFF6FF;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -14,20 +14,20 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --color-hover: #1f1f1f;
+    --color-hover: #1E293B;
   }
 }
 
 :root.light {
   --background: #ffffff;
   --foreground: #171717;
-  --color-hover: #f5f5f5;
+  --color-hover: #EFF6FF;
 }
 
 :root.dark {
   --background: #0a0a0a;
   --foreground: #ededed;
-  --color-hover: #1f1f1f;
+  --color-hover: #1E293B;
 }
 
 body {
@@ -77,13 +77,32 @@ body {
 }
 
 .swiper-slide:hover img {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  transition: all 1s ease;
+}
+
+.swiper-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  opacity: 0;
+  transition: all 1s ease;
+  z-index: 1;
+}
+
+.swiper-slide:hover::before {
+  left: 100%;
+  opacity: 1;
 }
 
 .swiper-top-games {
   width: 100%;
   aspect-ratio: 16 / 9;
-  max-height: 300px;
+  max-height: 350px;
   padding: 0; 
   overflow: hidden;
 }
