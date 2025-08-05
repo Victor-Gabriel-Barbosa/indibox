@@ -43,13 +43,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   return (
     <div className="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="relative mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
             {session ? 'Minha Conta' : 'Entrar'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -98,7 +98,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <p className="text-gray-600 dark:text-gray-300 text-center mb-6">
               Escolha uma opção para entrar na IndiBox
             </p>
-            
+
             <button
               onClick={() => handleSignIn('google')}
               disabled={isLoading !== null}
