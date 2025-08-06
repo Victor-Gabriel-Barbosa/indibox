@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -6,10 +7,10 @@ export default function Footer() {
       <div className="container mx-auto">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
+            <Link href="/" className="flex items-center space-x-2 mb-4">
               <Image src="/assets/favicon/favicon.svg" alt="IndiBox" width={64} height={64} />
-              <h5 className="font-bold text-lg">IndiBox</h5>
-            </div>
+              <h5 className="font-bold text-lg">Ind<span className="text-blue-600">iBox</span></h5>
+            </Link>
             <p className="text-gray-600 dark:text-gray-500 text-md">
               A plataforma definitiva para jogos indie gratuitos, conectando desenvolvedores e jogadores apaixonados.
             </p>

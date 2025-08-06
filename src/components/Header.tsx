@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect, useRef } from 'react';
 import { Icons, LoginModal } from '@/components';
 import { useTheme } from '@/contexts/ThemeContext';
+import Link from 'next/link';
 
 export default function Header() {
   const { data: sessao } = useSession();
@@ -44,7 +45,7 @@ export default function Header() {
           {/* Linha Principal do Cabeçalho */}
           <div className="flex items-center justify-between">
             {/* Seção da Logo */}
-            <div className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
               <Image
                 src="/assets/favicon/favicon.svg"
                 alt="IndiBox"
@@ -53,7 +54,7 @@ export default function Header() {
                 priority
               />
               <h1 className="text-xl md:text-2xl font-bold">Ind<span className="text-blue-600">iBox</span></h1>
-            </div>
+            </Link>
 
             {/* Barra de Navegação - Desktop */}
             <nav className="hidden md:flex items-center space-x-6">
@@ -94,9 +95,8 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-blue-600' : 'text-gray-600'
-                          } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600' : 'text-gray-600'
+                            } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
                           <span className="text-lg">{itemTema.nome}</span>
@@ -133,19 +133,16 @@ export default function Header() {
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${
-                    menuMobileAtivo ? 'rotate-45 translate-y-1.5' : 'rotate-0 translate-y-0'
-                  }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? 'rotate-45 translate-y-1.5' : 'rotate-0 translate-y-0'
+                    }`}
                 />
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out my-1 ${
-                    menuMobileAtivo ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out my-1 ${menuMobileAtivo ? 'opacity-0' : 'opacity-100'
+                    }`}
                 />
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${
-                    menuMobileAtivo ? '-rotate-45 -translate-y-1.5' : 'rotate-0 translate-y-0'
-                  }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? '-rotate-45 -translate-y-1.5' : 'rotate-0 translate-y-0'
+                    }`}
                 />
               </div>
             </button>
@@ -197,9 +194,8 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-gray-600 '
-                          }`}
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-gray-600 '
+                            }`}
                         >
                           <IconeTema className="w-6 h-6" />
                           <span className="text-xs">{itemTema.nome}</span>
