@@ -6,6 +6,7 @@ export { default as Providers } from './Providers';
 
 import { BsEmojiLaughingFill, BsStars, BsController, BsPersonCircle, BsFillPlusCircleFill, BsCloudArrowUp, BsSunFill, BsFillMoonStarsFill, BsLaptopFill } from "react-icons/bs";
 import { FaPeopleGroup, FaArrowRightToBracket, FaGoogle, FaGithub, FaBars, FaXmark } from "react-icons/fa6";
+import GameAsset from '../../public/assets/GameAsset.json';
 
 export const Icons = {
   BsEmojiLaughingFill,
@@ -24,3 +25,7 @@ export const Icons = {
   BsFillMoonStarsFill,
   BsLaptopFill,
 };
+
+export const Lotties = {
+  GameAsset,
+}

@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { Header, Footer, Icons } from '@/components';
+import { Header, Footer, Icons, Lotties } from '@/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
+import LottieAnimation from '@/components/LottieAnimation';
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
       <Header />
 
       {/* Seção de Destaque */}
-      <section className="py-5 px-4 mb-4">
+      <section className="py-10 px-4">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Descubra jogos
@@ -77,7 +78,7 @@ export default function Home() {
         pagination={{ clickable: true }}
         navigation={true}
         modules={[EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard]}
-        className="swiper-top-games mb-20 mx-auto"
+        className="swiper-top-games mx-auto mb-10"
       >
         <SwiperSlide>
           <Image src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Game showcase 1" fill />
@@ -109,7 +110,7 @@ export default function Home() {
       </Swiper>
 
       {/* Seção de Informações */}
-      <section id="jogos" className="py-20 px-4 bg-gray-50 dark:bg-blue-600">
+      <section id="jogos" className="py-10 px-4 bg-gray-50 dark:bg-blue-600">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold mb-4 text-white">Por que IndiBox?</h3>
@@ -121,7 +122,7 @@ export default function Home() {
             <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
+
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300">
                   <Icons.BsEmojiLaughingFill className="w-8 h-8 text-white" />
@@ -134,11 +135,11 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
+
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300">
                   <Icons.FaPeopleGroup className="w-8 h-8 text-white" />
@@ -151,11 +152,11 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
+
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300">
                   <Icons.BsStars className="w-8 h-8 text-white" />
@@ -173,7 +174,7 @@ export default function Home() {
       </section>
 
       {/* Seção de Exploração */}
-      <section className="py-20 px-4">
+      <section className="py-10 px-4">
         <div className="container mx-auto text-center">
           <h3 className="text-3xl font-bold mb-4">Pronto para descobrir?</h3>
           <p className="text-gray-600 dark:text-gray-500 mb-8 max-w-2xl mx-auto">
@@ -185,6 +186,9 @@ export default function Home() {
               <span>Explorar Jogos Agora</span>
             </div>
           </button>
+          <div className="mx-auto max-w-2xl">
+            <LottieAnimation animationData={Lotties.GameAsset} />
+          </div>
         </div>
       </section>
 
