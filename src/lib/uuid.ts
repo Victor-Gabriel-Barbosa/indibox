@@ -67,11 +67,6 @@ export function gerarUsuarioUUID(email: string): string {
 export function idParaUUID(idSimples: string): string {
   if (ehValidoUUID(idSimples)) return idSimples;
   
-  // Se não for UUID, gerar um baseado no ID
+  // Se não for UUID gera um baseado no ID
   return gerarUsuarioUUID(idSimples);
 }
-
-// Exemplos de uso:
-// const newId = generateUUID(); // "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-// const isValid = ehValidoUUID("f47ac10b-58cc-4372-a567-0e02b2c3d479"); // true
-// const userUuid = generateUserUUID("user@example.com"); // UUID consistente para este email

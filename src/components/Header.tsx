@@ -95,7 +95,7 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600' : 'text-gray-600'
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600' : 'text-foreground/70'
                             } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
@@ -194,8 +194,9 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-gray-600 '
-                            }`}
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${
+                            tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-foreground/70'
+                          }`}
                         >
                           <IconeTema className="w-6 h-6" />
                           <span className="text-xs">{itemTema.nome}</span>
