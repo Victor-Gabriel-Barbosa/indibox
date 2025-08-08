@@ -114,6 +114,102 @@ export async function getJogosEmDestaque() {
     return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
   }
 }
+  
+/**
+ * Busca jogos com paginação
+ */
+export async function getJogosComPaginacao(
+  pagina: number = 1, 
+  limite: number = 12,
+  filtros?: {
+    genero?: string;
+    ordenarPor?: 'criado_em' | 'avaliacao' | 'contador_download' | 'titulo';
+    ordem?: 'asc' | 'desc';
+  }
+) {
+  const offset = (pagina - 1) * limite;
+  const { genero, ordenarPor = 'criado_em', ordem = 'desc' } = filtros || {};
+
+  if (!estaConfigurado || !supabase) {
+    // Mock data para desenvolvimento
+    let jogosFiltrados = [...jogosMock];
+    
+    if (genero && genero !== 'todos') jogosFiltrados = jogosFiltrados.filter(jogo => jogo.genero.some(g => g.toLowerCase() === genero.toLowerCase()));
+
+    // Ordenação mock
+    jogosFiltrados.sort((a, b) => {
+      let valorA, valorB;
+      switch (ordenarPor) {
+        case 'titulo':
+          valorA = a.titulo.toLowerCase();
+          valorB = b.titulo.toLowerCase();
+          break;
+        case 'avaliacao':
+          valorA = a.avaliacao || 0;
+          valorB = b.avaliacao || 0;
+          break;
+        case 'contador_download':
+          valorA = a.contador_download || 0;
+          valorB = b.contador_download || 0;
+          break;
+        default:
+          valorA = new Date(a.criado_em).getTime();
+          valorB = new Date(b.criado_em).getTime();
+      }
+
+      if (ordem === 'asc') return valorA > valorB ? 1 : -1;
+      else return valorA < valorB ? 1 : -1;
+    });
+
+    const totalJogos = jogosFiltrados.length;
+    const jogosPaginados = jogosFiltrados.slice(offset, offset + limite);
+    
+    return { 
+      data: jogosPaginados, 
+      error: null,
+      totalJogos,
+      totalPaginas: Math.ceil(totalJogos / limite),
+      paginaAtual: pagina
+    };
+  }
+
+  try {
+    let query = supabase
+      .from('jogos')
+      .select('*', { count: 'exact' })
+      .eq('status', 'publicado');
+
+    // Aplica filtro de gênero se especificado
+    if (genero && genero !== 'todos') query = query.contains('genero', [genero]);
+
+    // Aplica ordenação
+    query = query.order(ordenarPor, { ascending: ordem === 'asc' });
+
+    // Aplica paginação
+    query = query.range(offset, offset + limite - 1);
+
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('Erro ao buscar jogos com paginação:', error);
+      return { data: null, error, totalJogos: 0, totalPaginas: 0, paginaAtual: pagina };
+    }
+
+    const totalJogos = count || 0;
+    const totalPaginas = Math.ceil(totalJogos / limite);
+
+    return { 
+      data, 
+      error: null,
+      totalJogos,
+      totalPaginas,
+      paginaAtual: pagina
+    };
+  } catch (error) {
+    console.error('Erro ao buscar jogos com paginação:', error);
+    return { data: null, error, totalJogos: 0, totalPaginas: 0, paginaAtual: pagina };
+  }
+}
 
 /**
  * Busca um jogo por ID

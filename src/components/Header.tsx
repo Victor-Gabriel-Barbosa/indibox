@@ -6,10 +6,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Icons, LoginModal } from '@/components';
 import { useTheme } from '@/contexts/ThemeContext';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const { data: sessao } = useSession();
   const { tema, setTema } = useTheme();
+  const pathname = usePathname();
   const [modalDeLoginAberto, setModalDeLoginAberto] = useState(false);
   const [menuMobileAtivo, setMenuMobileAtivo] = useState(false);
   const [seletorTemaAberto, setSeletorTemaAberto] = useState(false);
@@ -18,8 +20,13 @@ export default function Header() {
   const temas = [
     { id: 'light', nome: 'Claro', icone: Icons.BsSunFill },
     { id: 'dark', nome: 'Escuro', icone: Icons.BsFillMoonStarsFill },
-    { id: 'system', nome: 'Sistema', icone: Icons.BsLaptopFill },
+    { id: 'system', nome: 'Sistema', icone: Icons.BsCircleHalf },
   ] as const;
+
+  // Função para verificar se o link está ativo
+  const isLinkActive = (href: string) => {
+    return (href === '/') ? pathname === '/' : pathname.startsWith(href);
+  };
 
   const handleTemaChange = (novoTema: 'light' | 'dark' | 'system') => {
     setTema(novoTema);
@@ -58,11 +65,14 @@ export default function Header() {
 
             {/* Barra de Navegação - Desktop */}
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="#jogos" className="text-sm md:text-base hover:text-blue-600 transition-colors">
+              <Link href="/" className={`text-sm md:text-base hover:text-blue-600 transition-colors ${isLinkActive('/') ? 'text-blue-600' : ''}`}>
+                Início
+              </Link>
+              <Link href="/jogos" className={`text-sm md:text-base hover:text-blue-600 transition-colors ${isLinkActive('/jogos') ? 'text-blue-600' : ''}`}>
                 Jogos
-              </a>
+              </Link>
               <a href="#desenvolvedores" className="text-sm md:text-base hover:text-blue-600 transition-colors">
-                Desenvolvedores
+                Devs
               </a>
               <a href="#sobre" className="text-sm md:text-base hover:text-blue-600 transition-colors">
                 Sobre
@@ -78,12 +88,13 @@ export default function Header() {
               <div className="relative" ref={seletorTemaRef}>
                 <button
                   onClick={() => setSeletorTemaAberto(!seletorTemaAberto)}
-                  className="p-2 rounded-lg hover:text-blue-600 transition-colors"
+                  className="flex p-2 rounded-lg hover:text-blue-600 transition-colors"
                   aria-label="Seletor de tema"
                 >
                   {tema === 'light' && <Icons.BsSunFill className="w-6 h-6" />}
                   {tema === 'dark' && <Icons.BsFillMoonStarsFill className="w-6 h-6" />}
-                  {tema === 'system' && <Icons.BsLaptopFill className="w-6 h-6" />}
+                  {tema === 'system' && <Icons.BsCircleHalf className="w-6 h-6" />}
+                  <Icons.BsCaretDownFill className={`w-3 h-3 transition-transform duration-200 self-center ${seletorTemaAberto ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Dropdown do Seletor de Tema */}
@@ -95,8 +106,9 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-blue-600' : 'text-foreground/70'
-                            } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${
+                            tema === itemTema.id ? 'text-blue-600' : 'text-foreground/70'
+                          } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
                           <span className="text-lg">{itemTema.nome}</span>
@@ -113,14 +125,7 @@ export default function Header() {
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
                   <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
-                  <span className="hidden lg:inline">{sessao ? sessao.user?.name : 'Entrar'}</span>
-                </div>
-              </button>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-sm lg:text-base transition-colors">
-                <div className="flex items-center space-x-1 lg:space-x-2">
-                  <Icons.BsCloudArrowUp className="w-4 h-4 lg:w-5 lg:h-5" />
-                  <span className="hidden xl:inline">Publicar Jogo</span>
-                  <span className="xl:hidden">Publicar</span>
+                  <span className="hidden lg:inline">{sessao ? sessao.user?.name?.split(' ')[0] : 'Entrar'}</span>
                 </div>
               </button>
             </div>
@@ -152,19 +157,26 @@ export default function Header() {
           {menuMobileAtivo && (
             <div className="md:hidden mt-4 pt-4 border-t">
               <nav className="flex flex-col space-y-3 items-center text-center">
-                <a
-                  href="#jogos"
-                  className="text-base hover:text-blue-600 transition-colors py-2"
+                <Link
+                  href="/"
+                  className={`text-base hover:text-blue-600 transition-colors py-2 ${isLinkActive('/') ? 'text-blue-600' : ''}`}
+                  onClick={() => setMenuMobileAtivo(false)}
+                >
+                  Início
+                </Link>
+                <Link
+                  href="/jogos"
+                  className={`text-base hover:text-blue-600 transition-colors py-2 ${isLinkActive('/jogos') ? 'text-blue-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Jogos
-                </a>
+                </Link>
                 <a
                   href="#desenvolvedores"
                   className="text-base hover:text-blue-600 transition-colors py-2"
                   onClick={() => setMenuMobileAtivo(false)}
                 >
-                  Desenvolvedores
+                  Devs
                 </a>
                 <a
                   href="#sobre"
@@ -214,13 +226,7 @@ export default function Header() {
                   className="flex items-center justify-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
                 >
                   <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
-                  <span>{sessao ? sessao.user?.name : 'Entrar'}</span>
-                </button>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-base transition-colors w-full max-w-sm">
-                  <div className="flex items-center justify-center space-x-2">
-                    <Icons.BsCloudArrowUp className="w-6 h-6" />
-                    <span>Publicar Jogo</span>
-                  </div>
+                  <span>{sessao ? sessao.user?.name?.split(' ')[0] : 'Entrar'}</span>
                 </button>
               </div>
             </div>

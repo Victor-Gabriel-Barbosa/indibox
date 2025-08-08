@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Header, Footer, Icons, Lotties } from '@/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
@@ -12,6 +14,7 @@ import type { Database } from '@/types/supabase';
 type Jogo = Database['public']['Tables']['jogos']['Row'];
 
 export default function Home() {
+  const router = useRouter();
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
   const [carregandoJogos, setCarregandoJogos] = useState(true);
 
@@ -33,6 +36,10 @@ export default function Home() {
     carregarJogosDestaque();
   }, []);
 
+  const handleJogoClick = (jogoId: string) => {
+    router.push(`/jogos/${jogoId}`);
+  };
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Header />
@@ -48,9 +55,11 @@ export default function Home() {
             Uma plataforma dedicada a jogos independentes 100% gratuitos. Explore experiências únicas criadas por desenvolvedores apaixonados ao redor do mundo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
-              Explorar Jogos
-            </button>
+            <Link href="/jogos">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+                Explorar Jogos
+              </button>
+            </Link>
             <button className="border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Para Desenvolvedores
             </button>
@@ -121,7 +130,10 @@ export default function Home() {
           // Jogos carregados do banco
           jogosDestaque.map((jogo) => (
             <SwiperSlide key={jogo.id}>
-              <div className="relative w-full h-full group cursor-pointer">
+              <div 
+                className="relative w-full h-full group cursor-pointer"
+                onClick={() => handleJogoClick(jogo.id)}
+              >
                 {jogo.imagem_capa ? (
                   <Image 
                     src={jogo.imagem_capa} 
@@ -148,13 +160,13 @@ export default function Home() {
                     className="object-cover rounded-lg w-full h-full"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
                   />
-                  {/* Sobreposição com informações sobre a imagem placeholder */}
+                  {/* Overlay com informações sobre a imagem placeholder */}
                   <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center w-full h-full">
                     <Icons.BsController className="w-16 h-16 text-white mb-2" />
                     <p className="text-white text-sm font-medium text-center px-2">{jogo.titulo}</p>
                   </div>
                 </div>
-                {/* Sobreposição com informações do jogo */}
+                {/* Overlay com informações do jogo */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-4 w-full h-full">
                   <h3 className="text-white text-lg font-bold mb-1">{jogo.titulo}</h3>
                   <p className="text-gray-200 text-sm mb-2">{jogo.desenvolvedor}</p>
@@ -254,12 +266,14 @@ export default function Home() {
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
             Junte-se à nossa comunidade de jogadores e desenvolvedores apaixonados por jogos indie gratuitos.
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
-            <div className="flex items-center space-x-2 ">
-              <Icons.BsController className="w-8 h-8" />
-              <span>Explorar Jogos Agora</span>
-            </div>
-          </button>
+          <Link href="/jogos">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+              <div className="flex items-center space-x-2 ">
+                <Icons.BsController className="w-8 h-8" />
+                <span>Explorar Jogos Agora</span>
+              </div>
+            </button>
+          </Link>
           <div className="mx-auto max-w-2xl">
             <LottieAnimation animationData={Lotties.GameAsset} />
           </div>

@@ -4,7 +4,6 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { Icons } from '@/components';
-import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 interface LoginModalProps {
   estaAberto: boolean;
@@ -108,11 +107,20 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
               ) : (
                 <>
-                  <FaGoogle className="w-5 h-5 text-red-500" />
+                  <Icons.FcGoogle className="w-5 h-5 text-red-500" />
                   <span className="font-medium">Continuar com Google</span>
                 </>
               )}
             </button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-gray-800 text-white">ou</span>
+              </div>
+            </div>
 
             <button
               onClick={() => handleSignIn('github')}
@@ -123,7 +131,7 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
                 <>
-                  <FaGithub className="w-5 h-5" />
+                  <Icons.FaGithub className="w-5 h-5" />
                   <span className="font-medium">Continuar com GitHub</span>
                 </>
               )}
