@@ -5,8 +5,34 @@ import { Header, Footer, Icons, Lotties } from '@/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
 import LottieAnimation from '@/components/LottieAnimation';
+import { useEffect, useState } from 'react';
+import { getJogosEmDestaque } from '@/lib/database';
+import type { Database } from '@/types/supabase';
+
+type Jogo = Database['public']['Tables']['jogos']['Row'];
 
 export default function Home() {
+  const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
+  const [carregandoJogos, setCarregandoJogos] = useState(true);
+
+  useEffect(() => {
+    async function carregarJogosDestaque() {
+      try {
+        setCarregandoJogos(true);
+        const { data, error } = await getJogosEmDestaque();
+        
+        if (error) console.error('Erro ao carregar jogos em destaque:', error);
+        else if (data) setJogosDestaque(data);
+      } catch (error) {
+        console.error('Erro ao carregar jogos em destaque:', error);
+      } finally {
+        setCarregandoJogos(false);
+      }
+    }
+
+    carregarJogosDestaque();
+  }, []);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Header />
@@ -35,7 +61,7 @@ export default function Home() {
       <Swiper
         effect={'coverflow'}
         grabCursor={true}
-        loop={true}
+        loop={jogosDestaque.length > 0}
         centeredSlides={true}
         slidesPerView={'auto'}
         spaceBetween={10}
@@ -80,33 +106,81 @@ export default function Home() {
         modules={[EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard]}
         className="swiper-top-games mx-auto mb-10"
       >
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Game showcase 1" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-2.jpg" alt="Game showcase 2" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-3.jpg" alt="Game showcase 3" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-4.jpg" alt="Game showcase 4" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-5.jpg" alt="Game showcase 5" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-6.jpg" alt="Game showcase 6" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-7.jpg" alt="Game showcase 7" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-8.jpg" alt="Game showcase 8" fill />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="https://swiperjs.com/demos/images/nature-9.jpg" alt="Game showcase 9" fill />
-        </SwiperSlide>
+        {carregandoJogos ? (
+          // Esqueleto de carregamento
+          Array.from({ length: 5 }).map((_, index) => (
+            <SwiperSlide key={`skeleton-${index}`}>
+              <div className="relative w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg">
+                <div className="absolute inset-0 flex items-center justify-center w-full h-full">
+                  <Icons.BsController className="w-12 h-12 text-gray-400" />
+                </div>
+              </div>
+            </SwiperSlide>
+          ))
+        ) : jogosDestaque.length > 0 ? (
+          // Jogos carregados do banco
+          jogosDestaque.map((jogo) => (
+            <SwiperSlide key={jogo.id}>
+              <div className="relative w-full h-full group cursor-pointer">
+                {jogo.imagem_capa ? (
+                  <Image 
+                    src={jogo.imagem_capa} 
+                    alt={jogo.titulo}
+                    fill
+                    className="object-cover rounded-lg w-full h-full"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={true}
+                    onError={(e) => {
+                      // Se a imagem falhar, mostra placeholder
+                      e.currentTarget.style.display = 'none';
+                      const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (placeholder) placeholder.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className={`absolute inset-0 w-full h-full ${jogo.imagem_capa ? 'hidden' : 'block'}`}
+                >
+                  <Image 
+                    src="/assets/game-placeholder.svg"
+                    alt={`Placeholder para ${jogo.titulo}`}
+                    fill
+                    className="object-cover rounded-lg w-full h-full"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
+                  />
+                  {/* Sobreposição com informações sobre a imagem placeholder */}
+                  <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center w-full h-full">
+                    <Icons.BsController className="w-16 h-16 text-white mb-2" />
+                    <p className="text-white text-sm font-medium text-center px-2">{jogo.titulo}</p>
+                  </div>
+                </div>
+                {/* Sobreposição com informações do jogo */}
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-4 w-full h-full">
+                  <h3 className="text-white text-lg font-bold mb-1">{jogo.titulo}</h3>
+                  <p className="text-gray-200 text-sm mb-2">{jogo.desenvolvedor}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1">
+                      <Icons.BsStars className="w-4 h-4 text-yellow-400" />
+                      <span className="text-white text-sm">{jogo.avaliacao?.toFixed(1) || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Icons.BsDownload className="w-4 h-4 text-gray-300" />
+                      <span className="text-white text-sm">{jogo.contador_download || 0}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))
+        ) : (
+          // Fallback quando não há jogos
+          <SwiperSlide>
+            <div className="relative w-full h-full bg-gray-100 dark:bg-gray-800 rounded-lg flex flex-col items-center justify-center">
+              <Icons.BsController className="w-16 h-16 text-gray-400 mb-4" />
+              <p className="text-gray-500 text-center">Nenhum jogo em destaque encontrado</p>
+            </div>
+          </SwiperSlide>
+        )}
       </Swiper>
 
       {/* Seção de Informações */}

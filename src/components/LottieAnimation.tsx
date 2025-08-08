@@ -1,4 +1,3 @@
-// components/LottieAnimation.js
 import React from 'react';
 import Lottie from 'react-lottie';
 

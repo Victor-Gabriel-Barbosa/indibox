@@ -119,10 +119,7 @@ export async function getJogosEmDestaque() {
  * Busca um jogo por ID
  */
 export async function getJogoPorID(id: string) {
-  if (!estaConfigurado || !supabase) {
-    const jogo = jogosMock.find(j => j.id === id);
-    return { data: jogo || null, error: null };
-  }
+  if (!estaConfigurado || !supabase) return { data: jogosMock.find(j => j.id === id) || null, error: null };
 
   try {
     const { data, error } = await supabase
