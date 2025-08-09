@@ -14,7 +14,7 @@ interface GameCardProps {
 export default function GameCard({ jogo, onClick }: GameCardProps) {
   return (
     <div 
-      className="relative rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"
+      className="relative h-full flex flex-col rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"
       onClick={onClick}
     >
       {/* Imagem do jogo */}
@@ -36,7 +36,7 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
         
         {/* Placeholder para quando não há imagem */}
         <div 
-          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 ${jogo.imagem_capa ? 'hidden' : 'flex'}`}
+          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 ${jogo.imagem_capa ? 'hidden' : 'flex'}`}
         >
           <Icons.BsController className="w-12 h-12 text-white mb-2" />
           <p className="text-white text-sm font-medium text-center px-2">{jogo.titulo}</p>
@@ -60,8 +60,8 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
       </div>
 
       {/* Informações do jogo */}
-      <div className="p-4">
-        <h3 className="text-lg font-bold mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+      <div className="p-4 flex flex-col flex-grow">
+        <h3 className="text-lg font-bold mb-1 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
           {jogo.titulo}
         </h3>
         
@@ -80,7 +80,7 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
           {jogo.genero && jogo.genero.slice(0, 2).map((genero, index) => (
             <span 
               key={index}
-              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full"
+              className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-2 py-1 rounded-full"
             >
               {genero}
             </span>
@@ -90,8 +90,8 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
           )}
         </div>
 
-        {/* Estatísticas */}
-        <div className="flex items-center justify-between text-sm">
+        {/* Estatísticas - sempre no final */}
+        <div className="flex items-center justify-between text-sm mt-auto">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-1">
               <Icons.BsStars className="w-4 h-4 text-yellow-500" />
@@ -100,7 +100,7 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              <Icons.BsDownload className="w-4 h-4 text-gray-500" />
+              <Icons.BsDownload className="w-4 h-4 text-green-500" />
               <span>
                 {jogo.contador_download || 0}
               </span>

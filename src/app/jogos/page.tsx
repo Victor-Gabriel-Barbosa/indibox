@@ -129,7 +129,7 @@ export default function JogosPage() {
       <section className="text-center py-8 px-4">
         <div className="container mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Biblioteca de <span className="text-blue-600">Jogos</span>
+            Biblioteca de <span className="text-indigo-600">Jogos</span>
           </h1>
           <p className="text-xl opacity-90">
             Explore nossa coleção completa de jogos indie gratuitos. Encontre sua próxima aventura!
@@ -138,11 +138,11 @@ export default function JogosPage() {
       </section>
 
       {/* Filtros e ordenação */}
-      <section className="py-6 px-4 bg-blue-600 text-white">
+      <section className="py-6 mx-4 px-4 rounded-lg shadow-md bg-indigo-600">
         <div className="container mx-auto">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
             {/* Informações de resultados */}
-            <div className="text-sm">
+            <div className="text-white text-sm">
               {carregando ? (
                 'Carregando jogos...'
               ) : (
@@ -154,13 +154,13 @@ export default function JogosPage() {
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               {/* Filtro por gênero */}
               <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium">
+                <label className="text-white text-sm font-medium">
                   Gênero:
                 </label>
                 <select
                   value={filtros.genero}
                   onChange={(e) => handleMudarFiltro({ genero: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 bg-indigo-600 text-white border border-white rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
                   {generos.map((genero) => (
                     <option key={genero} value={genero}>
@@ -172,7 +172,7 @@ export default function JogosPage() {
 
               {/* Ordenação */}
               <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium">
+                <label className="text-white text-sm font-medium">
                   Ordenar por:
                 </label>
                 <select
@@ -180,7 +180,7 @@ export default function JogosPage() {
                   onChange={(e) => handleMudarFiltro({ 
                     ordenarPor: e.target.value as FiltrosState['ordenarPor'] 
                   })}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 bg-indigo-600 text-white border border-white rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
                   <option value="criado_em">Data de lançamento</option>
                   <option value="titulo">Nome</option>
@@ -194,7 +194,7 @@ export default function JogosPage() {
                 onClick={() => handleMudarFiltro({ 
                   ordem: filtros.ordem === 'desc' ? 'asc' : 'desc' 
                 })}
-                className="flex items-center space-x-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="flex items-center space-x-1 px-3 py-2 bg-indigo-600 text-white border border-white rounded-md text-sm hover:bg-indigo-700 transition-colors"
                 title={filtros.ordem === 'desc' ? 'Decrescente' : 'Crescente'}
               >
                 <span>{filtros.ordem === 'desc' ? <Icons.FaArrowDownShortWide /> : <Icons.FaArrowUpWideShort />}</span>

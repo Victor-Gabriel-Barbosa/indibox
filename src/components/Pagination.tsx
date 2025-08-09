@@ -59,7 +59,7 @@ export default function Pagination({ paginaAtual, totalPaginas, onMudarPagina }:
           onClick={() => onMudarPagina(pagina)}
           className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
             pagina === paginaAtual
-              ? 'bg-blue-600 text-white border border-blue-600'
+              ? 'bg-pxl-game text-white border border-pxl-game'
               : 'text-gray-500 bg-white dark:bg-gray-800 dark:text-gray-400 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >

@@ -1,36 +1,36 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import { upsertUsuario } from '@/lib/database';
 import { estaConfigurado } from '@/lib/supabase';
-import { gerarUsuarioUUID } from '@/lib/uuid';
+import { ehValidoUUID } from '@/lib/uuid';
 
 /**
  * Hook para sincronizar usuário autenticado com Supabase
- * Gera um UUID baseado no email se o ID do usuário for inválido ou ausente
+ * Usa o ID nativo do Supabase Auth para consistência com a tabela usuarios
  */
 export function useUserSync() {
-  const { data: sessao, status } = useSession();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     async function syncUser() {
-      if (status === 'authenticated' && sessao?.user) {
+      if (!loading && user) {
         // Só tenta sincronizar se o Supabase estiver configurado
         if (!estaConfigurado) return;
 
         try {
-          // Gera UUID válido se não houver ID ou se for inválido
-          let usuarioId = sessao.user.id;
-          
-          // Verifica se o ID é válido
-          if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]') usuarioId = gerarUsuarioUUID(sessao.user.email!);
+          // Valida se o ID do usuário é válido
+          if (!user.id || typeof user.id !== 'string' || !ehValidoUUID(user.id)) {
+            console.error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
+            return;
+          }
 
           const dadosUsuario = {
-            id: usuarioId,
-            email: sessao.user.email!,
-            nome: sessao.user.name,
-            url_avatar: sessao.user.image,
+            id: user.id, // Usa o ID nativo do Supabase Auth
+            email: user.email!,
+            nome: user.name,
+            url_avatar: user.image,
             email_verificado: true,
           };
 
@@ -44,7 +44,7 @@ export function useUserSync() {
     }
 
     syncUser();
-  }, [sessao, status]);
+  }, [user, loading]);
 
-  return { sessao, status };
+  return { user, loading };
 }

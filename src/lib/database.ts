@@ -1,73 +1,28 @@
 import { supabase, supabaseAdmin, estaConfigurado } from './supabase';
 import type { Database } from '@/types/supabase';
-import { ehValidoUUID, gerarUsuarioUUID } from './uuid';
+import { ehValidoUUID } from './uuid';
 
 type JogoInsert = Database['public']['Tables']['jogos']['Insert'];
 type JogoUpdate = Database['public']['Tables']['jogos']['Update'];
 type UsuarioInserido = Database['public']['Tables']['usuarios']['Insert'];
-type AvaliacaoInsert = Database['public']['Tables']['avaliacoes']['Insert'];
 
-// Dados mock para desenvolvimento
-const jogosMock = [
-  {
-    id: '1',
-    titulo: 'Aventura Espacial',
-    descricao: 'Um jogo de aventura espacial emocionante com gráficos retrô.',
-    descricao_curta: 'Aventura espacial retrô',
-    desenvolvedor: 'Indie Dev Studio',
-    data_lancamento: '2024-01-15',
-    genero: ['Aventura', 'Ação'],
-    tags: ['indie', 'retro', 'space'],
-    url_download: 'https://example.com/download1',
-    url_site: 'https://example.com',
-    url_github: null,
-    imagem_capa: 'https://swiperjs.com/demos/images/nature-1.jpg',
-    capturas_tela: ['https://swiperjs.com/demos/images/nature-1.jpg'],
-    avaliacao: 4.5,
-    contador_download: 1250,
-    tamanho_arquivo: '150MB',
-    plataforma: ['Windows', 'Linux'],
-    status: 'publicado' as const,
-    destaque: true,
-    criado_em: '2024-01-15T10:00:00Z',
-    atualizado_em: '2024-01-15T10:00:00Z',
-    id_usuario: '1'
-  },
-  {
-    id: '2',
-    titulo: 'Puzzle Master',
-    descricao: 'Desafie sua mente com quebra-cabeças únicos e criativos.',
-    descricao_curta: 'Quebra-cabeças desafiadores',
-    desenvolvedor: 'Brain Games Co',
-    data_lancamento: '2024-02-01',
-    genero: ['Puzzle', 'Casual'],
-    tags: ['puzzle', 'brain', 'casual'],
-    url_download: 'https://example.com/download2',
-    url_site: 'https://example.com',
-    url_github: null,
-    imagem_capa: 'https://swiperjs.com/demos/images/nature-2.jpg',
-    capturas_tela: ['https://swiperjs.com/demos/images/nature-2.jpg'],
-    avaliacao: 4.2,
-    contador_download: 890,
-    tamanho_arquivo: '80MB',
-    plataforma: ['Windows', 'Mac', 'Linux'],
-    status: 'publicado' as const,
-    destaque: true,
-    criado_em: '2024-02-01T10:00:00Z',
-    atualizado_em: '2024-02-01T10:00:00Z',
-    id_usuario: '1'
-  }
-];
+// Tipos para as consultas de desenvolvedores
+type JogoEstatistica = {
+  id: string;
+  contador_download: number | null;
+  avaliacao: number | null;
+  status: string;
+};
+
+
 
 // ================================
 // OPERAÇÕES COM JOGOS
 // ================================
 
-/**
- * Busca todos os jogos publicados
- */
+// Busca todos os jogos publicados
 export async function getJogosPublicados() {
-  if (!estaConfigurado || !supabase) return { data: jogosMock, error: null };
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     const { data, error } = await supabase
@@ -84,15 +39,13 @@ export async function getJogosPublicados() {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogos:', error);
-    return { data: jogosMock, error: null }; // Fallback para dados mock
+    return { data: [], error: { message: 'Erro interno do servidor' } };
   }
 }
 
-/**
- * Busca jogos em destaque
- */
+// Busca jogos em destaque
 export async function getJogosEmDestaque() {
-  if (!estaConfigurado || !supabase) return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     const { data, error } = await supabase
@@ -111,13 +64,11 @@ export async function getJogosEmDestaque() {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogos em destaque:', error);
-    return { data: jogosMock.filter(jogo => jogo.destaque), error: null };
+    return { data: [], error: { message: 'Erro interno do servidor' } };
   }
 }
   
-/**
- * Busca jogos com paginação
- */
+// Busca jogos com paginação
 export async function getJogosComPaginacao(
   pagina: number = 1, 
   limite: number = 12,
@@ -131,44 +82,11 @@ export async function getJogosComPaginacao(
   const { genero, ordenarPor = 'criado_em', ordem = 'desc' } = filtros || {};
 
   if (!estaConfigurado || !supabase) {
-    // Mock data para desenvolvimento
-    let jogosFiltrados = [...jogosMock];
-    
-    if (genero && genero !== 'todos') jogosFiltrados = jogosFiltrados.filter(jogo => jogo.genero.some(g => g.toLowerCase() === genero.toLowerCase()));
-
-    // Ordenação mock
-    jogosFiltrados.sort((a, b) => {
-      let valorA, valorB;
-      switch (ordenarPor) {
-        case 'titulo':
-          valorA = a.titulo.toLowerCase();
-          valorB = b.titulo.toLowerCase();
-          break;
-        case 'avaliacao':
-          valorA = a.avaliacao || 0;
-          valorB = b.avaliacao || 0;
-          break;
-        case 'contador_download':
-          valorA = a.contador_download || 0;
-          valorB = b.contador_download || 0;
-          break;
-        default:
-          valorA = new Date(a.criado_em).getTime();
-          valorB = new Date(b.criado_em).getTime();
-      }
-
-      if (ordem === 'asc') return valorA > valorB ? 1 : -1;
-      else return valorA < valorB ? 1 : -1;
-    });
-
-    const totalJogos = jogosFiltrados.length;
-    const jogosPaginados = jogosFiltrados.slice(offset, offset + limite);
-    
     return { 
-      data: jogosPaginados, 
-      error: null,
-      totalJogos,
-      totalPaginas: Math.ceil(totalJogos / limite),
+      data: [], 
+      error: { message: 'Banco de dados não configurado' },
+      totalJogos: 0,
+      totalPaginas: 0,
       paginaAtual: pagina
     };
   }
@@ -211,11 +129,9 @@ export async function getJogosComPaginacao(
   }
 }
 
-/**
- * Busca um jogo por ID
- */
+// Busca um jogo por ID
 export async function getJogoPorID(id: string) {
-  if (!estaConfigurado || !supabase) return { data: jogosMock.find(j => j.id === id) || null, error: null };
+  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
     const { data, error } = await supabase
@@ -232,23 +148,13 @@ export async function getJogoPorID(id: string) {
     return { data, error: null };
   } catch (error) {
     console.error('Erro ao buscar jogo:', error);
-    const jogo = jogosMock.find(j => j.id === id);
-    return { data: jogo || null, error: null };
+    return { data: null, error: { message: 'Erro interno do servidor' } };
   }
 }
 
-/**
- * Busca jogos por texto
- */
+// Busca jogos por texto
 export async function buscarJogos(query: string) {
-  if (!estaConfigurado || !supabase) {
-    const filtrado = jogosMock.filter(jogo => 
-      jogo.titulo.toLowerCase().includes(query.toLowerCase()) ||
-      jogo.descricao.toLowerCase().includes(query.toLowerCase()) ||
-      jogo.desenvolvedor.toLowerCase().includes(query.toLowerCase())
-    );
-    return { data: filtrado, error: null };
-  }
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     const { data, error } = await supabase
@@ -266,12 +172,7 @@ export async function buscarJogos(query: string) {
     return { data, error: null };
   } catch (error) {
     console.error('Erro na busca de jogos:', error);
-    const filtrado = jogosMock.filter(jogo => 
-      jogo.titulo.toLowerCase().includes(query.toLowerCase()) ||
-      jogo.descricao.toLowerCase().includes(query.toLowerCase()) ||
-      jogo.desenvolvedor.toLowerCase().includes(query.toLowerCase())
-    );
-    return { data: filtrado, error: null };
+    return { data: [], error: { message: 'Erro interno do servidor' } };
   }
 }
 
@@ -279,29 +180,27 @@ export async function buscarJogos(query: string) {
 // OPERAÇÕES COM USUÁRIOS
 // ================================
 
-/**
- * Cria ou atualiza um usuário
- */
+// Cria ou atualiza um usuário
 export async function upsertUsuario(usuario: UsuarioInserido) {
   if (!estaConfigurado || !supabase) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
 
   try {
-    // Valida e corrige ID se necessário
-    let usuarioId = usuario.id;
+    // Valida o ID - deve ser um UUID válido vindo do Supabase Auth
+    const usuarioId = usuario.id;
     
-    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !ehValidoUUID(usuarioId)) usuarioId = gerarUsuarioUUID(usuario.email);
+    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !ehValidoUUID(usuarioId)) throw new Error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
 
-    // Cria objeto usuario com ID corrigido
+    // Cria objeto usuario com ID validado
     const dadosUsuario = { ...usuario, id: usuarioId };
 
     // Usa supabaseAdmin para contornar políticas RLS durante criação inicial
     const clienteDB = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
 
-    // Usa upsert nativo do Supabase com email como chave de conflito
+    // Usa upsert nativo do Supabase com ID como chave de conflito
     const { data, error } = await clienteDB
       .from('usuarios')
       .upsert(dadosUsuario, {
-        onConflict: 'email',
+        onConflict: 'id',
         ignoreDuplicates: false
       })
       .select()
@@ -335,35 +234,22 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
 
   } catch (error) {
     console.error('❌ Erro exceção ao criar/atualizar usuário:', error);
-    
-    // Fallback para dados mock em caso de erro
-    return { 
-      data: { ...usuario, papel: 'usuario' as const, criado_em: new Date().toISOString(), atualizado_em: new Date().toISOString() }, 
-      error: null 
-    };
+    return { data: null, error: { message: 'Erro interno do servidor' } };
   }
 }
 
 // ================================
-// OPERAÇÕES COM FAVORITOS (MOCK)
+// OPERAÇÕES COM FAVORITOS
 // ================================
 
-/**
- * Busca jogos favoritos do usuário
- */
+// Busca jogos favoritos do usuário
 export async function getFavoritosUsuario(idUsuario: string) {
-  if (!estaConfigurado || !supabase) {
-    // Retorna alguns favoritos mock
-    return { 
-      data: [
-        { id: '1', id_usuario: idUsuario, id_jogo: '1', criado_em: '2024-01-01', jogos: jogosMock[0] },
-        { id: '2', id_usuario: idUsuario, id_jogo: '2', criado_em: '2024-01-02', jogos: jogosMock[1] }
-      ], 
-      error: null 
-    };
-  }
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Valida se é um UUID válido
+    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    
     const { data, error } = await supabase
       .from('favoritos')
       .select('*, jogos(*)')
@@ -382,13 +268,14 @@ export async function getFavoritosUsuario(idUsuario: string) {
   }
 }
 
-/**
- * Verifica se jogo está nos favoritos
- */
+// Verifica se jogo está nos favoritos
 export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
   if (!estaConfigurado || !supabase) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
 
   try {
+    // Valida se é um UUID válido
+    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    
     const { data, error } = await supabase
       .from('favoritos')
       .select('id')
@@ -408,13 +295,14 @@ export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
   }
 }
 
-/**
- * Adiciona jogo aos favoritos
- */
+// Adiciona jogo aos favoritos
 export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
   if (!estaConfigurado || !supabase) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
 
   try {
+    // Valida se é um UUID válido
+    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    
     const { data, error } = await supabase
       .from('favoritos')
       .insert({ id_usuario: idUsuario, id_jogo: idJogo })
@@ -433,13 +321,14 @@ export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
   }
 }
 
-/**
- * Remove jogo dos favoritos
- */
+// Remove jogo dos favoritos
 export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
   if (!estaConfigurado || !supabase) return { success: true, error: null };
 
   try {
+    // Valida se é um UUID válido
+    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    
     const { error } = await supabase
       .from('favoritos')
       .delete()
@@ -458,5 +347,234 @@ export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
   }
 }
 
-// Exporta dados mock para testes
-export { jogosMock };
+// Insere um novo jogo no banco de dados
+export async function inserirJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' | 'atualizado_em'>) {
+  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    // Valida se o ID do usuário é um UUID válido
+    if (!ehValidoUUID(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+
+    const { data, error } = await supabase
+      .from('jogos')
+      .insert(dadosJogo)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Erro ao inserir jogo:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao inserir jogo:', error);
+    return { data: null, error };
+  }
+}
+
+// Atualiza um jogo existente
+export async function atualizarJogo(id: string, dadosJogo: JogoUpdate) {
+  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    const { data, error } = await supabase
+      .from('jogos')
+      .update(dadosJogo)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Erro ao atualizar jogo:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao atualizar jogo:', error);
+    return { data: null, error };
+  }
+}
+
+// Obtém jogos do usuário desenvolvedor
+export async function obterJogosDoUsuario(idUsuario: string) {
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    // Valida se é um UUID válido
+    if (!ehValidoUUID(idUsuario)) {
+      throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    }
+    
+    const { data, error } = await supabase
+      .from('jogos')
+      .select('*')
+      .eq('id_usuario', idUsuario)
+      .order('criado_em', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao obter jogos do usuário:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao obter jogos do usuário:', error);
+    return { data: null, error };
+  }
+}
+
+// Obtém um jogo específico por ID
+export async function obterJogoPorId(idJogo: string) {
+  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    const { data, error } = await supabase
+      .from('jogos')
+      .select('*')
+      .eq('id', idJogo)
+      .single();
+
+    if (error) {
+      console.error('Erro ao obter jogo:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao obter jogo:', error);
+    return { data: null, error };
+  }
+}
+
+// Função para obter desenvolvedores com estatísticas
+export async function obterDesenvolvedores() {
+  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    // Busca desenvolvedores com estatísticas agregadas
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select(`
+        *,
+        jogos!inner(
+          id,
+          contador_download,
+          avaliacao,
+          status
+        )
+      `)
+      .eq('papel', 'desenvolvedor')
+      .eq('jogos.status', 'publicado');
+
+    if (error) {
+      console.error('Erro ao obter desenvolvedores:', error);
+      return { data: null, error };
+    }
+
+    // Processa os dados para calcular estatísticas
+    const desenvolvedoresComEstatisticas = data?.map(dev => {
+      const jogosPublicados = dev.jogos?.length || 0;
+      const totalDownloads = dev.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.contador_download || 0), 0) || 0;
+      const avaliacaoMedia = jogosPublicados > 0 ? (dev.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.avaliacao || 0), 0) / jogosPublicados) || 0 : 0;
+
+      return {
+        ...dev,
+        jogosPublicados,
+        totalDownloads,
+        avaliacaoMedia
+      };
+    }) || [];
+
+    return { data: desenvolvedoresComEstatisticas, error: null };
+  } catch (error) {
+    console.error('Erro ao obter desenvolvedores:', error);
+    return { data: null, error };
+  }
+}
+
+// Função para obter um desenvolvedor específico com estatísticas
+export async function obterDesenvolvedorPorId(idDesenvolvedor: string) {
+  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+
+  try {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select(`
+        *,
+        jogos!inner(
+          id,
+          contador_download,
+          avaliacao,
+          status
+        )
+      `)
+      .eq('id', idDesenvolvedor)
+      .eq('papel', 'desenvolvedor')
+      .eq('jogos.status', 'publicado')
+      .single();
+
+    if (error) {
+      console.error('Erro ao obter desenvolvedor:', error);
+      return { data: null, error };
+    }
+
+    // Calcula estatísticas
+    const jogosPublicados = data?.jogos?.length || 0;
+    const totalDownloads = data?.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.contador_download || 0), 0) || 0;
+    const avaliacaoMedia = jogosPublicados > 0 ? (data?.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.avaliacao || 0), 0) / jogosPublicados) || 0 : 0;
+
+    const desenvolvedorComEstatisticas = {
+      ...data,
+      jogosPublicados,
+      totalDownloads,
+      avaliacaoMedia
+    };
+
+    return { data: desenvolvedorComEstatisticas, error: null };
+  } catch (error) {
+    console.error('Erro ao obter desenvolvedor:', error);
+    return { data: null, error };
+  }
+}
+
+// Deleta um jogo do banco de dados
+export async function deletarJogo(idJogo: string, idUsuario: string) {
+  if (!estaConfigurado || !supabase) return { error: { message: 'Banco de dados não configurado' } };
+  if (!ehValidoUUID(idJogo) || !ehValidoUUID(idUsuario)) return { error: { message: 'IDs inválidos fornecidos' } };
+
+  try {
+    // Verifica se o jogo pertence ao usuário
+    const { data: jogoExistente, error: erroVerificacao } = await supabase
+      .from('jogos')
+      .select('id, usuario_id')
+      .eq('id', idJogo)
+      .eq('usuario_id', idUsuario)
+      .single();
+
+    if (erroVerificacao) {
+      console.error('Erro ao verificar jogo:', erroVerificacao);
+      return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
+    }
+
+    if (!jogoExistente) return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
+
+    // Se chegou até aqui, o usuário tem permissão para deletar o jogo
+    const { error } = await supabase
+      .from('jogos')
+      .delete()
+      .eq('id', idJogo)
+      .eq('usuario_id', idUsuario);
+
+    if (error) {
+      console.error('Erro ao deletar jogo:', error);
+      return { error };
+    }
+
+    return { error: null };
+  } catch (error) {
+    console.error('Erro ao deletar jogo:', error);
+    return { error: { message: 'Erro interno do servidor' } };
+  }
+}

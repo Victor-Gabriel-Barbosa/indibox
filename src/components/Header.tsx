@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { Icons, LoginModal } from '@/components';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const { data: sessao } = useSession();
+  const { user } = useAuth();
   const { tema, setTema } = useTheme();
   const pathname = usePathname();
   const [modalDeLoginAberto, setModalDeLoginAberto] = useState(false);
@@ -24,9 +24,7 @@ export default function Header() {
   ] as const;
 
   // Função para verificar se o link está ativo
-  const isLinkActive = (href: string) => {
-    return (href === '/') ? pathname === '/' : pathname.startsWith(href);
-  };
+  const isLinkActive = (href: string) => (href === '/') ? pathname === '/' : pathname.startsWith(href);
 
   const handleTemaChange = (novoTema: 'light' | 'dark' | 'system') => {
     setTema(novoTema);
@@ -60,24 +58,24 @@ export default function Header() {
                 height={48}
                 priority
               />
-              <h1 className="text-xl md:text-2xl font-bold">Ind<span className="text-blue-600">iBox</span></h1>
+              <h1 className="text-xl md:text-2xl font-bold">Ind<span className="text-indigo-600">iBox</span></h1>
             </Link>
 
             {/* Barra de Navegação - Desktop */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/" className={`text-sm md:text-base hover:text-blue-600 transition-colors ${isLinkActive('/') ? 'text-blue-600' : ''}`}>
+              <Link href="/" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('/') ? 'text-indigo-600' : ''}`}>
                 Início
               </Link>
-              <Link href="/jogos" className={`text-sm md:text-base hover:text-blue-600 transition-colors ${isLinkActive('/jogos') ? 'text-blue-600' : ''}`}>
+              <Link href="/jogos" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('/jogos') ? 'text-indigo-600' : ''}`}>
                 Jogos
               </Link>
-              <a href="#desenvolvedores" className="text-sm md:text-base hover:text-blue-600 transition-colors">
+              <Link href="/devs" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('/devs') ? 'text-indigo-600' : ''}`}>
                 Devs
-              </a>
-              <a href="#sobre" className="text-sm md:text-base hover:text-blue-600 transition-colors">
+              </Link>
+              <a href="#sobre" className="text-sm md:text-base hover:text-indigo-600 transition-colors">
                 Sobre
               </a>
-              <a href="#contato" className="text-sm md:text-base hover:text-blue-600 transition-colors">
+              <a href="#contato" className="text-sm md:text-base hover:text-indigo-600 transition-colors">
                 Contato
               </a>
             </nav>
@@ -88,7 +86,7 @@ export default function Header() {
               <div className="relative" ref={seletorTemaRef}>
                 <button
                   onClick={() => setSeletorTemaAberto(!seletorTemaAberto)}
-                  className="flex p-2 rounded-lg hover:text-blue-600 transition-colors"
+                  className="flex p-2 rounded-lg hover:text-indigo-600 transition-colors"
                   aria-label="Seletor de tema"
                 >
                   {tema === 'light' && <Icons.BsSunFill className="w-6 h-6" />}
@@ -107,7 +105,7 @@ export default function Header() {
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
                           className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-blue-600' : 'text-foreground/70'
+                            tema === itemTema.id ? 'text-indigo-600' : 'text-foreground/70'
                           } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
@@ -121,11 +119,11 @@ export default function Header() {
 
               <button
                 onClick={() => setModalDeLoginAberto(true)}
-                className="text-sm lg:text-base hover:text-blue-600 transition-colors"
+                className="text-sm lg:text-base hover:text-indigo-600 transition-colors"
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
-                  <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
-                  <span className="hidden lg:inline">{sessao ? sessao.user?.name?.split(' ')[0] : 'Entrar'}</span>
+                  <Icons.FaArrowRightToBracket className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform ${user ? 'rotate-180' : ''}`} />
+                  <span className="hidden lg:inline">{user ? user.name?.split(' ')[0] : 'Entrar'}</span>
                 </div>
               </button>
             </div>
@@ -159,35 +157,35 @@ export default function Header() {
               <nav className="flex flex-col space-y-3 items-center text-center">
                 <Link
                   href="/"
-                  className={`text-base hover:text-blue-600 transition-colors py-2 ${isLinkActive('/') ? 'text-blue-600' : ''}`}
+                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/') ? 'text-indigo-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Início
                 </Link>
                 <Link
                   href="/jogos"
-                  className={`text-base hover:text-blue-600 transition-colors py-2 ${isLinkActive('/jogos') ? 'text-blue-600' : ''}`}
+                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/jogos') ? 'text-indigo-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Jogos
                 </Link>
-                <a
-                  href="#desenvolvedores"
-                  className="text-base hover:text-blue-600 transition-colors py-2"
+                <Link
+                  href="/devs"
+                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/devs') ? 'text-indigo-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Devs
-                </a>
+                </Link>
                 <a
                   href="#sobre"
-                  className="text-base hover:text-blue-600 transition-colors py-2"
+                  className="text-base hover:text-indigo-600 transition-colors py-2"
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Sobre
                 </a>
                 <a
                   href="#contato"
-                  className="text-base hover:text-blue-600 transition-colors py-2"
+                  className="text-base hover:text-indigo-600 transition-colors py-2"
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Contato
@@ -207,7 +205,7 @@ export default function Header() {
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
                           className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-blue-600 border border-blue-200' : 'text-foreground/70'
+                            tema === itemTema.id ? 'text-indigo-600 border border-indigo-200' : 'text-foreground/70'
                           }`}
                         >
                           <IconeTema className="w-6 h-6" />
@@ -223,10 +221,10 @@ export default function Header() {
                     setModalDeLoginAberto(true);
                     setMenuMobileAtivo(false);
                   }}
-                  className="flex items-center justify-center space-x-2 text-base hover:text-blue-600 transition-colors py-2"
+                  className="flex items-center justify-center space-x-2 text-base hover:text-indigo-600 transition-colors py-2"
                 >
-                  <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${sessao ? 'rotate-180' : ''}`} />
-                  <span>{sessao ? sessao.user?.name?.split(' ')[0] : 'Entrar'}</span>
+                  <Icons.FaArrowRightToBracket className={`w-6 h-6 transition-transform ${user ? 'rotate-180' : ''}`} />
+                  <span>{user ? user.name?.split(' ')[0] : 'Entrar'}</span>
                 </button>
               </div>
             </div>

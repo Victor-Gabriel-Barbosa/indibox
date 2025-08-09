@@ -15,7 +15,7 @@ Este guia vai te mostrar, passo a passo, como configurar autenticação OAuth co
    * **Origens JavaScript autorizadas**:
      `http://localhost:3000`
    * **URIs de redirecionamento autorizados**:
-     `http://localhost:3000/api/auth/callback/google`
+     `https://vcezoiieemdakdhtnebt.supabase.co/auth/v1/callback`
 6. Após criar, copie o **Client ID** e o **Client Secret** gerados — você vai precisar deles no próximo passo.
 
 ---
@@ -29,7 +29,7 @@ Este guia vai te mostrar, passo a passo, como configurar autenticação OAuth co
    * **Application name**: `IndiBox`
    * **Homepage URL**: `http://localhost:3000`
    * **Authorization callback URL**:
-     `http://localhost:3000/api/auth/callback/github`
+     `https://vcezoiieemdakdhtnebt.supabase.co/auth/v1/callback`
 4. Clique em **"Register application"**.
 5. Copie o **Client ID** e gere o **Client Secret**.
 

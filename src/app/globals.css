@@ -36,6 +36,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button, select {
+  cursor: pointer;
+}
+
 .bg-background {
   background-color: var(--background);
 }

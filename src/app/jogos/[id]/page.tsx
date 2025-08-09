@@ -69,7 +69,7 @@ export default function DetalhesJogoPage() {
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center min-h-96">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
               <p className="text-gray-600 dark:text-gray-400">Carregando detalhes do jogo...</p>
             </div>
           </div>
@@ -92,9 +92,9 @@ export default function DetalhesJogoPage() {
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               O jogo que você está procurando não existe ou foi removido.
             </p>
-            <Link 
+            <Link
               href="/jogos"
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
               <Icons.BsArrowLeft className="w-4 h-4 mr-2" />
               Voltar aos jogos
@@ -111,18 +111,18 @@ export default function DetalhesJogoPage() {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
-        {/* Navegação de volta */}
-        <div className="mb-6">
-          <Link 
-            href="/jogos"
-            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-          >
-            <Icons.BsArrowLeft className="w-4 h-4 mr-2" />
-            Voltar aos jogos
-          </Link>
-        </div>
+        {/* Migalhas de pão */}
+        <nav className="mb-8">
+          <div className="flex items-center space-x-2 text-sm">
+            <Link href="/jogos" className="hover:text-indigo-600">
+              Jogos
+            </Link>
+            <Icons.BsChevronRight className="w-4 h-4" />
+            <span>{jogo.titulo}</span>
+          </div>
+        </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Coluna principal - Imagens e informações básicas */}
@@ -141,7 +141,7 @@ export default function DetalhesJogoPage() {
                       sizes="(max-width: 1024px) 100vw, 66vw"
                     />
                   </div>
-                  
+
                   {/* Miniaturas */}
                   {imagens.length > 1 && (
                     <div className="flex space-x-2 overflow-x-auto pb-2">
@@ -149,11 +149,10 @@ export default function DetalhesJogoPage() {
                         <button
                           key={index}
                           onClick={() => setImagemAtiva(index)}
-                          className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                            imagemAtiva === index 
-                              ? 'border-blue-500 scale-105' 
+                          className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${imagemAtiva === index
+                              ? 'border-indigo-500 scale-105'
                               : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                          }`}
+                            }`}
                         >
                           <Image
                             src={imagem}
@@ -168,7 +167,7 @@ export default function DetalhesJogoPage() {
                   )}
                 </div>
               ) : (
-                <div className="relative w-full h-96 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <div className="relative w-full h-96 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
                   <div className="text-center text-white">
                     <Icons.BsController className="w-16 h-16 mx-auto mb-4" />
                     <p className="text-xl font-medium">{jogo.titulo}</p>
@@ -207,7 +206,7 @@ export default function DetalhesJogoPage() {
                 <p className="text-lg text-gray-600 dark:text-gray-400">
                   por {jogo.desenvolvedor}
                 </p>
-                
+
                 {jogo.destaque && (
                   <div className="inline-flex items-center mt-3 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-sm font-medium">
                     <Icons.BsStars className="w-4 h-4 mr-1" />
@@ -227,10 +226,10 @@ export default function DetalhesJogoPage() {
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Avaliação</p>
                 </div>
-                
+
                 <div className="text-center p-3 rounded-lg">
                   <div className="flex items-center justify-center mb-1">
-                    <Icons.BsDownload className="w-5 h-5 text-blue-500" />
+                    <Icons.BsDownload className="w-5 h-5 text-indigo-500" />
                   </div>
                   <p className="text-xl font-bold">
                     {jogo.contador_download.toLocaleString('pt-BR')}
@@ -243,7 +242,7 @@ export default function DetalhesJogoPage() {
               {jogo.url_download && (
                 <button
                   onClick={handleDownload}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center mb-4"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center mb-4"
                 >
                   <Icons.BsDownload className="w-5 h-5 mr-2" />
                   Baixar Jogo
@@ -263,7 +262,7 @@ export default function DetalhesJogoPage() {
                     Site Oficial
                   </a>
                 )}
-                
+
                 {jogo.url_github && (
                   <a
                     href={jogo.url_github}
@@ -283,7 +282,7 @@ export default function DetalhesJogoPage() {
               <h3 className="text-xl font-bold mb-4">
                 Informações Técnicas
               </h3>
-              
+
               <div className="space-y-4">
                 {/* Data de lançamento */}
                 {jogo.data_lancamento && (
@@ -333,7 +332,7 @@ export default function DetalhesJogoPage() {
                     {jogo.genero.map((genero, index) => (
                       <span
                         key={index}
-                        className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded-full"
+                        className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-sm px-2 py-1 rounded-full"
                       >
                         {genero}
                       </span>

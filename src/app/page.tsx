@@ -23,7 +23,7 @@ export default function Home() {
       try {
         setCarregandoJogos(true);
         const { data, error } = await getJogosEmDestaque();
-        
+
         if (error) console.error('Erro ao carregar jogos em destaque:', error);
         else if (data) setJogosDestaque(data);
       } catch (error) {
@@ -49,20 +49,18 @@ export default function Home() {
         <div className="container mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Descubra jogos
-            <span className="text-blue-600"> indie gratuitos</span>
+            <span className="text-indigo-600"> indie gratuitos</span>
           </h2>
           <p className="text-xl mb-4 max-w-4xl mx-auto">
             Uma plataforma dedicada a jogos independentes 100% gratuitos. Explore experiências únicas criadas por desenvolvedores apaixonados ao redor do mundo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/jogos">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
-                Explorar Jogos
-              </button>
+            <Link href="/jogos" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+              Explorar Jogos
             </Link>
-            <button className="border border-gray-300 dark:border-gray-700 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+            <Link href="/devs" className="text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Para Desenvolvedores
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -130,13 +128,13 @@ export default function Home() {
           // Jogos carregados do banco
           jogosDestaque.map((jogo) => (
             <SwiperSlide key={jogo.id}>
-              <div 
+              <div
                 className="relative w-full h-full group cursor-pointer"
                 onClick={() => handleJogoClick(jogo.id)}
               >
                 {jogo.imagem_capa ? (
-                  <Image 
-                    src={jogo.imagem_capa} 
+                  <Image
+                    src={jogo.imagem_capa}
                     alt={jogo.titulo}
                     fill
                     className="object-cover rounded-lg w-full h-full"
@@ -150,10 +148,10 @@ export default function Home() {
                     }}
                   />
                 ) : null}
-                <div 
+                <div
                   className={`absolute inset-0 w-full h-full ${jogo.imagem_capa ? 'hidden' : 'block'}`}
                 >
-                  <Image 
+                  <Image
                     src="/assets/game-placeholder.svg"
                     alt={`Placeholder para ${jogo.titulo}`}
                     fill
@@ -196,7 +194,7 @@ export default function Home() {
       </Swiper>
 
       {/* Seção de Informações */}
-      <section id="jogos" className="py-10 px-4 bg-gray-50 dark:bg-blue-600">
+      <section id="jogos" className="py-10 px-4 bg-gray-50 dark:bg-indigo-600">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold mb-4 text-white">Por que IndiBox?</h3>
@@ -205,15 +203,15 @@ export default function Home() {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-indigo-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-indigo-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300">
                   <Icons.BsEmojiLaughingFill className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300">
+                <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-300">
                   100% Gratuito
                 </h4>
                 <p className="text-white leading-relaxed text-base">
@@ -222,7 +220,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-indigo-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-indigo-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -239,7 +237,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-blue-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-blue-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-indigo-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform border border-gray-100 dark:border-indigo-600 overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -266,13 +264,9 @@ export default function Home() {
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
             Junte-se à nossa comunidade de jogadores e desenvolvedores apaixonados por jogos indie gratuitos.
           </p>
-          <Link href="/jogos">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
-              <div className="flex items-center space-x-2 ">
-                <Icons.BsController className="w-8 h-8" />
-                <span>Explorar Jogos Agora</span>
-              </div>
-            </button>
+          <Link href="/jogos" className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+            <Icons.BsController className="w-8 h-8" />
+            <span>Explorar Jogos Agora</span>
           </Link>
           <div className="mx-auto max-w-2xl">
             <LottieAnimation animationData={Lotties.GameAsset} />

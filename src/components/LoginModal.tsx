@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import Image from 'next/image';
 import { Icons } from '@/components';
@@ -11,15 +11,16 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
-  const { data: sessao, status } = useSession();
+  const { user, loading, signInWithGoogle, signInWithGithub, signOut } = useAuth();
   const [estaCarregando, setEstaCarregando] = useState<string | null>(null);
 
   if (!estaAberto) return null;
 
-  const handleSignIn = async (provedor: string) => {
+  const handleSignIn = async (provedor: 'google' | 'github') => {
     setEstaCarregando(provedor);
     try {
-      await signIn(provedor, { callbackUrl: '/' });
+      if (provedor === 'google') await signInWithGoogle();
+      else await signInWithGithub();
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     } finally {
@@ -30,7 +31,7 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
   const handleSignOut = async () => {
     setEstaCarregando('signout');
     try {
-      await signOut({ callbackUrl: '/' });
+      await signOut();
       aoFechar();
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
@@ -44,7 +45,7 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
         <div className="relative mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
-            {sessao ? 'Minha Conta' : 'Entrar'}
+            {user ? 'Minha Conta' : 'Entrar'}
           </h2>
           <button
             onClick={aoFechar}
@@ -56,16 +57,16 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
           </button>
         </div>
 
-        {status === 'loading' ? (
+        {loading ? (
           <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
           </div>
-        ) : sessao ? (
+        ) : user ? (
           <div className="text-center">
             <div className="mb-4">
-              {sessao.user?.image && (
+              {user?.image && (
                 <Image
-                  src={sessao.user.image}
+                  src={user.image}
                   alt="Avatar"
                   width={64}
                   height={64}
@@ -73,9 +74,9 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
                 />
               )}
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Olá, {sessao.user?.name}!
+                Olá, {user?.name}!
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">{sessao.user?.email}</p>
+              <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
             </div>
             <button
               onClick={handleSignOut}
@@ -140,9 +141,9 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
             <div className="text-center mt-6">
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Ao continuar, você concorda com nossos{' '}
-                <a href="#" className="text-blue-600 hover:underline">Termos de Uso</a>{' '}
+                <a href="#" className="text-indigo-600 hover:underline">Termos de Uso</a>{' '}
                 e{' '}
-                <a href="#" className="text-blue-600 hover:underline">Política de Privacidade</a>
+                <a href="#" className="text-indigo-600 hover:underline">Política de Privacidade</a>
               </p>
             </div>
           </div>
