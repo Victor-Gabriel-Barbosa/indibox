@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { upsertUsuario } from '@/lib/database';
+import { salvarUrlRedir } from '@/lib/redirect';
 
 interface AuthUser {
   id: string;
@@ -156,6 +157,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     
+    // Armazena a URL atual para redirecionamento após login
+    salvarUrlRedir();
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -174,6 +178,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Supabase não configurado');
       return;
     }
+    
+    // Armazena a URL atual para redirecionamento após login
+    salvarUrlRedir();
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',

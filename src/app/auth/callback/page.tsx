@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { getUrlSegura, removerUrlRedir } from '@/lib/redirect';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -23,8 +24,16 @@ export default function AuthCallback() {
           return;
         }
 
-        if (data.session) router.push('/'); // Redireciona para a página inicial após login bem-sucedido
-        else router.push('/');
+        if (data.session) {
+          // Recupera a URL segura armazenada antes do login
+          const redirectUrl = getUrlSegura();
+          
+          // Remove a URL do localStorage após usar
+          removerUrlRedir();
+          
+          // Redireciona para a URL original ou para a página inicial
+          router.push(redirectUrl);
+        } else router.push('/');
       } catch (error) {
         console.error('Erro inesperado:', error);
         router.push('/');
