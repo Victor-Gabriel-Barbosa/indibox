@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, GameCardDev } from '@/components';
+import { Header, Footer, Icons, GameCardDev, Breadcrumb } from '@/components';
 import Link from 'next/link';
 import { obterJogosDoUsuario, deletarJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
@@ -105,16 +105,10 @@ export default function MeusJogosPage() {
       <Header />
 
       <div className="container mx-auto px-4 py-8">
-        {/* Migalhas de pão */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-2 text-sm">
-            <Link href="/devs" className="hover:text-indigo-600">
-              Desenvolvedores
-            </Link>
-            <Icons.BsChevronRight className="w-4 h-4" />
-            <span>Meus Jogos</span>
-          </div>
-        </nav>
+        <Breadcrumb items={[
+          { label: 'Desenvolvedores', href: '/devs' },
+          { label: 'Meus Jogos', isActive: true }
+        ]} />
 
         {/* Cabeçalho da página */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Header, Footer, Icons } from '@/components';
+import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { getJogoPorID } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
@@ -113,16 +113,10 @@ export default function DetalhesJogoPage() {
       <Header />
 
       <main className="container mx-auto px-4 py-8">
-        {/* Migalhas de pão */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-2 text-sm">
-            <Link href="/jogos" className="hover:text-indigo-600">
-              Jogos
-            </Link>
-            <Icons.BsChevronRight className="w-4 h-4" />
-            <span>{jogo.titulo}</span>
-          </div>
-        </nav>
+        <Breadcrumb items={[
+          { label: 'Jogos', href: '/jogos' },
+          { label: jogo.titulo, isActive: true }
+        ]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Coluna principal - Imagens e informações básicas */}
@@ -132,7 +126,7 @@ export default function DetalhesJogoPage() {
               {imagens.length > 0 ? (
                 <div className="space-y-4">
                   {/* Imagem principal */}
-                  <div className="relative w-full h-135 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-[70vh] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <Image
                       src={imagens[imagemAtiva]}
                       alt={`${jogo.titulo} - Imagem ${imagemAtiva + 1}`}

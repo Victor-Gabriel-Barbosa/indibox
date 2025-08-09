@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons } from '@/components';
+import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter, useParams } from 'next/navigation';
 import { obterJogoPorId, atualizarJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
@@ -231,20 +231,11 @@ export default function EditarJogoPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          {/* Migalhas de Pão */}
-          <nav className="mb-8">
-            <div className="flex items-center space-x-2 text-sm">
-              <Link href="/devs" className="hover:text-indigo-600">
-                Desenvolvedores
-              </Link>
-              <Icons.BsChevronRight className="w-4 h-4" />
-              <Link href="/devs/meus-jogos" className="hover:text-indigo-600">
-                Meus Jogos
-              </Link>
-              <Icons.BsChevronRight className="w-4 h-4" />
-              <span>Editar {jogo?.titulo}</span>
-            </div>
-          </nav>
+          <Breadcrumb items={[
+            { label: 'Desenvolvedores', href: '/devs' },
+            { label: 'Meus Jogos', href: '/devs/meus-jogos' },
+            { label: `Editar ${jogo?.titulo || 'Jogo'}`, isActive: true }
+          ]} />
 
           {/* Cabeçalho */}
           <div className="mb-8">

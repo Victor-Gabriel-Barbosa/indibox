@@ -3,7 +3,8 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="border-t py-12 px-4">
+    <footer className="relative bg-background py-12 px-4 top-0">
+      <div className="absolute top-0 left-0 w-full h-[6px] bg-gradient-to-r from-transparent via-indigo-600 to-transparent"></div>
       <div className="container mx-auto">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
@@ -40,7 +41,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="border-t mt-8 pt-8 text-center text-md">
+        <div className="border-t border-indigo-600 mt-8 pt-8 text-center text-md">
           <p>&copy; 2025 IndiBox. Todos os direitos reservados.</p>
         </div>
       </div>

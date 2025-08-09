@@ -45,7 +45,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="border-b bg-background sticky top-0 z-50">
+      <header className="relative bg-background sticky top-0 z-50">
+        <div className="absolute bottom-0 left-0 w-full h-[6px] bg-gradient-to-r from-transparent via-indigo-600 to-transparent"></div>
         <div className="container mx-auto px-4 py-1 md:py-2">
           {/* Linha Principal do Cabeçalho */}
           <div className="flex items-center justify-between">
@@ -97,16 +98,15 @@ export default function Header() {
 
                 {/* Dropdown do Seletor de Tema */}
                 {seletorTemaAberto && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-background border border-indigo-600 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
                       return (
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-indigo-600' : 'text-foreground/70'
-                          } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600' : 'text-foreground/70'
+                            } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
                           <span className="text-lg">{itemTema.nome}</span>
@@ -131,7 +131,7 @@ export default function Header() {
             {/* Botão do Menu - Mobile */}
             <button
               onClick={() => setMenuMobileAtivo(!menuMobileAtivo)}
-              className="md:hidden p-2 rounded-lg transition-colors relative w-10 h-10 flex items-center justify-center"
+              className="md:hidden p-2 rounded-lg transition-colors relative w-10 h-10 flex items-center justify-center hover:bg-indigo-600"
               aria-label="Menu"
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
@@ -153,7 +153,7 @@ export default function Header() {
 
           {/* Menu - Mobile */}
           {menuMobileAtivo && (
-            <div className="md:hidden mt-4 pt-4 border-t">
+            <div className="md:hidden mt-4 pt-4 border-t border-indigo-600">
               <nav className="flex flex-col space-y-3 items-center text-center">
                 <Link
                   href="/"
@@ -193,9 +193,9 @@ export default function Header() {
               </nav>
 
               {/* Botões de Ação - Mobile */}
-              <div className="flex flex-col space-y-3 mt-4 pt-4 border-t items-center">
+              <div className="flex flex-col space-y-3 my-4 pt-4 border-t border-indigo-600 items-center">
                 {/* Seletor de Tema - Mobile */}
-                <div className="border border-gray-200 rounded-lg p-3 w-full max-w-sm">
+                <div className="rounded-lg w-full max-w-sm">
                   <h3 className="text-lg font-medium mb-2 text-center">Tema</h3>
                   <div className="grid grid-cols-3 gap-2">
                     {temas.map((itemTema) => {
@@ -204,9 +204,8 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTemaChange(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${
-                            tema === itemTema.id ? 'text-indigo-600 border border-indigo-200' : 'text-foreground/70'
-                          }`}
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-foreground/70'
+                            }`}
                         >
                           <IconeTema className="w-6 h-6" />
                           <span className="text-xs">{itemTema.nome}</span>

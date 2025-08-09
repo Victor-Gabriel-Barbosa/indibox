@@ -7,6 +7,8 @@ export { default as Providers } from "./Providers";
 export { default as GameCard } from "./GameCard";
 export { default as GameCardDev } from "./GameCardDev";
 export { default as Pagination } from "./Pagination";
+export { default as Breadcrumb } from "./Breadcrumb";
+export type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb";
 
 import {
   BsEmojiLaughingFill,

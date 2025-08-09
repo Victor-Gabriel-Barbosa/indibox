@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
-import { Header, Footer, Icons } from '@/components';
+import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter } from 'next/navigation';
 import { inserirJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
@@ -158,16 +158,10 @@ export default function NovoJogoPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="mb-8">
-            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-              <Link href="/devs" className="hover:text-indigo-600">
-                Desenvolvedores
-              </Link>
-              <Icons.BsChevronRight className="w-4 h-4" />
-              <span>Novo Jogo</span>
-            </div>
-          </nav>
+          <Breadcrumb items={[
+            { label: 'Desenvolvedores', href: '/devs' },
+            { label: 'Novo Jogo', isActive: true }
+          ]} />
 
           {/* Cabeçalho */}
           <div className="mb-8">
