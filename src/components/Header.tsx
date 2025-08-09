@@ -131,7 +131,7 @@ export default function Header() {
             {/* Botão do Menu - Mobile */}
             <button
               onClick={() => setMenuMobileAtivo(!menuMobileAtivo)}
-              className="md:hidden p-2 rounded-lg transition-colors relative w-10 h-10 flex items-center justify-center hover:bg-indigo-600"
+              className="md:hidden p-2 rounded-lg transition-colors relative w-10 h-10 flex items-center justify-center hover:text-indigo-600"
               aria-label="Menu"
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
