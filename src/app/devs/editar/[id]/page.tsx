@@ -8,16 +8,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { getJogoPorId, updateJogo } from '@/lib/database';
 import type { Jogo, JogoUpdate } from '@/types';
 import Link from 'next/link';
-
-const generosDisponiveis = [
-  'Ação', 'Aventura', 'RPG', 'Estratégia', 'Puzzle', 'Plataforma',
-  'Corrida', 'Esporte', 'Simulação', 'Tiro', 'Horror', 'Casual',
-  'Arcade', 'Luta', 'Sobrevivência', 'Roguelike', 'Metroidvania'
-];
-
-const plataformasDisponiveis = [
-  'Windows', 'Linux', 'macOS', 'Web Browser', 'Android', 'iOS'
-];
+import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/gameData';
 
 export default function EditarJogoPage() {
   const { user, loading } = useAuth();
@@ -346,7 +337,7 @@ export default function EditarJogoPage() {
                     Gêneros <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                    {generosDisponiveis.map((genero) => (
+                    {GENEROS_DISPONIVEIS.map((genero: string) => (
                       <label key={genero} className="flex items-center">
                         <input
                           type="checkbox"
@@ -365,7 +356,7 @@ export default function EditarJogoPage() {
                     Plataformas <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {plataformasDisponiveis.map((plataforma) => (
+                    {PLATAFORMAS_DISPONIVEIS.map((plataforma: string) => (
                       <label key={plataforma} className="flex items-center">
                         <input
                           type="checkbox"

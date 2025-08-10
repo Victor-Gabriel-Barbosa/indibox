@@ -24,6 +24,9 @@ export type FavoritoUpdate = Database['public']['Tables']['favoritos']['Update']
 export type PapelUsuario = Database['public']['Enums']['papel_usuario'];
 export type StatusJogo = Database['public']['Enums']['status_jogo'];
 
+// Tipos para dados de jogos
+export type { Genero, Plataforma, GameData } from './gameData';
+
 // Tipos customizados/utilitários
 export type JogoEstatistica = {
   id: string;

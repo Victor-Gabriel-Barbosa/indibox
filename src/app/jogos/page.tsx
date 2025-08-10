@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Header, Footer, GameCard, Pagination, Icons } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
+import { GENEROS_DISPONIVEIS } from '@/lib/gameData';
 
 interface FiltrosState {
   genero: string;
@@ -104,20 +105,7 @@ export default function JogosPage() {
     router.push(`/jogos/${jogo.id}`);
   };
 
-  const generos = [
-    'todos',
-    'Ação',
-    'Aventura',
-    'RPG',
-    'Estratégia',
-    'Puzzle',
-    'Corrida',
-    'Esportes',
-    'Simulação',
-    'Casual',
-    'Plataforma',
-    'Tiro'
-  ];
+  const generos = ['todos', ...GENEROS_DISPONIVEIS];
 
   return (
     <main className="min-h-screen bg-background text-foreground">
