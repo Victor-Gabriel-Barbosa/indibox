@@ -546,15 +546,15 @@ export async function deletarJogo(idJogo: string, idUsuario: string) {
 
   try {
     // Verifica se o jogo pertence ao usuário
-    const { data: jogoExistente, error: erroVerificacao } = await supabase
+    const { data: jogoExistente, error: erro } = await supabase
       .from('jogos')
-      .select('id, usuario_id')
+      .select('id, id_usuario')
       .eq('id', idJogo)
-      .eq('usuario_id', idUsuario)
+      .eq('id_usuario', idUsuario)
       .single();
 
-    if (erroVerificacao) {
-      console.error('Erro ao verificar jogo:', erroVerificacao);
+    if (erro) {
+      console.error('Erro ao verificar jogo:', erro);
       return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
     }
 
@@ -565,7 +565,7 @@ export async function deletarJogo(idJogo: string, idUsuario: string) {
       .from('jogos')
       .delete()
       .eq('id', idJogo)
-      .eq('usuario_id', idUsuario);
+      .eq('id_usuario', idUsuario);
 
     if (error) {
       console.error('Erro ao deletar jogo:', error);
