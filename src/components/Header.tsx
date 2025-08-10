@@ -12,7 +12,7 @@ export default function Header() {
   const { user } = useAuth();
   const { tema, setTema } = useTheme();
   const pathname = usePathname();
-  const [modalDeLoginAberto, setModalDeLoginAberto] = useState(false);
+  const [modalLoginAberto, setModalLoginAberto] = useState(false);
   const [menuMobileAtivo, setMenuMobileAtivo] = useState(false);
   const [seletorTemaAberto, setSeletorTemaAberto] = useState(false);
   const seletorTemaRef = useRef<HTMLDivElement>(null);
@@ -23,24 +23,22 @@ export default function Header() {
     { id: 'system', nome: 'Sistema', icone: Icons.BsCircleHalf },
   ] as const;
 
-  // Função para verificar se o link está ativo
+  // Verifica se o link está ativo
   const isLinkActive = (href: string) => (href === '/') ? pathname === '/' : pathname.startsWith(href);
 
-  const handleTemaChange = (novoTema: 'light' | 'dark' | 'system') => {
+  const handleTrocaTema = (novoTema: 'light' | 'dark' | 'system') => {
     setTema(novoTema);
     setSeletorTemaAberto(false);
   };
 
-  // Fecha o dropdown quando clicar fora dele
+  // Fecha o dropdown quando clica fora dele
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (seletorTemaRef.current && !seletorTemaRef.current.contains(event.target as Node)) setSeletorTemaAberto(false);
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -104,7 +102,7 @@ export default function Header() {
                       return (
                         <button
                           key={itemTema.id}
-                          onClick={() => handleTemaChange(itemTema.id)}
+                          onClick={() => handleTrocaTema(itemTema.id)}
                           className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600' : 'text-foreground/70'
                             } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
@@ -118,7 +116,7 @@ export default function Header() {
               </div>
 
               <button
-                onClick={() => setModalDeLoginAberto(true)}
+                onClick={() => setModalLoginAberto(true)}
                 className="text-sm lg:text-base hover:text-indigo-600 transition-colors"
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
@@ -136,16 +134,13 @@ export default function Header() {
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? 'rotate-45 translate-y-1.5' : 'rotate-0 translate-y-0'
-                    }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? 'rotate-45 translate-y-1.5' : 'rotate-0 translate-y-0'}`}
                 />
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out my-1 ${menuMobileAtivo ? 'opacity-0' : 'opacity-100'
-                    }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out my-1 ${menuMobileAtivo ? 'opacity-0' : 'opacity-100'}`}
                 />
                 <span
-                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? '-rotate-45 -translate-y-1.5' : 'rotate-0 translate-y-0'
-                    }`}
+                  className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out ${menuMobileAtivo ? '-rotate-45 -translate-y-1.5' : 'rotate-0 translate-y-0'}`}
                 />
               </div>
             </button>
@@ -203,7 +198,7 @@ export default function Header() {
                       return (
                         <button
                           key={itemTema.id}
-                          onClick={() => handleTemaChange(itemTema.id)}
+                          onClick={() => handleTrocaTema(itemTema.id)}
                           className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-foreground/70'
                             }`}
                         >
@@ -217,7 +212,7 @@ export default function Header() {
 
                 <button
                   onClick={() => {
-                    setModalDeLoginAberto(true);
+                    setModalLoginAberto(true);
                     setMenuMobileAtivo(false);
                   }}
                   className="flex items-center justify-center space-x-2 text-base hover:text-indigo-600 transition-colors py-2"
@@ -232,8 +227,8 @@ export default function Header() {
       </header>
 
       <LoginModal
-        estaAberto={modalDeLoginAberto}
-        aoFechar={() => setModalDeLoginAberto(false)}
+        isOpen={modalLoginAberto}
+        onClose={() => setModalLoginAberto(false)}
       />
     </>
   );

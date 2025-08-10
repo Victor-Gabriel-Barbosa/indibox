@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { Header, Footer, Icons, GameCardDev, DotLottieReact } from '@/components';
 import Link from 'next/link';
-import { obterJogosDoUsuario, deletarJogo } from '@/lib/database';
+import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
 type Jogo = Database['public']['Tables']['jogos']['Row'];
@@ -19,7 +19,7 @@ export default function DesenvolvededoresPage() {
       console.log('ID: ', user.id);
 
       try {
-        const { data, error } = await obterJogosDoUsuario(user.id);
+        const { data, error } = await getJogosUsuario(user.id);
         
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
         else if (data) setJogosDoUsuario(data);
@@ -35,7 +35,7 @@ export default function DesenvolvededoresPage() {
     if (!user?.id) return;
 
     try {
-      const { error } = await deletarJogo(idJogo, user.id);
+      const { error } = await deleteJogo(idJogo, user.id);
       
       if (error) {
         console.error('Erro ao deletar jogo:', error);

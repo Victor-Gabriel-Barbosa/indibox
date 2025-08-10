@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { sb } from '@/lib/supabase';
 import { getUrlSegura, removerUrlRedir } from '@/lib/redirect';
 import { useAuth } from '@/contexts/AuthContext';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
@@ -14,13 +14,13 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const handleAuthCallback = async () => {
-      if (!supabase) {
+      if (!sb) {
         router.push('/');
         return;
       }
 
       try {
-        const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await sb.auth.getSession();
         
         if (error) {
           console.error('Erro na autenticação:', error);

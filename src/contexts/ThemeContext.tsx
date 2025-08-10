@@ -1,13 +1,15 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+// Tipos para o tema
 type Tema = 'light' | 'dark' | 'system';
+type TemaEfetivo = 'light' | 'dark';
 
 interface ThemeContextProps {
   tema: Tema;
   setTema: (tema: Tema) => void;
-  temaEfetivo: 'light' | 'dark';
+  temaEfetivo: TemaEfetivo;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
@@ -16,65 +18,44 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
+// Provedor do tema
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [tema, setTema] = useState<Tema>('system');
-  const [temaEfetivo, setTemaEfetivo] = useState<'light' | 'dark'>('light');
+  
+  const [temaEfetivo, setTemaEfetivo] = useState<TemaEfetivo>('light');
 
-  // Função para detectar preferência do sistema
-  const detectarPreferenciaSistema = useCallback((): 'light' | 'dark' => {
-    if (typeof window !== 'undefined') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    return 'light';
+  // Carrega o tema salvo do localStorage
+  useEffect(() => {
+    const temaSalvo = localStorage.getItem('indibox-theme') as Tema | null;
+    if (temaSalvo && ['light', 'dark', 'system'].includes(temaSalvo)) setTema(temaSalvo);
   }, []);
 
-  // Função para aplicar o tema
-  const aplicarTema = useCallback((novoTema: Tema) => {
-    let temaParaAplicar: 'light' | 'dark';
-
-    if (novoTema === 'system') temaParaAplicar = detectarPreferenciaSistema();
-    else temaParaAplicar = novoTema;
-
-    setTemaEfetivo(temaParaAplicar);
-
-    // Aplica no documento
-    if (typeof document !== 'undefined') {
-      const root = document.documentElement;
-      
-      root.classList.toggle('dark', temaParaAplicar === 'dark');
-      root.classList.toggle('light', temaParaAplicar === 'light');
-    }
-  }, [detectarPreferenciaSistema]);
-
-  // Carrega tema salvo no localStorage
+  // Atualiza o tema efetivo com base na preferência do sistema
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const temaSalvo = localStorage.getItem('indibox-theme') as Tema | null;
-      if (temaSalvo && ['light', 'dark', 'system'].includes(temaSalvo)) {
-        setTema(temaSalvo);
-        aplicarTema(temaSalvo);
-      } else aplicarTema('system');
-    }
-  }, [aplicarTema]);
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-  // Listener para mudanças na preferência do sistema
+    // Atualiza o tema efetivo baseado na preferência do sistema
+    const updateTemaSistema = () => setTemaEfetivo(mediaQuery.matches ? 'dark' : 'light');
+
+    if (tema === 'system') {
+      updateTemaSistema();
+      mediaQuery.addEventListener('change', updateTemaSistema);
+    } else setTemaEfetivo(tema);
+
+    return () => mediaQuery.removeEventListener('change', updateTemaSistema);
+  }, [tema]);
+
+  // Atualiza a classe do elemento root com o tema efetivo
   useEffect(() => {
-    if (typeof window !== 'undefined' && tema === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
-      const handleChange = () => {
-        if (tema === 'system') aplicarTema('system');
-      };
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(temaEfetivo);
+  }, [temaEfetivo]); 
 
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  }, [tema, aplicarTema]);
-
-  // Função para alterar tema
+  // Atualiza o estado e salva a preferência no localStorage
   const handleSetTema = (novoTema: Tema) => {
+    localStorage.setItem('indibox-theme', novoTema);
     setTema(novoTema);
-    aplicarTema(novoTema);
-
-    if (typeof window !== 'undefined') localStorage.setItem('indibox-theme', novoTema);
   };
 
   return (
@@ -84,6 +65,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 }
 
+// Hook para acessar o contexto do tema
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) throw new Error('useTheme deve ser usado dentro de um ThemeProvider');

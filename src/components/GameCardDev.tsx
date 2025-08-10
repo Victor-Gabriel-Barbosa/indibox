@@ -5,8 +5,10 @@ import { useState } from 'react';
 import { Icons, ConfirmModal } from '@/components';
 import type { Database } from '@/types/supabase';
 
+// Tipos de dados do jogo
 type Jogo = Database['public']['Tables']['jogos']['Row'];
 
+// Propriedades do cartão de jogo
 interface GameCardDevProps {
   jogo: Jogo;
   onClick?: () => void;
@@ -14,10 +16,12 @@ interface GameCardDevProps {
   onToggleStatus?: () => void;
 }
 
+// Componente de cartão de jogo para desenvolvedores
 export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProps) {
   const [modalDeleteAberto, setModalDeleteAberto] = useState(false);
   const [deletandoJogo, setDeletandoJogo] = useState(false);
 
+  // Função para obter a cor de status
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'publicado': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -27,6 +31,7 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
     }
   };
 
+  // Função para obter o ícone de status
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'publicado': return <Icons.BsCheckCircle className="w-3 h-3" />;
@@ -36,21 +41,24 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
     }
   };
 
+  // Handle para edição do jogo
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onClick) onClick();
   };
 
+  // Handle para exclusão do jogo
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     setModalDeleteAberto(true);
   };
 
+  // Handle para confirmação da exclusão
   const confirmarDelete = async () => {
     if (onDelete) {
       setDeletandoJogo(true);
       try {
-        await onDelete();
+        onDelete();
         setModalDeleteAberto(false);
       } catch (error) {
         console.error('Erro ao deletar jogo:', error);
@@ -230,8 +238,8 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
       {/* Modal de confirmação para deletar */}
       <ConfirmModal
         estaAberto={modalDeleteAberto}
-        aoFechar={() => setModalDeleteAberto(false)}
-        aoConfirmar={confirmarDelete}
+        onClose={() => setModalDeleteAberto(false)}
+        onConfirm={confirmarDelete}
         titulo="Excluir Jogo"
         mensagem={`Tem certeza que deseja excluir o jogo "${jogo.titulo}"? Esta ação não pode ser desfeita.`}
         textoConfirmar="Excluir"

@@ -1,22 +1,26 @@
 'use client';
 
+// Propriedades do componente de paginação
 interface PaginationProps {
   paginaAtual: number;
   totalPaginas: number;
   onMudarPagina: (pagina: number) => void;
 }
 
+// Componente de paginação
 export default function Pagination({ paginaAtual, totalPaginas, onMudarPagina }: PaginationProps) {
   const gerarPaginas = () => {
     const paginas = [];
     const maxPaginasVisiveis = 5;
     
+    // Calcula o intervalo de páginas a serem exibidas
     let inicio = Math.max(1, paginaAtual - Math.floor(maxPaginasVisiveis / 2));
     const fim = Math.min(totalPaginas, inicio + maxPaginasVisiveis - 1);
-    
+
     // Ajusta o início se o fim for menor que maxPaginasVisiveis
     if (fim - inicio + 1 < maxPaginasVisiveis) inicio = Math.max(1, fim - maxPaginasVisiveis + 1);
-    
+
+    // Gera as páginas
     for (let i = inicio; i <= fim; i++) paginas.push(i);
     
     return paginas;

@@ -2,10 +2,11 @@
 
 import { Icons } from '@/components';
 
+// Tipos de propriedades do modal de confirmação
 interface ConfirmModalProps {
   estaAberto: boolean;
-  aoFechar: () => void;
-  aoConfirmar: () => void;
+  onClose: () => void;
+  onConfirm: () => void;
   titulo: string;
   mensagem: string;
   textoConfirmar?: string;
@@ -14,10 +15,11 @@ interface ConfirmModalProps {
   carregando?: boolean;
 }
 
+// Componente de modal de confirmação
 export default function ConfirmModal({ 
   estaAberto, 
-  aoFechar, 
-  aoConfirmar, 
+  onClose: aoFechar, 
+  onConfirm: aoConfirmar, 
   titulo, 
   mensagem, 
   textoConfirmar = 'Confirmar',
@@ -28,22 +30,16 @@ export default function ConfirmModal({
   if (!estaAberto) return null;
 
   const handleConfirmar = () => {
-    if (!carregando) {
-      aoConfirmar();
-    }
+    if (!carregando) aoConfirmar();
   };
 
   const handleCancelar = () => {
-    if (!carregando) {
-      aoFechar();
-    }
+    if (!carregando) aoFechar();
   };
 
   // Impede fechar o modal ao clicar no backdrop quando está carregando
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget && !carregando) {
-      aoFechar();
-    }
+    if (e.target === e.currentTarget && !carregando) aoFechar();
   };
 
   return (

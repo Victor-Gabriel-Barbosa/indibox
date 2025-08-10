@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter } from 'next/navigation';
-import { inserirJogo } from '@/lib/database';
+import { insertJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 import Link from 'next/link';
 
@@ -101,7 +101,7 @@ export default function NovoJogoPage() {
         contador_download: 0
       };
 
-      const { data, error } = await inserirJogo(dadosJogo);
+      const { data, error } = await insertJogo(dadosJogo);
 
       if (error) {
         setErro('Erro ao publicar o jogo. Tente novamente.');

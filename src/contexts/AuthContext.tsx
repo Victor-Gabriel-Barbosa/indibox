@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { sb } from '@/lib/supabase';
 import { upsertUsuario } from '@/lib/database';
 import { salvarUrlRedir } from '@/lib/redirect';
 
@@ -31,30 +31,32 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Provedor de autenticação
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  const syncUserWithDatabase = async (user: User) => {
+  // Sincroniza dados do usuário
+  const syncUsuarioDB = async (usuario: User) => {
     try {
       // Usa o ID nativo do Supabase Auth para consistência
-      const userId = user.id;
+      const idUsuario = usuario.id;
       
-      // Busca metadados do provider
-      const providerData = user.user_metadata;
-      const identities = user.identities || [];
-      const githubIdentity = identities.find(identity => identity.provider === 'github');
+      // Busca metadados do provedor
+      const dadosProvedor = usuario.user_metadata;
+      const identidades = usuario.identities || [];
+      const identidadeGithub = identidades.find(identidade => identidade.provider === 'github');
       
       // Cria ou atualiza usuário no banco
       const dadosUsuario = {
-        id: userId,
-        email: user.email!,
-        nome: providerData.full_name || providerData.name,
-        url_avatar: providerData.avatar_url || providerData.picture,
-        nome_usuario_github: githubIdentity?.identity_data?.login || null,
-        email_verificado: user.email_confirmed_at ? true : false,
+        id: idUsuario,
+        email: usuario.email!,
+        nome: dadosProvedor.full_name || dadosProvedor.name,
+        url_avatar: dadosProvedor.avatar_url || dadosProvedor.picture,
+        nome_usuario_github: identidadeGithub?.identity_data?.login || null,
+        email_verificado: usuario.email_confirmed_at ? true : false,
       };
 
       const { data, error } = await upsertUsuario(dadosUsuario);
@@ -71,14 +73,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const fetchUserData = async (userId: string) => {
-    if (!supabase) return null;
+  // Busca dados do usuário
+  const fetchDadosUsuario = async (idUsuario: string) => {
+    if (!sb) return null;
     
     try {
-      const { data } = await supabase
+      const { data } = await sb
         .from('usuarios')
         .select('*')
-        .eq('id', userId)
+        .eq('id', idUsuario)
         .single();
       
       return data;
@@ -89,19 +92,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (!supabase) {
+    // Verifica se o Supabase está disponível
+    if (!sb) {
       setLoading(false);
       return;
     }
 
     // Busca sessão inicial
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    sb.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       
       if (session?.user) {
-        syncUserWithDatabase(session.user).then(async () => {
-          const userId = session.user.id;
-          const userData = await fetchUserData(userId);
+        syncUsuarioDB(session.user).then(async () => {
+          const idUsuario = session.user.id;
+          const userData = await fetchDadosUsuario(idUsuario);
           
           if (userData) {
             setUser({
@@ -123,14 +127,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     // Escuta mudanças na autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = sb.auth.onAuthStateChange(
       async (event, session) => {
         setSession(session);
         
         if (event === 'SIGNED_IN' && session?.user) {
-          await syncUserWithDatabase(session.user);
-          const userId = session.user.id;
-          const userData = await fetchUserData(userId);
+          await syncUsuarioDB(session.user);
+          const idUsuario = session.user.id;
+          const userData = await fetchDadosUsuario(idUsuario);
           
           if (userData) {
             setUser({
@@ -154,8 +158,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signInWithGoogle = async () => {
-    if (!supabase) {
+  // Login com Google
+  const signInGoogle = async () => {
+    if (!sb) {
       console.error('Supabase não configurado');
       return;
     }
@@ -163,7 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Armazena a URL atual para redirecionamento após login
     salvarUrlRedir();
     
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`
@@ -176,8 +181,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signInWithGithub = async () => {
-    if (!supabase) {
+  // Login com GitHub
+  const signInGithub = async () => {
+    if (!sb) {
       console.error('Supabase não configurado');
       return;
     }
@@ -185,7 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Armazena a URL atual para redirecionamento após login
     salvarUrlRedir();
     
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await sb.auth.signInWithOAuth({
       provider: 'github',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`
@@ -198,13 +204,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Logout
   const signOut = async () => {
-    if (!supabase) {
+    if (!sb) {
       console.error('Supabase não configurado');
       return;
     }
     
-    const { error } = await supabase.auth.signOut();
+    const { error } = await sb.auth.signOut();
     
     if (error) {
       console.error('Erro no logout:', error);
@@ -218,8 +225,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     loginSuccess,
     setLoginSuccess,
-    signInWithGoogle,
-    signInWithGithub,
+    signInWithGoogle: signInGoogle,
+    signInWithGithub: signInGithub,
     signOut,
   };
 

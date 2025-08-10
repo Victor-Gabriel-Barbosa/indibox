@@ -8,37 +8,38 @@ import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { getJogoPorID } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
+// Definição do tipo Jogo
 type Jogo = Database['public']['Tables']['jogos']['Row'];
 
 export default function DetalhesJogoPage() {
   const { id } = useParams();
   const [jogo, setJogo] = useState<Jogo | null>(null);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [imagemAtiva, setImagemAtiva] = useState(0);
 
   useEffect(() => {
     const carregarJogo = async () => {
       if (!id || typeof id !== 'string') {
-        setErro('ID do jogo inválido');
-        setCarregando(false);
+        setError('ID do jogo inválido');
+        setLoading(false);
         return;
       }
 
       try {
-        setCarregando(true);
+        setLoading(true);
         const { data, error } = await getJogoPorID(id);
 
         if (error) {
           console.error('Erro ao carregar jogo:', error);
-          setErro('Erro ao carregar detalhes do jogo');
-        } else if (!data) setErro('Jogo não encontrado');
+          setError('Erro ao carregar detalhes do jogo');
+        } else if (!data) setError('Jogo não encontrado');
         else setJogo(data);
       } catch (error) {
         console.error('Erro inesperado:', error);
-        setErro('Erro inesperado ao carregar o jogo');
+        setError('Erro inesperado ao carregar o jogo');
       } finally {
-        setCarregando(false);
+        setLoading(false);
       }
     };
 
@@ -62,7 +63,7 @@ export default function DetalhesJogoPage() {
     return tamanho;
   };
 
-  if (carregando) {
+  if (loading) {
     return (
       <div className="min-h-screen">
         <Header />
@@ -79,7 +80,7 @@ export default function DetalhesJogoPage() {
     );
   }
 
-  if (erro || !jogo) {
+  if (error || !jogo) {
     return (
       <div className="min-h-screen">
         <Header />
@@ -87,7 +88,7 @@ export default function DetalhesJogoPage() {
           <div className="text-center py-12">
             <Icons.BsExclamationCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold mb-2">
-              {erro || 'Jogo não encontrado'}
+              {error || 'Jogo não encontrado'}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               O jogo que você está procurando não existe ou foi removido.

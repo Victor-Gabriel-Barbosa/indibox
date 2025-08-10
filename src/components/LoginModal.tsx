@@ -5,38 +5,42 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Icons } from '@/components';
 
+// Propriedades do modal de login
 interface LoginModalProps {
-  estaAberto: boolean;
-  aoFechar: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
+// Componente de modal de login
+export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { user, loading, signInWithGoogle, signInWithGithub, signOut } = useAuth();
-  const [estaCarregando, setEstaCarregando] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<string | null>(null);
 
-  if (!estaAberto) return null;
+  if (!isOpen) return null;
 
+  // Lida com o login
   const handleSignIn = async (provedor: 'google' | 'github') => {
-    setEstaCarregando(provedor);
+    setIsLoading(provedor);
     try {
       if (provedor === 'google') await signInWithGoogle();
       else await signInWithGithub();
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     } finally {
-      setEstaCarregando(null);
+      setIsLoading(null);
     }
   };
 
+  // Lida com o logout
   const handleSignOut = async () => {
-    setEstaCarregando('signout');
+    setIsLoading('signout');
     try {
       await signOut();
-      aoFechar();
+      onClose();
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     } finally {
-      setEstaCarregando(null);
+      setIsLoading(null);
     }
   };
 
@@ -48,7 +52,7 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
             {user ? 'Minha Conta' : 'Entrar'}
           </h2>
           <button
-            onClick={aoFechar}
+            onClick={onClose}
             className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,10 +84,10 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
             </div>
             <button
               onClick={handleSignOut}
-              disabled={estaCarregando === 'signout'}
+              disabled={isLoading === 'signout'}
               className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
             >
-              {estaCarregando === 'signout' ? (
+              {isLoading === 'signout' ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
               ) : (
                 <>
@@ -101,10 +105,10 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
 
             <button
               onClick={() => handleSignIn('google')}
-              disabled={estaCarregando !== null}
+              disabled={isLoading !== null}
               className="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-3 disabled:opacity-50"
             >
-              {estaCarregando === 'google' ? (
+              {isLoading === 'google' ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
               ) : (
                 <>
@@ -116,19 +120,19 @@ export default function LoginModal({ estaAberto, aoFechar }: LoginModalProps) {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white"></div>
+                <div className="w-full border-t"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-white">ou</span>
+                <span className="px-2 bg-white dark:bg-gray-800">ou</span>
               </div>
             </div>
 
             <button
               onClick={() => handleSignIn('github')}
-              disabled={estaCarregando !== null}
+              disabled={isLoading !== null}
               className="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-3 disabled:opacity-50"
             >
-              {estaCarregando === 'github' ? (
+              {isLoading === 'github' ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
                 <>

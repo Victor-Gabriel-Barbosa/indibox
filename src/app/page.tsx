@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getJogosEmDestaque } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
+// Definição do tipo Jogo
 type Jogo = Database['public']['Tables']['jogos']['Row'];
 
 export default function Home() {
@@ -74,26 +75,11 @@ export default function Home() {
         zoom={true}
         keyboard={{ enabled: true }}
         breakpoints={{
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 10,
-          },
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 15,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 25,
-          },
-          1280: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-          },
+          320: { slidesPerView: 1, spaceBetween: 10 },
+          640: { slidesPerView: 2, spaceBetween: 15 },
+          768: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 25 },
+          1280: { slidesPerView: 3, spaceBetween: 30 }
         }}
         coverflowEffect={{
           rotate: 25,

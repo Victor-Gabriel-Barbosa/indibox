@@ -3,31 +3,31 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { upsertUsuario } from '@/lib/database';
-import { estaConfigurado } from '@/lib/supabase';
-import { ehValidoUUID } from '@/lib/uuid';
+import { sbConfig } from '@/lib/supabase';
+import { validarUUID } from '@/lib/uuid';
 
 /**
  * Hook para sincronizar usuário autenticado com Supabase
  * Usa o ID nativo do Supabase Auth para consistência com a tabela usuarios
  */
-export function useUserSync() {
+export function useSyncUsuario() {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    async function syncUser() {
+    async function syncUsuario() {
       if (!loading && user) {
         // Só tenta sincronizar se o Supabase estiver configurado
-        if (!estaConfigurado) return;
+        if (!sbConfig) return;
 
         try {
           // Valida se o ID do usuário é válido
-          if (!user.id || typeof user.id !== 'string' || !ehValidoUUID(user.id)) {
+          if (!user.id || typeof user.id !== 'string' || !validarUUID(user.id)) {
             console.error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
             return;
           }
 
           const dadosUsuario = {
-            id: user.id, // Usa o ID nativo do Supabase Auth
+            id: user.id,
             email: user.email!,
             nome: user.name,
             url_avatar: user.image,
@@ -43,7 +43,7 @@ export function useUserSync() {
       }
     }
 
-    syncUser();
+    syncUsuario();
   }, [user, loading]);
 
   return { user, loading };

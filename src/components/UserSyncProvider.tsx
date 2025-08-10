@@ -1,12 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useUserSync } from '@/hooks/useUserSync';
+import { useSyncUsuario } from '@/hooks/useUserSync';
 
-/**
- * Componente para sincronizar usuários
- */
+// Componente provedor para sincronização do usuário
 export function UserSyncProvider({ children }: { children: React.ReactNode }) {
-  useUserSync();
+  useSyncUsuario();
   return <>{children}</>;
 }

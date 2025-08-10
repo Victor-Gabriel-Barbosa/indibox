@@ -6,11 +6,11 @@ import {
   getJogosPublicados, 
   getJogosEmDestaque, 
   getJogoPorID, 
-  buscarJogos,
+  getJogos,
   getFavoritosUsuario,
   ehJogoFavoritado,
-  adicionarAosFavoritos,
-  removerDosFavoritos
+  insertJogoFavorito,
+  deleteJogoFavorito
 } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 
@@ -139,7 +139,7 @@ export function useBuscaJogos() {
 
     try {
       setLoading(true);
-      const { data, error } = await buscarJogos(query);
+      const { data, error } = await getJogos(query);
       
       if (error) {
         setError(error.message);
@@ -197,12 +197,12 @@ export function useFavoritos() {
       const { ehFavorito } = await ehJogoFavoritado(user.id, idJogo);
       
       if (ehFavorito) {
-        const { success, error } = await removerDosFavoritos(user.id, idJogo);
+        const { success, error } = await deleteJogoFavorito(user.id, idJogo);
         if (error) throw error;
         await fetchFavoritos(); // Recarrega favoritos
         return !success;
       } else {
-        const { data, error } = await adicionarAosFavoritos(user.id, idJogo);
+        const { data, error } = await insertJogoFavorito(user.id, idJogo);
         if (error) throw error;
         await fetchFavoritos(); // Recarrega favoritos
         return !!data;

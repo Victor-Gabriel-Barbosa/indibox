@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter, useParams } from 'next/navigation';
-import { obterJogoPorId, atualizarJogo } from '@/lib/database';
+import { getJogoPorId, updateJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
 import Link from 'next/link';
 
@@ -58,7 +58,7 @@ export default function EditarJogoPage() {
 
       try {
         setCarregandoJogo(true);
-        const { data, error } = await obterJogoPorId(idJogo);
+        const { data, error } = await getJogoPorId(idJogo);
         
         if (error || !data) {
           setErro('Jogo não encontrado');
@@ -155,7 +155,7 @@ export default function EditarJogoPage() {
         status: formData.status
       };
 
-      const { data, error } = await atualizarJogo(jogo.id, dadosAtualizacao);
+      const { data, error } = await updateJogo(jogo.id, dadosAtualizacao);
 
       if (error) {
         setErro('Erro ao atualizar o jogo. Tente novamente.');

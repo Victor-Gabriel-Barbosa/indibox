@@ -1,6 +1,6 @@
-import { supabase, supabaseAdmin, estaConfigurado } from './supabase';
+import { sb, sbAdmin, sbConfig } from './supabase';
 import type { Database } from '@/types/supabase';
-import { ehValidoUUID } from './uuid';
+import { validarUUID } from './uuid';
 
 type JogoInsert = Database['public']['Tables']['jogos']['Insert'];
 type JogoUpdate = Database['public']['Tables']['jogos']['Update'];
@@ -22,10 +22,10 @@ type JogoEstatistica = {
 
 // Busca todos os jogos publicados
 export async function getJogosPublicados() {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('status', 'publicado')
@@ -45,10 +45,10 @@ export async function getJogosPublicados() {
 
 // Busca jogos em destaque
 export async function getJogosEmDestaque() {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('status', 'publicado')
@@ -81,7 +81,7 @@ export async function getJogosComPaginacao(
   const offset = (pagina - 1) * limite;
   const { genero, ordenarPor = 'criado_em', ordem = 'desc' } = filtros || {};
 
-  if (!estaConfigurado || !supabase) {
+  if (!sbConfig || !sb) {
     return { 
       data: [], 
       error: { message: 'Banco de dados não configurado' },
@@ -92,7 +92,7 @@ export async function getJogosComPaginacao(
   }
 
   try {
-    let query = supabase
+    let query = sb
       .from('jogos')
       .select('*', { count: 'exact' })
       .eq('status', 'publicado');
@@ -131,10 +131,10 @@ export async function getJogosComPaginacao(
 
 // Busca um jogo por ID
 export async function getJogoPorID(id: string) {
-  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*, usuarios(*)')
       .eq('id', id)
@@ -153,11 +153,11 @@ export async function getJogoPorID(id: string) {
 }
 
 // Busca jogos por texto
-export async function buscarJogos(query: string) {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+export async function getJogos(query: string) {
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('status', 'publicado')
@@ -182,19 +182,19 @@ export async function buscarJogos(query: string) {
 
 // Cria ou atualiza um usuário
 export async function upsertUsuario(usuario: UsuarioInserido) {
-  if (!estaConfigurado || !supabase) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
+  if (!sbConfig || !sb) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
 
   try {
     // Valida o ID - deve ser um UUID válido vindo do Supabase Auth
     const usuarioId = usuario.id;
     
-    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !ehValidoUUID(usuarioId)) throw new Error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
+    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !validarUUID(usuarioId)) throw new Error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
 
     // Cria objeto usuario com ID validado
     const dadosUsuario = { ...usuario, id: usuarioId };
 
     // Usa supabaseAdmin para contornar políticas RLS durante criação inicial
-    const clienteDB = supabaseAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : supabase;
+    const clienteDB = sbAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY ? sbAdmin : sb;
 
     // Usa upsert nativo do Supabase com ID como chave de conflito
     const { data, error } = await clienteDB
@@ -208,8 +208,8 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
 
     if (error) {
       // Se foi erro de RLS com cliente normal tenta com admin
-      if (error?.code === '42501' && clienteDB === supabase && supabaseAdmin) {
-        const { data: adminData, error: adminError } = await supabaseAdmin
+      if (error?.code === '42501' && clienteDB === sb && sbAdmin) {
+        const { data: adminData, error: adminError } = await sbAdmin
           .from('usuarios')
           .upsert(dadosUsuario, {
             onConflict: 'email',
@@ -244,13 +244,13 @@ export async function upsertUsuario(usuario: UsuarioInserido) {
 
 // Busca jogos favoritos do usuário
 export async function getFavoritosUsuario(idUsuario: string) {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     // Valida se é um UUID válido
-    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('favoritos')
       .select('*, jogos(*)')
       .eq('id_usuario', idUsuario)
@@ -270,13 +270,13 @@ export async function getFavoritosUsuario(idUsuario: string) {
 
 // Verifica se jogo está nos favoritos
 export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
-  if (!estaConfigurado || !supabase) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
+  if (!sbConfig || !sb) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
 
   try {
     // Valida se é um UUID válido
-    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('favoritos')
       .select('id')
       .eq('id_usuario', idUsuario)
@@ -296,14 +296,14 @@ export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
 }
 
 // Adiciona jogo aos favoritos
-export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
-  if (!estaConfigurado || !supabase) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
+export async function insertJogoFavorito(idUsuario: string, idJogo: string) {
+  if (!sbConfig || !sb) return { data: { id: Date.now().toString(), id_usuario: idUsuario, id_jogo: idJogo }, error: null };
 
   try {
     // Valida se é um UUID válido
-    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('favoritos')
       .insert({ id_usuario: idUsuario, id_jogo: idJogo })
       .select()
@@ -322,14 +322,14 @@ export async function adicionarAosFavoritos(idUsuario: string, idJogo: string) {
 }
 
 // Remove jogo dos favoritos
-export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
-  if (!estaConfigurado || !supabase) return { success: true, error: null };
+export async function deleteJogoFavorito(idUsuario: string, idJogo: string) {
+  if (!sbConfig || !sb) return { success: true, error: null };
 
   try {
     // Valida se é um UUID válido
-    if (!ehValidoUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
-    const { error } = await supabase
+    const { error } = await sb
       .from('favoritos')
       .delete()
       .eq('id_usuario', idUsuario)
@@ -348,14 +348,14 @@ export async function removerDosFavoritos(idUsuario: string, idJogo: string) {
 }
 
 // Insere um novo jogo no banco de dados
-export async function inserirJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' | 'atualizado_em'>) {
-  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+export async function insertJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' | 'atualizado_em'>) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
     // Valida se o ID do usuário é um UUID válido
-    if (!ehValidoUUID(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validarUUID(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
 
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .insert(dadosJogo)
       .select()
@@ -374,11 +374,11 @@ export async function inserirJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em'
 }
 
 // Atualiza um jogo existente
-export async function atualizarJogo(id: string, dadosJogo: JogoUpdate) {
-  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+export async function updateJogo(id: string, dadosJogo: JogoUpdate) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .update(dadosJogo)
       .eq('id', id)
@@ -398,16 +398,14 @@ export async function atualizarJogo(id: string, dadosJogo: JogoUpdate) {
 }
 
 // Obtém jogos do usuário desenvolvedor
-export async function obterJogosDoUsuario(idUsuario: string) {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+export async function getJogosUsuario(idUsuario: string) {
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     // Valida se é um UUID válido
-    if (!ehValidoUUID(idUsuario)) {
-      throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    }
+    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('id_usuario', idUsuario)
@@ -426,11 +424,11 @@ export async function obterJogosDoUsuario(idUsuario: string) {
 }
 
 // Obtém um jogo específico por ID
-export async function obterJogoPorId(idJogo: string) {
-  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+export async function getJogoPorId(idJogo: string) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('id', idJogo)
@@ -449,12 +447,12 @@ export async function obterJogoPorId(idJogo: string) {
 }
 
 // Função para obter desenvolvedores com estatísticas
-export async function obterDesenvolvedores() {
-  if (!estaConfigurado || !supabase) return { data: [], error: { message: 'Banco de dados não configurado' } };
+export async function getDev() {
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
     // Busca desenvolvedores com estatísticas agregadas
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('usuarios')
       .select(`
         *,
@@ -495,11 +493,11 @@ export async function obterDesenvolvedores() {
 }
 
 // Função para obter um desenvolvedor específico com estatísticas
-export async function obterDesenvolvedorPorId(idDesenvolvedor: string) {
-  if (!estaConfigurado || !supabase) return { data: null, error: { message: 'Banco de dados não configurado' } };
+export async function getDevPorId(idDesenvolvedor: string) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('usuarios')
       .select(`
         *,
@@ -540,13 +538,13 @@ export async function obterDesenvolvedorPorId(idDesenvolvedor: string) {
 }
 
 // Deleta um jogo do banco de dados
-export async function deletarJogo(idJogo: string, idUsuario: string) {
-  if (!estaConfigurado || !supabase) return { error: { message: 'Banco de dados não configurado' } };
-  if (!ehValidoUUID(idJogo) || !ehValidoUUID(idUsuario)) return { error: { message: 'IDs inválidos fornecidos' } };
+export async function deleteJogo(idJogo: string, idUsuario: string) {
+  if (!sbConfig || !sb) return { error: { message: 'Banco de dados não configurado' } };
+  if (!validarUUID(idJogo) || !validarUUID(idUsuario)) return { error: { message: 'IDs inválidos fornecidos' } };
 
   try {
     // Verifica se o jogo pertence ao usuário
-    const { data: jogoExistente, error: erro } = await supabase
+    const { data: jogoExistente, error: erro } = await sb
       .from('jogos')
       .select('id, id_usuario')
       .eq('id', idJogo)
@@ -561,7 +559,7 @@ export async function deletarJogo(idJogo: string, idUsuario: string) {
     if (!jogoExistente) return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
 
     // Se chegou até aqui, o usuário tem permissão para deletar o jogo
-    const { error } = await supabase
+    const { error } = await sb
       .from('jogos')
       .delete()
       .eq('id', idJogo)

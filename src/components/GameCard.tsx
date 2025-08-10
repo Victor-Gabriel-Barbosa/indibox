@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { Icons } from '@/components';
 import type { Database } from '@/types/supabase';
 
+// Tipos de dados do jogo
 type Jogo = Database['public']['Tables']['jogos']['Row'];
 
+// Propriedades do cartão de jogo
 interface GameCardProps {
   jogo: Jogo;
   onClick?: () => void;

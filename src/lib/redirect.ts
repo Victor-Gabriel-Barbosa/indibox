@@ -2,7 +2,7 @@
  * Valida se uma URL é segura para redirecionamento
  * Previne ataques de redirecionamento aberto
  */
-export function validaUrlRedir(url: string): boolean {
+export function validarUrlRedir(url: string): boolean {
   try {
     // URLs que começam com / são rotas internas válidas
     if (url.startsWith('/')) {
@@ -17,8 +17,7 @@ export function validaUrlRedir(url: string): boolean {
     
     return urlObj.hostname === dominioAtual;
   } catch {
-    // Se a URL não é válida retorna false
-    return false;
+    return false; // Se a URL não é válida retorna false
   }
 }
 
@@ -26,7 +25,7 @@ export function validaUrlRedir(url: string): boolean {
 export function getUrlSegura(): string {
   if (typeof window === 'undefined') return '/';
   const redirUrl = localStorage.getItem('redirAposLogin');
-  if (!redirUrl || !validaUrlRedir(redirUrl)) return '/';
+  if (!redirUrl || !validarUrlRedir(redirUrl)) return '/';
   return redirUrl;
 }
 
