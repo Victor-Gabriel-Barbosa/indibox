@@ -2,10 +2,7 @@
 
 import Image from 'next/image';
 import { Icons } from '@/components';
-import type { Database } from '@/types/supabase';
-
-// Tipos de dados do jogo
-type Jogo = Database['public']['Tables']['jogos']['Row'];
+import type { Jogo } from '@/types';
 
 // Propriedades do cartão de jogo
 interface GameCardProps {

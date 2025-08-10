@@ -5,9 +5,7 @@ import { useState, useEffect } from 'react';
 import { Header, Footer, Icons, GameCardDev, Breadcrumb } from '@/components';
 import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
-import type { Database } from '@/types/supabase';
-
-type Jogo = Database['public']['Tables']['jogos']['Row'];
+import type { Jogo } from '@/types';
 
 export default function MeusJogosPage() {
   const { user, loading } = useAuth();

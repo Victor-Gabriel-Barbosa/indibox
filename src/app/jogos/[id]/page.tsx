@@ -6,10 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { getJogoPorID } from '@/lib/database';
-import type { Database } from '@/types/supabase';
-
-// Definição do tipo Jogo
-type Jogo = Database['public']['Tables']['jogos']['Row'];
+import type { Jogo } from '@/types';
 
 export default function DetalhesJogoPage() {
   const { id } = useParams();

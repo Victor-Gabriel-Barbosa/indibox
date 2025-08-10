@@ -8,10 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
 import { useEffect, useState } from 'react';
 import { getJogosEmDestaque } from '@/lib/database';
-import type { Database } from '@/types/supabase';
-
-// Definição do tipo Jogo
-type Jogo = Database['public']['Tables']['jogos']['Row'];
+import type { Jogo } from '@/types';
 
 export default function Home() {
   const router = useRouter();

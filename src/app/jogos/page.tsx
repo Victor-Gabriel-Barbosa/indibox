@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header, Footer, GameCard, Pagination, Icons } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
-import type { Database } from '@/types/supabase';
-
-type Jogo = Database['public']['Tables']['jogos']['Row'];
+import type { Jogo } from '@/types';
 
 interface FiltrosState {
   genero: string;

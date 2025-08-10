@@ -5,10 +5,8 @@ import { useState } from 'react';
 import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter } from 'next/navigation';
 import { insertJogo } from '@/lib/database';
-import type { Database } from '@/types/supabase';
+import type { JogoInsert } from '@/types';
 import Link from 'next/link';
-
-type JogoInsert = Database['public']['Tables']['jogos']['Insert'];
 
 const generosDisponiveis = [
   'Ação', 'Aventura', 'RPG', 'Estratégia', 'Puzzle', 'Plataforma',

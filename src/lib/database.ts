@@ -1,20 +1,6 @@
 import { sb, sbAdmin, sbConfig } from './supabase';
-import type { Database } from '@/types/supabase';
+import type { JogoInsert, JogoUpdate, JogoEstatistica, UsuarioInsert } from '@/types';
 import { validarUUID } from './uuid';
-
-type JogoInsert = Database['public']['Tables']['jogos']['Insert'];
-type JogoUpdate = Database['public']['Tables']['jogos']['Update'];
-type UsuarioInserido = Database['public']['Tables']['usuarios']['Insert'];
-
-// Tipos para as consultas de desenvolvedores
-type JogoEstatistica = {
-  id: string;
-  contador_download: number | null;
-  avaliacao: number | null;
-  status: string;
-};
-
-
 
 // ================================
 // OPERAÇÕES COM JOGOS
@@ -181,7 +167,7 @@ export async function getJogos(query: string) {
 // ================================
 
 // Cria ou atualiza um usuário
-export async function upsertUsuario(usuario: UsuarioInserido) {
+export async function upsertUsuario(usuario: UsuarioInsert) {
   if (!sbConfig || !sb) return { data: { ...usuario, papel: 'usuario' as const }, error: null };
 
   try {

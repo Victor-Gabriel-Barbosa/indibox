@@ -6,11 +6,8 @@ import { useState, useEffect } from 'react';
 import { Header, Footer, Icons, Breadcrumb } from '@/components';
 import { useRouter, useParams } from 'next/navigation';
 import { getJogoPorId, updateJogo } from '@/lib/database';
-import type { Database } from '@/types/supabase';
+import type { Jogo, JogoUpdate } from '@/types';
 import Link from 'next/link';
-
-type Jogo = Database['public']['Tables']['jogos']['Row'];
-type JogoUpdate = Database['public']['Tables']['jogos']['Update'];
 
 const generosDisponiveis = [
   'Ação', 'Aventura', 'RPG', 'Estratégia', 'Puzzle', 'Plataforma',
