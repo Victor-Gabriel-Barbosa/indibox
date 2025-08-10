@@ -1,12 +1,16 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { getUrlSegura, removerUrlRedir } from '@/lib/redirect';
+import { useAuth } from '@/contexts/AuthContext';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function AuthCallback() {
   const router = useRouter();
+  const { setLoginSuccess } = useAuth();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const handleAuthCallback = async () => {
@@ -25,14 +29,21 @@ export default function AuthCallback() {
         }
 
         if (data.session) {
-          // Recupera a URL segura armazenada antes do login
-          const redirectUrl = getUrlSegura();
+          // Mostra a animação de sucesso
+          setShowSuccess(true);
+          setLoginSuccess(true);
           
-          // Remove a URL do localStorage após usar
-          removerUrlRedir();
-          
-          // Redireciona para a URL original ou para a página inicial
-          router.push(redirectUrl);
+          // Aguarda um tempo para mostrar a animação antes de redirecionar
+          setTimeout(() => {
+            // Recupera a URL segura armazenada antes do login
+            const redirectUrl = getUrlSegura();
+            
+            // Remove a URL do localStorage após usar
+            removerUrlRedir();
+            
+            // Redireciona para a URL original ou para a página inicial
+            router.push(redirectUrl);
+          }, 2000); // 2 segundos para mostrar a animação
         } else router.push('/');
       } catch (error) {
         console.error('Erro inesperado:', error);
@@ -41,15 +52,34 @@ export default function AuthCallback() {
     };
 
     handleAuthCallback();
-  }, [router]);
+  }, [router, setLoginSuccess]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-300">
-          Finalizando autenticação...
-        </p>
+        {showSuccess ? (
+          <>
+            <DotLottieReact
+              src="/assets/Success.lottie"
+              loop={false}
+              autoplay
+              style={{ width: 200, height: 200, margin: '0 auto' }}
+            />
+            <p className="mt-4 text-green-600 dark:text-green-400 font-semibold text-lg">
+              Login realizado com sucesso!
+            </p>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">
+              Redirecionando...
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
+              Finalizando autenticação...
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

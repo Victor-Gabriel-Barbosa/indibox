@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, GameCardDev } from '@/components';
+import { Header, Footer, Icons, GameCardDev, DotLottieReact } from '@/components';
 import Link from 'next/link';
 import { obterJogosDoUsuario, deletarJogo } from '@/lib/database';
 import type { Database } from '@/types/supabase';
@@ -93,13 +93,13 @@ export default function DesenvolvededoresPage() {
       <Header />
 
       {/* Seção Principal */}
-      <section className="py-10 px-4">
+      <section className="pt-10 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Área do
             <span className="text-indigo-600"> Desenvolvedor</span>
           </h1>
-          <p className="text-xl mb-8 max-w-4xl mx-auto">
+          <p className="text-xl mb-4 max-w-4xl mx-auto">
             Publique seus jogos indie gratuitos e compartilhe suas criações com uma comunidade apaixonada por jogos independentes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -113,25 +113,26 @@ export default function DesenvolvededoresPage() {
             </Link>
           </div>
         </div>
+        <DotLottieReact src="/assets/developer.lottie" loop autoplay style={{ margin: '0 auto', maxWidth: '450px', width: '100%', height: 'auto' }} />
       </section>
 
       {/* Estatísticas Rápidas */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-slate-100 dark:bg-slate-900">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-lg shadow-md text-center bg-indigo-600 text-white">
-              <Icons.BsController className="w-12 h-12 text-indigo-100 mx-auto mb-4" />
+            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
+              <Icons.BsController className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">{jogosDoUsuario.length}</h3>
               <p>Jogos Publicados</p>
             </div>
-            <div className="p-6 rounded-lg shadow-md text-center bg-indigo-600 text-white">
-              <Icons.BsDownload className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
+              <Icons.BsDownload className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.reduce((total, jogo) => total + (jogo.contador_download || 0), 0)}
               </h3>
               <p>Total de Downloads</p>
             </div>
-            <div className="p-6 rounded-lg shadow-md text-center bg-indigo-600 text-white">
+            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
               <Icons.BsStars className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.length > 0 

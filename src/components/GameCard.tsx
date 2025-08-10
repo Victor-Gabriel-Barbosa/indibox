@@ -70,7 +70,7 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
         </p>
 
         {jogo.descricao_curta && (
-          <p className="text-sm mb-3 line-clamp-2">
+          <p className="text-sm mb-3 line-clamp-2 text-gray-600 dark:text-gray-400">
             {jogo.descricao_curta}
           </p>
         )}

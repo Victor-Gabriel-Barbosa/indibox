@@ -73,12 +73,12 @@ export default function Header() {
               <Link href="/devs" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('/devs') ? 'text-indigo-600' : ''}`}>
                 Devs
               </Link>
-              <a href="#sobre" className="text-sm md:text-base hover:text-indigo-600 transition-colors">
+              <Link href="/sobre" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('/sobre') ? 'text-indigo-600' : ''}`}>
                 Sobre
-              </a>
-              <a href="#contato" className="text-sm md:text-base hover:text-indigo-600 transition-colors">
+              </Link>
+              <Link href="/contato" className={`text-sm md:text-base hover:text-indigo-600 transition-colors ${isLinkActive('#contato') ? 'text-indigo-600' : ''}`}>
                 Contato
-              </a>
+              </Link>
             </nav>
 
             {/* Botões de Ação - Desktop */}
@@ -176,20 +176,20 @@ export default function Header() {
                 >
                   Devs
                 </Link>
-                <a
-                  href="#sobre"
-                  className="text-base hover:text-indigo-600 transition-colors py-2"
+                <Link
+                  href="/sobre"
+                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/sobre') ? 'text-indigo-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Sobre
-                </a>
-                <a
-                  href="#contato"
-                  className="text-base hover:text-indigo-600 transition-colors py-2"
+                </Link>
+                <Link
+                  href="/contato"
+                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/contato') ? 'text-indigo-600' : ''}`}
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Contato
-                </a>
+                </Link>
               </nav>
 
               {/* Botões de Ação - Mobile */}

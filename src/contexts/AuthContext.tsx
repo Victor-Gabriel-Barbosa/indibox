@@ -22,6 +22,8 @@ interface AuthContextType {
   user: AuthUser | null;
   session: Session | null;
   loading: boolean;
+  loginSuccess: boolean;
+  setLoginSuccess: (success: boolean) => void;
   signInWithGoogle: () => Promise<void>;
   signInWithGithub: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -33,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const syncUserWithDatabase = async (user: User) => {
     try {
@@ -213,6 +216,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     session,
     loading,
+    loginSuccess,
+    setLoginSuccess,
     signInWithGoogle,
     signInWithGithub,
     signOut,

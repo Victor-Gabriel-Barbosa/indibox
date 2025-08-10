@@ -242,7 +242,7 @@ export default function EditarJogoPage() {
             <h1 className="text-4xl font-bold mb-4">
               Editar <span className="text-indigo-600">{jogo?.titulo}</span>
             </h1>
-            <p className="text-xl">
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               Atualize as informações do seu jogo
             </p>
           </div>

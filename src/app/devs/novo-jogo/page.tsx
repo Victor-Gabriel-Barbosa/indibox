@@ -185,7 +185,7 @@ export default function NovoJogoPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label htmlFor="titulo" className="block text-sm font-medium mb-2">
-                    Título do Jogo *
+                    Título do Jogo <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -201,7 +201,7 @@ export default function NovoJogoPage() {
 
                 <div>
                   <label htmlFor="desenvolvedor" className="block text-sm font-medium mb-2">
-                    Nome do Desenvolvedor *
+                    Nome do Desenvolvedor <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -272,7 +272,7 @@ export default function NovoJogoPage() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-3">
-                    Gêneros *
+                    Gêneros <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {generosDisponiveis.map((genero) => (
@@ -291,7 +291,7 @@ export default function NovoJogoPage() {
 
                 <div>
                   <label className="block text-sm font-medium mb-3">
-                    Plataformas *
+                    Plataformas <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {plataformasDisponiveis.map((plataforma) => (
@@ -451,7 +451,7 @@ export default function NovoJogoPage() {
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-background border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   <option value="rascunho">Rascunho (não visível publicamente)</option>
                   <option value="publicado">Publicado (visível para todos)</option>

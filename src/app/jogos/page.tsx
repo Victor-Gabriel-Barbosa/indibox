@@ -131,7 +131,7 @@ export default function JogosPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Biblioteca de <span className="text-indigo-600">Jogos</span>
           </h1>
-          <p className="text-xl opacity-90">
+          <p className="text-xl text-gray-600 dark:text-gray-400">
             Explore nossa coleção completa de jogos indie gratuitos. Encontre sua próxima aventura!
           </p>
         </div>

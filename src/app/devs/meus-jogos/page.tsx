@@ -116,7 +116,7 @@ export default function MeusJogosPage() {
             <h1 className="text-4xl font-bold mb-4">
               Meus <span className="text-indigo-600">Jogos</span>
             </h1>
-            <p className="text-xl">
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               Gerencie seus jogos publicados na plataforma
             </p>
           </div>
