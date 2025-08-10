@@ -96,14 +96,14 @@ export default function Header() {
 
                 {/* Dropdown do Seletor de Tema */}
                 {seletorTemaAberto && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border border-indigo-600 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-background border border-indigo-600 rounded-lg shadow-lg shadow-indigo-600 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
                       return (
                         <button
                           key={itemTema.id}
                           onClick={() => handleTrocaTema(itemTema.id)}
-                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600' : 'text-foreground/70'
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-indigo-600 hover:text-white transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600' : 'text-gray-600 dark:text-gray-400'
                             } ${itemTema.id === 'light' ? 'rounded-t-lg' : ''} ${itemTema.id === 'system' ? 'rounded-b-lg' : ''}`}
                         >
                           <IconeTema className="w-4 h-4" />
@@ -199,7 +199,7 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTrocaTema(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover-bg transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-foreground/70'
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-gray-600 dark:text-gray-400'
                             }`}
                         >
                           <IconeTema className="w-6 h-6" />

@@ -97,7 +97,7 @@ export default function DesenvolvededoresPage() {
             Área do
             <span className="text-indigo-600"> Desenvolvedor</span>
           </h1>
-          <p className="text-xl mb-4 max-w-4xl mx-auto">
+          <p className="text-xl mb-4 max-w-4xl mx-auto text-gray-600 dark:text-gray-400">
             Publique seus jogos indie gratuitos e compartilhe suas criações com uma comunidade apaixonada por jogos independentes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

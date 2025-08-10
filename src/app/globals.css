@@ -1,12 +1,12 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+
+@variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-hover: #EFF6FF;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -15,20 +15,17 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --color-hover: #1E293B;
   }
 }
 
 :root.light {
   --background: #ffffff;
   --foreground: #171717;
-  --color-hover: #EFF6FF;
 }
 
 :root.dark {
   --background: #0a0a0a;
   --foreground: #ededed;
-  --color-hover: #1E293B;
 }
 
 body {
@@ -47,10 +44,6 @@ button, select {
 
 .text-foreground {
   color: var(--foreground);
-}
-
-.hover-bg:hover {
-  background-color: var(--color-hover);
 }
 
 .swiper {
