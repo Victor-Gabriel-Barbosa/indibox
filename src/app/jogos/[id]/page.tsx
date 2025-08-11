@@ -124,7 +124,7 @@ export default function DetalhesJogoPage() {
               {imagens.length > 0 ? (
                 <div className="space-y-4">
                   {/* Imagem principal */}
-                  <div className="relative w-full h-[70vh] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-[65vmin] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <Image
                       src={imagens[imagemAtiva]}
                       alt={`${jogo.titulo} - Imagem ${imagemAtiva + 1}`}
@@ -169,7 +169,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Descrição */}
-            <div className="rounded-lg shadow-lg shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <h2 className="text-2xl font-bold mb-4">
                 Sobre o jogo
               </h2>
@@ -190,7 +190,7 @@ export default function DetalhesJogoPage() {
           {/* Sidebar - Informações do jogo */}
           <div className="space-y-6">
             {/* Card principal com título e ações */}
-            <div className="rounded-lg shadow-lg shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold mb-2">
                   {jogo.titulo}
@@ -270,7 +270,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Informações técnicas */}
-            <div className="rounded-lg shadow-lg shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <h3 className="text-xl font-bold mb-4">
                 Informações Técnicas
               </h3>

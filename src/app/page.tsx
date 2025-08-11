@@ -55,7 +55,7 @@ export default function Home() {
             <Link href="/jogos" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Explorar Jogos
             </Link>
-            <Link href="/devs" className="text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+            <Link href="/devs" className="text-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Para Desenvolvedores
             </Link>
           </div>
@@ -185,12 +185,12 @@ export default function Home() {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 transform border border-indigo-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600 transition-transform duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.BsEmojiLaughingFill className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-300">
@@ -202,12 +202,12 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 transform border border-indigo-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600 transition-transform duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.FaPeopleGroup className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors duration-300">
@@ -219,12 +219,12 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 transform border border-indigo-600 overflow-hidden">
+            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600 transition-transform duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.BsStars className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-300">

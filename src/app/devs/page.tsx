@@ -111,26 +111,27 @@ export default function DesenvolvededoresPage() {
             </Link>
           </div>
         </div>
-        <DotLottieReact src="/assets/developer.lottie" loop autoplay style={{ margin: '0 auto', maxWidth: '450px', width: '100%', height: 'auto' }} />
+        <DotLottieReact src="/assets/developer.lottie" loop autoplay 
+        style={{ margin: '0 auto', maxWidth: '350px', width: '100%', height: 'auto', transform: 'scale(2) translateY(15px)', pointerEvents: 'none' }} />
       </section>
 
       {/* Estatísticas Rápidas */}
       <section className="py-10 px-4 bg-slate-100 dark:bg-slate-900">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center bg-white dark:bg-slate-800 hover:shadow-xl">
               <Icons.BsController className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">{jogosDoUsuario.length}</h3>
               <p>Jogos Publicados</p>
             </div>
-            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center bg-white dark:bg-slate-800 hover:shadow-xl">
               <Icons.BsDownload className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.reduce((total, jogo) => total + (jogo.contador_download || 0), 0)}
               </h3>
               <p>Total de Downloads</p>
             </div>
-            <div className="p-6 rounded-lg shadow-md text-center bg-white dark:bg-slate-800 border hover:shadow-2xl border-indigo-600">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center bg-white dark:bg-slate-800 hover:shadow-xl">
               <Icons.BsStars className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.length > 0 

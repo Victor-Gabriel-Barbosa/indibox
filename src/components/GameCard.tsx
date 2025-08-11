@@ -13,7 +13,7 @@ interface GameCardProps {
 export default function GameCard({ jogo, onClick }: GameCardProps) {
   return (
     <div 
-      className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"
+      className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"
       onClick={onClick}
     >
       {/* Imagem do jogo */}

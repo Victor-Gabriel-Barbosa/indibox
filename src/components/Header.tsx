@@ -96,7 +96,7 @@ export default function Header() {
 
                 {/* Dropdown do Seletor de Tema */}
                 {seletorTemaAberto && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border border-indigo-600 rounded-lg shadow-lg shadow-indigo-600 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-background border border-indigo-600 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                     {temas.map((itemTema) => {
                       const IconeTema = itemTema.icone;
                       return (

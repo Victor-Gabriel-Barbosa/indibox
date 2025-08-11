@@ -102,11 +102,11 @@ export default function Sobre() {
           <DotLottieReact src="/assets/criative.lottie" loop autoplay style={{ margin: '0 auto', maxWidth: '500px', width: '100%', height: 'auto' }} />
           
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 border border-indigo-100 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600">
                   <Icons.BsHeart className="text-white w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-300">
@@ -118,11 +118,11 @@ export default function Sobre() {
               </div>
             </div>
 
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 border border-indigo-100 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600">
                   <Icons.BsUnlockFill className="text-white w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors duration-300">
@@ -134,11 +134,11 @@ export default function Sobre() {
               </div>
             </div>
 
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-600 hover:shadow-2xl transition-all duration-300 border border-indigo-100 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600">
                   <Icons.BsLightbulb className="text-white w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-300">
@@ -179,7 +179,7 @@ export default function Sobre() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl p-8">
+            <div className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600">
               <div className="grid grid-cols-2 gap-6 text-center">
                 <div>
                   <div className="text-3xl font-bold mb-2">100%</div>
@@ -214,7 +214,7 @@ export default function Sobre() {
           </div>
           
           <div className="grid md:grid-cols-4 gap-6">
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-600 border border-indigo-100 dark:border-indigo-700">
+            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                 <Icons.TbBrandNextjs className="w-8 h-8 text-blue-600" />
               </div>
@@ -222,7 +222,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Framework React para aplicações web modernas</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-600 border border-indigo-100 dark:border-indigo-700">
+            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                 <Icons.SiSupabase className="w-8 h-8 text-green-600" />
               </div>
@@ -230,7 +230,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Backend como serviço com banco PostgreSQL</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-600 border border-indigo-100 dark:border-indigo-700">
+            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
                 <Icons.SiTailwindcss className="w-8 h-8 text-cyan-600" />
               </div>
@@ -238,7 +238,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Framework CSS utilitário para design responsivo</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-600 border border-indigo-100 dark:border-indigo-700">
+            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                 <Icons.SiTypescript className="w-8 h-8 text-blue-600" />
               </div>
@@ -261,11 +261,11 @@ export default function Sobre() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/jogos" className="bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-3 rounded-lg text-lg font-medium transition-colors inline-flex items-center space-x-2">
+            <Link href="/jogos" className="flex items-center justify-center space-x-2 bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               <Icons.BsController className="w-5 h-5" />
               <span>Explorar Jogos</span>
             </Link>
-            <Link href="/devs" className="text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors inline-flex items-center space-x-2">
+            <Link href="/devs" className="flex items-center justify-center space-x-2 text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               <Icons.BsCodeSlash className="w-5 h-5" />
               <span>Área do Desenvolvedor</span>
             </Link>
