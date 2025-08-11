@@ -66,7 +66,7 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
   };
 
   return (
-    <div className="relative h-full flex flex-col rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform group overflow-hidden">
+    <div className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform group overflow-hidden">
       {/* Status Badge */}
       <div className="absolute top-2 left-2 z-10">
         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(jogo.status || 'rascunho')}`}>

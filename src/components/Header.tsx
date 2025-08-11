@@ -43,7 +43,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="relative bg-background sticky top-0 z-50">
+      <header className="bg-background sticky top-0 z-50">
         <div className="absolute bottom-0 left-0 w-full h-[6px] bg-gradient-to-r from-transparent via-indigo-600 to-transparent"></div>
         <div className="container mx-auto px-4 py-1 md:py-2">
           {/* Linha Principal do Cabeçalho */}

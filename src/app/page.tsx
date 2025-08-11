@@ -55,7 +55,7 @@ export default function Home() {
             <Link href="/jogos" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Explorar Jogos
             </Link>
-            <Link href="/devs" className="text-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+            <Link href="/devs" className="text-indigo-600 hover:bg-indigo-600 border border-indigo-600 hover:text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Para Desenvolvedores
             </Link>
           </div>
@@ -176,7 +176,7 @@ export default function Home() {
       </Swiper>
 
       {/* Seção de Informações */}
-      <section id="jogos" className="py-10 px-4 bg-slate-100 dark:bg-slate-900">
+      <section id="jogos" className="py-10 px-4 bg-slate-200 dark:bg-slate-900">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold mb-4">Por que IndiBox?</h3>
@@ -185,7 +185,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -202,7 +202,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -219,7 +219,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
+            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
               {/* Gradiente sutil de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 

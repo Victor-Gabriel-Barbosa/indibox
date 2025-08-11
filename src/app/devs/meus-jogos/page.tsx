@@ -204,7 +204,7 @@ export default function MeusJogosPage() {
             <h2 className="text-2xl font-bold mb-6 text-center">Resumo dos Seus Jogos</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-200 mb-2">
+                <div className="text-3xl font-bold text-sky-500 mb-2">
                   {jogosDoUsuario.filter(j => j.status === 'publicado').length}
                 </div>
                 <div className="text-sm">Publicados</div>
@@ -222,7 +222,7 @@ export default function MeusJogosPage() {
                 <div className="text-sm">Downloads Totais</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-red-500 mb-2">
+                <div className="text-3xl font-bold text-cyan-500 mb-2">
                   {jogosDoUsuario.length > 0 
                     ? (jogosDoUsuario.reduce((total, jogo) => total + (jogo.avaliacao || 0), 0) / jogosDoUsuario.length).toFixed(1)
                     : '0.0'

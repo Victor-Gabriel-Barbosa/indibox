@@ -183,7 +183,7 @@ export default function JogosPage() {
                 className="flex items-center space-x-1 px-3 py-2 bg-indigo-600 text-white border border-white rounded-md text-sm hover:bg-indigo-700 transition-colors"
                 title={filtros.ordem === 'desc' ? 'Decrescente' : 'Crescente'}
               >
-                <span>{filtros.ordem === 'desc' ? <Icons.FaArrowDownShortWide /> : <Icons.FaArrowUpWideShort />}</span>
+                <span>{filtros.ordem === 'desc' ? <Icons.FaArrowDownWideShort /> : <Icons.FaArrowUpShortWide />}</span>
                 <span>{filtros.ordem === 'desc' ? 'Desc' : 'Cresc'}</span>
               </button>
             </div>
