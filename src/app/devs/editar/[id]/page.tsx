@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, Breadcrumb } from '@/components';
+import { Header, Footer, Icons, Breadcrumb, DotLottieReact } from '@/components';
 import { useRouter, useParams } from 'next/navigation';
 import { getJogoPorId, updateJogo } from '@/lib/database';
 import type { Jogo, JogoUpdate } from '@/types';
@@ -177,7 +177,9 @@ export default function EditarJogoPage() {
         <Header />
         <div className="container mx-auto px-4 py-20">
           <div className="text-center">
-            <Icons.BsExclamationTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-6" />
+            <div className="mx-auto max-w-2xl">
+              <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+            </div>
             <h1 className="text-3xl font-bold mb-4">Acesso Restrito</h1>
             <p className="text-xl mb-8 text-gray-600 dark:text-gray-400">
               Você precisa estar logado para editar jogos.

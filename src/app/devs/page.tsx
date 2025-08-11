@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
 
-export default function DesenvolvededoresPage() {
+export default function DevsPage() {
   const { user, loading } = useAuth();
   const [jogosDoUsuario, setJogosDoUsuario] = useState<Jogo[]>([]);
 

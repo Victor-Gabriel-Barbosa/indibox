@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, GameCardDev, Breadcrumb } from '@/components';
+import { Header, Footer, Icons, GameCardDev, Breadcrumb, DotLottieReact } from '@/components';
 import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
@@ -83,7 +83,9 @@ export default function MeusJogosPage() {
         <Header />
         <div className="container mx-auto px-4 py-20">
           <div className="text-center">
-            <Icons.BsExclamationTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-6" />
+            <div className="mx-auto max-w-2xl">
+              <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+            </div>
             <h1 className="text-3xl font-bold mb-4">Acesso Restrito</h1>
             <p className="text-xl mb-8">
               Você precisa estar logado para acessar seus jogos.
@@ -167,8 +169,10 @@ export default function MeusJogosPage() {
             ))}
           </div>
         ) : jogosFiltrados.length === 0 ? (
-          <div className="text-center py-16">
-            <Icons.BsController className="w-16 h-16 mx-auto mb-6" />
+          <div className="text-center py-10">
+            <div className="mx-auto max-w-2xl">
+              <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+            </div>
             <h2 className="text-2xl font-bold mb-4">
               {filtroStatus === 'todos' ? 'Nenhum jogo encontrado' : `Nenhum jogo ${filtroStatus === 'publicado' ? 'publicado' : filtroStatus === 'rascunho' ? 'em rascunho' : 'arquivado'}`}
             </h2>

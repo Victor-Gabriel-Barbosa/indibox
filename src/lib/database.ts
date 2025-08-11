@@ -62,10 +62,11 @@ export async function getJogosComPaginacao(
     genero?: string;
     ordenarPor?: 'criado_em' | 'avaliacao' | 'contador_download' | 'titulo';
     ordem?: 'asc' | 'desc';
+    busca?: string;
   }
 ) {
   const offset = (pagina - 1) * limite;
-  const { genero, ordenarPor = 'criado_em', ordem = 'desc' } = filtros || {};
+  const { genero, ordenarPor = 'criado_em', ordem = 'desc', busca } = filtros || {};
 
   if (!sbConfig || !sb) {
     return { 
@@ -82,6 +83,12 @@ export async function getJogosComPaginacao(
       .from('jogos')
       .select('*', { count: 'exact' })
       .eq('status', 'publicado');
+
+    // Aplica filtro de busca se especificado
+    if (busca && busca.trim()) {
+      const termoBusca = busca.trim();
+      query = query.or(`titulo.ilike.%${termoBusca}%,descricao.ilike.%${termoBusca}%,desenvolvedor.ilike.%${termoBusca}%`);
+    }
 
     // Aplica filtro de gênero se especificado
     if (genero && genero !== 'todos') query = query.contains('genero', [genero]);

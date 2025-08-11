@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Header, Footer, GameCard, Pagination, Icons } from '@/components';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Header, Footer, GameCard, Pagination, Icons, DotLottieReact } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
 import { GENEROS_DISPONIVEIS } from '@/lib/gameData';
@@ -11,10 +11,12 @@ interface FiltrosState {
   genero: string;
   ordenarPor: 'criado_em' | 'avaliacao' | 'contador_download' | 'titulo';
   ordem: 'asc' | 'desc';
+  busca?: string;
 }
 
 export default function JogosPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [jogos, setJogos] = useState<Jogo[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [paginaAtual, setPaginaAtual] = useState(1);
@@ -23,7 +25,8 @@ export default function JogosPage() {
   const [filtros, setFiltros] = useState<FiltrosState>({
     genero: 'todos',
     ordenarPor: 'criado_em',
-    ordem: 'desc'
+    ordem: 'desc',
+    busca: ''
   });
 
   const jogosPorPagina = 12;
@@ -39,7 +42,8 @@ export default function JogosPage() {
         {
           genero: filtrosParaUsar.genero === 'todos' ? undefined : filtrosParaUsar.genero,
           ordenarPor: filtrosParaUsar.ordenarPor,
-          ordem: filtrosParaUsar.ordem
+          ordem: filtrosParaUsar.ordem,
+          busca: filtrosParaUsar.busca
         }
       );
 
@@ -63,13 +67,27 @@ export default function JogosPage() {
       try {
         setCarregando(true);
         
+        // Obtém o parâmetro de busca da URL
+        const termoBusca = searchParams.get('busca') || '';
+        
+        // Atualiza os filtros com o termo de busca
+        const filtrosIniciais = {
+          genero: 'todos',
+          ordenarPor: 'criado_em' as const,
+          ordem: 'desc' as const,
+          busca: termoBusca
+        };
+        
+        setFiltros(filtrosIniciais);
+        
         const { data, error, totalJogos, totalPaginas } = await getJogosComPaginacao(
           1,
           jogosPorPagina,
           {
-            genero: filtros.genero === 'todos' ? undefined : filtros.genero,
-            ordenarPor: filtros.ordenarPor,
-            ordem: filtros.ordem
+            genero: filtrosIniciais.genero === 'todos' ? undefined : filtrosIniciais.genero,
+            ordenarPor: filtrosIniciais.ordenarPor,
+            ordem: filtrosIniciais.ordem,
+            busca: filtrosIniciais.busca
           }
         );
 
@@ -89,7 +107,15 @@ export default function JogosPage() {
     };
 
     carregarJogosIniciais();
-  }, [filtros]);
+  }, [searchParams]);
+
+  // UseEffect para mudanças nos filtros
+  useEffect(() => {
+    if (filtros.busca !== undefined) { // Executa apenas após inicialização
+      carregarJogos(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtros.genero, filtros.ordenarPor, filtros.ordem]);
 
   const handleMudarPagina = (novaPagina: number) => {
     carregarJogos(novaPagina);
@@ -117,9 +143,15 @@ export default function JogosPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Biblioteca de <span className="text-indigo-600">Jogos</span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            Explore nossa coleção completa de jogos indie gratuitos. Encontre sua próxima aventura!
-          </p>
+          {filtros.busca ? (
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              Resultados da pesquisa por: <span className="text-indigo-600 font-semibold">&ldquo;{filtros.busca}&rdquo;</span>
+            </p>
+          ) : (
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              Explore nossa coleção completa de jogos indie gratuitos. Encontre sua próxima aventura!
+            </p>
+          )}
         </div>
       </section>
 
@@ -128,11 +160,27 @@ export default function JogosPage() {
         <div className="container mx-auto">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
             {/* Informações de resultados */}
-            <div className="text-white text-sm">
-              {carregando ? (
-                'Carregando jogos...'
-              ) : (
-                `Mostrando ${jogos.length} de ${totalJogos} jogos`
+            <div className="text-white text-sm flex items-center gap-4">
+              <span>
+                {carregando ? (
+                  'Carregando jogos...'
+                ) : (
+                  `Mostrando ${jogos.length} de ${totalJogos} jogos`
+                )}
+              </span>
+              
+              {/* Botão para limpar busca */}
+              {filtros.busca && (
+                <button
+                  onClick={() => {
+                    setFiltros({ ...filtros, busca: '' });
+                    router.push('/jogos');
+                  }}
+                  className="flex items-center gap-1 px-3 py-1 bg-white text-indigo-600 rounded-full text-xs hover:bg-gray-100 transition-colors"
+                >
+                  <Icons.BsX className="w-4 h-4" />
+                  Limpar busca
+                </button>
               )}
             </div>
 
@@ -221,8 +269,10 @@ export default function JogosPage() {
             </div>
           ) : (
             /* Estado vazio */
-            <div className="text-center py-16">
-              <Icons.BsController className="w-16 h-16 mx-auto mb-4" />
+            <div className="text-center py-10">
+              <div className="mx-auto max-w-2xl">
+                <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+              </div>
               <h3 className="text-xl font-semibold mb-2">
                 Nenhum jogo encontrado
               </h3>
