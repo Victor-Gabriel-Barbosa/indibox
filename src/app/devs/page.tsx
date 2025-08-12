@@ -121,19 +121,19 @@ export default function DevsPage() {
       <section className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center dark:bg-slate-800 hover:shadow-xl">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
               <Icons.BsController className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">{jogosDoUsuario.length}</h3>
               <p>Jogos Publicados</p>
             </div>
-            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center dark:bg-slate-800 hover:shadow-xl">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
               <Icons.BsDownload className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.reduce((total, jogo) => total + (jogo.contador_download || 0), 0)}
               </h3>
               <p>Total de Downloads</p>
             </div>
-            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center dark:bg-slate-800 hover:shadow-xl">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
               <Icons.BsStars className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.length > 0 
@@ -157,7 +157,7 @@ export default function DevsPage() {
                 <span>Ver Todos</span> <Icons.FaArrowUpRightFromSquare />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {jogosDoUsuario.slice(0, 4).map((jogo) => (
                 <GameCardDev 
                   key={jogo.id} 

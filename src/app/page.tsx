@@ -203,9 +203,6 @@ export default function Home() {
             </div>
 
             <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
-              {/* Gradiente sutil de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.FaPeopleGroup className="w-8 h-8 text-white" />
@@ -220,9 +217,6 @@ export default function Home() {
             </div>
 
             <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
-              {/* Gradiente sutil de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.BsStars className="w-8 h-8 text-white" />

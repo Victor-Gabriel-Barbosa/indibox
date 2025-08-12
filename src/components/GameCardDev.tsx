@@ -66,7 +66,10 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
   };
 
   return (
-    <div className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform group overflow-hidden">
+    <div 
+      className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform group overflow-hidden cursor-pointer"
+      onClick={handleEdit}
+    >
       {/* Status Badge */}
       <div className="absolute top-2 left-2 z-10">
         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(jogo.status || 'rascunho')}`}>
@@ -97,7 +100,7 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
       </div>
 
       {/* Imagem do jogo */}
-      <div className="relative w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden cursor-pointer" onClick={handleEdit}>
+      <div className="relative w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
         {jogo.imagem_capa ? (
           <Image 
             src={jogo.imagem_capa} 
@@ -128,14 +131,6 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
             Destaque
           </div>
         )}
-
-        {/* Overlay com informações de edição */}
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <div className="text-center text-white">
-            <Icons.FaRegPenToSquare className="w-8 h-8 mx-auto mb-2" />
-            <p className="text-sm font-medium">Clique para editar</p>
-          </div>
-        </div>
       </div>
 
       {/* Informações do jogo */}
@@ -204,15 +199,7 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
           )}
 
           {/* Ações rápidas no rodapé */}
-          <div className="flex items-center justify-between pt-2">
-            <button
-              onClick={handleEdit}
-              className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
-            >
-              <Icons.FaPenToSquare className="w-3 h-3" />
-              Editar
-            </button>
-            
+          <div className="flex items-center justify-end pt-2">
             <div className="flex items-center gap-2">
               {jogo.status === 'publicado' && (
                 <span className="text-green-600 text-xs flex items-center gap-1">
