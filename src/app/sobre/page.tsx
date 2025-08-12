@@ -22,7 +22,7 @@ export default function Sobre() {
       </section>
 
       {/* Seção Nossa Missão */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -35,7 +35,7 @@ export default function Sobre() {
           
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Para Jogadores */}
-            <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-shadow duration-300">
+            <div className="rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mr-4">
                   <Icons.BsController className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -77,7 +77,7 @@ export default function Sobre() {
             </div>
             
             {/* Para Desenvolvedores */}
-            <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-shadow duration-300">
+            <div className="rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mr-4">
                   <Icons.BsCodeSlash className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -134,7 +134,7 @@ export default function Sobre() {
           <DotLottieReact src="/assets/criative.lottie" loop autoplay style={{ margin: '0 auto', maxWidth: '500px', width: '100%', height: 'auto' }} />
           
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
@@ -150,7 +150,7 @@ export default function Sobre() {
               </div>
             </div>
 
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent dark:from-green-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
@@ -166,7 +166,7 @@ export default function Sobre() {
               </div>
             </div>
 
-            <div className="group relative bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
+            <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               <div className="relative z-10">
@@ -186,7 +186,7 @@ export default function Sobre() {
       </section>
 
       {/* Seção História */}
-      <section className="py-10 px-4 mx-4 rounded-2xl bg-slate-100 dark:bg-slate-900">
+      <section className="py-10 px-4 mx-4 rounded-2xl bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Nossa <span className="text-indigo-600">História</span></h2>
@@ -211,7 +211,7 @@ export default function Sobre() {
               </p>
             </div>
 
-            <div className="bg-slate-100 dark:bg-slate-800 backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-shadow duration-300">
+            <div className="backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-shadow duration-300">
               <div className="grid grid-cols-2 gap-6 text-center">
                 <div>
                   <div className="text-3xl font-bold mb-2">100%</div>
@@ -236,7 +236,7 @@ export default function Sobre() {
       </section>
 
       {/* Seção Tecnologia */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Tecno<span className="text-indigo-600">logia</span></h2>
@@ -246,7 +246,7 @@ export default function Sobre() {
           </div>
           
           <div className="grid md:grid-cols-4 gap-6">
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
+            <div className="text-center p-6 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                 <Icons.TbBrandNextjs className="w-8 h-8 text-blue-600" />
               </div>
@@ -254,7 +254,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Framework React para aplicações web modernas</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
+            <div className="text-center p-6 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                 <Icons.SiSupabase className="w-8 h-8 text-green-600" />
               </div>
@@ -262,7 +262,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Backend como serviço com banco PostgreSQL</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
+            <div className="text-center p-6 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
                 <Icons.SiTailwindcss className="w-8 h-8 text-cyan-600" />
               </div>
@@ -270,7 +270,7 @@ export default function Sobre() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Framework CSS utilitário para design responsivo</p>
             </div>
             
-            <div className="text-center p-6 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
+            <div className="text-center p-6 rounded-xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 dark:border-indigo-700 hover:shadow-xl transition-all duration-300">
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                 <Icons.SiTypescript className="w-8 h-8 text-blue-600" />
               </div>
