@@ -121,7 +121,7 @@ export default function Header() {
                       value={termoPesquisa}
                       onChange={(e) => setTermoPesquisa(e.target.value)}
                       name="busca"
-                      className="w-[25vw] pl-8 pr-3 py-2 text-sm bg-background border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+                      className="pl-8 pr-3 py-2 text-sm bg-background border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
                     />
                     <Icons.BsSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
                   </div>

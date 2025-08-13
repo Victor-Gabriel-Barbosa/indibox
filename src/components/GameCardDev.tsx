@@ -138,7 +138,7 @@ export default function GameCardDev({ jogo, onClick, onDelete, priority = false 
       {/* Informações do jogo */}
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg font-bold line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors flex-1">
+          <h3 className="text-lg font-bold line-clamp-1 group-hover:text-indigo-600 transition-colors flex-1">
             {jogo.titulo}
           </h3>
         </div>

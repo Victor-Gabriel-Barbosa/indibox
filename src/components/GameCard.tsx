@@ -54,7 +54,7 @@ export default function GameCard({ jogo, onClick, priority = false }: GameCardPr
 
       {/* Informações do jogo */}
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-bold mb-1 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+        <h3 className="text-lg font-bold mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors">
           {jogo.titulo}
         </h3>
         
