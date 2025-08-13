@@ -104,9 +104,6 @@ export default function Header() {
               <Link href="/sobre" className={`text-base hover:text-indigo-600 transition-colors whitespace-nowrap ${isLinkActive('/sobre') ? 'text-indigo-600' : ''}`}>
                 Sobre
               </Link>
-              <Link href="/contato" className={`text-base hover:text-indigo-600 transition-colors whitespace-nowrap ${isLinkActive('#contato') ? 'text-indigo-600' : ''}`}>
-                Contato
-              </Link>
             </nav>
 
             {/* Barra de Pesquisa + Botões de Ação - Desktop */}
@@ -286,13 +283,6 @@ export default function Header() {
                   onClick={() => setMenuMobileAtivo(false)}
                 >
                   Sobre
-                </Link>
-                <Link
-                  href="/contato"
-                  className={`text-base hover:text-indigo-600 transition-colors py-2 ${isLinkActive('/contato') ? 'text-indigo-600' : ''}`}
-                  onClick={() => setMenuMobileAtivo(false)}
-                >
-                  Contato
                 </Link>
               </nav>
 
