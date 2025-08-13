@@ -25,7 +25,6 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/assets/favicon/favicon.ico", sizes: "any" },
-      { url: "/assets/favicon/favicon.svg", type: "image/svg+xml" },
       { url: "/assets/favicon/favicon-96x96.png", type: "image/png", sizes: "96x96" },
     ],
     apple: "/assets/favicon/apple-touch-icon.png",
@@ -40,6 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -188,10 +188,11 @@ export default function JogosPage() {
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               {/* Filtro por gênero */}
               <div className="flex items-center space-x-2">
-                <label className="text-white text-sm font-medium">
+                <label htmlFor="genero" className="text-white text-sm font-medium">
                   Gênero:
                 </label>
                 <select
+                  id="genero"
                   value={filtros.genero}
                   onChange={(e) => handleMudarFiltro({ genero: e.target.value })}
                   className="px-3 py-2 bg-indigo-600 text-white border border-white rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -206,10 +207,11 @@ export default function JogosPage() {
 
               {/* Ordenação */}
               <div className="flex items-center space-x-2">
-                <label className="text-white text-sm font-medium">
+                <label htmlFor="ordenarPor" className="text-white text-sm font-medium">
                   Ordenar por:
                 </label>
                 <select
+                  id="ordenarPor"
                   value={filtros.ordenarPor}
                   onChange={(e) => handleMudarFiltro({ 
                     ordenarPor: e.target.value as FiltrosState['ordenarPor'] 
@@ -259,10 +261,11 @@ export default function JogosPage() {
           ) : jogos.length > 0 ? (
             /* Grade de jogos */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {jogos.map((jogo) => (
+              {jogos.map((jogo, index) => (
                 <GameCard
                   key={jogo.id}
                   jogo={jogo}
+                  priority={index === 0} // Primeira imagem tem prioridade para LCP
                   onClick={() => handleJogoClick(jogo)}
                 />
               ))}

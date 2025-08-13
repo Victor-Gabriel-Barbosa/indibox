@@ -139,6 +139,7 @@ export default function Home() {
                     fill
                     className="object-cover rounded-lg w-full h-full"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
+                    priority={true}
                   />
                   {/* Overlay com informações sobre a imagem placeholder */}
                   <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center w-full h-full">

@@ -9,7 +9,13 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Image src="/assets/favicon/favicon.svg" alt="IndiBox" width={64} height={64} />
+              <Image 
+                src="/assets/favicon/favicon.svg" 
+                alt="IndiBox" 
+                width={64} 
+                height={64}
+                priority={false}
+              />
               <h5 className="font-bold text-lg">Ind<span className="text-indigo-600">iBox</span></h5>
             </Link>
             <p className="text-foreground/70 text-md">

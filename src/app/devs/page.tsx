@@ -18,7 +18,7 @@ export default function DevsPage() {
 
       try {
         const { data, error } = await getJogosUsuario(user.id);
-        
+
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
         else if (data) setJogosDoUsuario(data);
       } catch (error) {
@@ -34,7 +34,7 @@ export default function DevsPage() {
 
     try {
       const { error } = await deleteJogo(idJogo, user.id);
-      
+
       if (error) {
         console.error('Erro ao deletar jogo:', error);
         alert('Erro ao deletar o jogo. Tente novamente.');
@@ -43,7 +43,7 @@ export default function DevsPage() {
 
       // Remove o jogo da lista local
       setJogosDoUsuario(jogosAtuais => jogosAtuais.filter(jogo => jogo.id !== idJogo));
-      
+
       console.log('Jogo deletado com sucesso');
     } catch (error) {
       console.error('Erro ao deletar jogo:', error);
@@ -113,8 +113,17 @@ export default function DevsPage() {
             </Link>
           </div>
         </div>
-        <DotLottieReact src="/assets/developer.lottie" loop autoplay 
-        style={{ margin: '0 auto', maxWidth: '350px', width: '100%', height: 'auto', transform: 'scale(2) translateY(15px)', pointerEvents: 'none' }} />
+        <div className="mx-auto max-w-2xl overflow-x-clip">
+          <DotLottieReact src="/assets/developer.lottie" loop autoplay
+            style={{
+              margin: '0 auto',
+              maxWidth: '350px',
+              width: '100%',
+              height: 'auto',
+              transform: 'scale(2.5) translateY(15px)',
+              pointerEvents: 'none'
+            }} />
+        </div>
       </section>
 
       {/* Estatísticas Rápidas */}
@@ -136,7 +145,7 @@ export default function DevsPage() {
             <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
               <Icons.BsStars className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
-                {jogosDoUsuario.length > 0 
+                {jogosDoUsuario.length > 0
                   ? (jogosDoUsuario.reduce((total, jogo) => total + (jogo.avaliacao || 0), 0) / jogosDoUsuario.length).toFixed(1)
                   : '0.0'
                 }
@@ -158,10 +167,11 @@ export default function DevsPage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {jogosDoUsuario.slice(0, 4).map((jogo) => (
-                <GameCardDev 
-                  key={jogo.id} 
+              {jogosDoUsuario.slice(0, 4).map((jogo, index) => (
+                <GameCardDev
+                  key={jogo.id}
                   jogo={jogo}
+                  priority={index === 0}
                   onClick={() => window.location.href = `/devs/editar/${jogo.id}`}
                   onDelete={() => handleDeletarJogo(jogo.id)}
                 />

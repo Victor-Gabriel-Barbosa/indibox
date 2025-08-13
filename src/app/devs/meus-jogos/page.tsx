@@ -130,8 +130,9 @@ export default function MeusJogosPage() {
         <div className="bg-indigo-600 p-6 rounded-lg shadow-md mb-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <span className="font-medium text-white">Filtrar por status:</span>
+              <label htmlFor="filtroStatus" className="font-medium text-white">Filtrar por status:</label>
               <select
+                id="filtroStatus"
                 value={filtroStatus}
                 onChange={(e) => setFiltroStatus(e.target.value)}
                 className="px-3 py-2 bg-indigo-600 text-white border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -191,10 +192,11 @@ export default function MeusJogosPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {jogosFiltrados.map((jogo) => (
+            {jogosFiltrados.map((jogo, index) => (
               <GameCardDev 
                 key={jogo.id} 
                 jogo={jogo}
+                priority={index === 0}
                 onClick={() => window.location.href = `/devs/editar/${jogo.id}`}
                 onDelete={() => handleDeletarJogo(jogo.id)}
               />

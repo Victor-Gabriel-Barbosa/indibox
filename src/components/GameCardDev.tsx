@@ -11,10 +11,11 @@ interface GameCardDevProps {
   onClick?: () => void;
   onDelete?: () => void;
   onToggleStatus?: () => void;
+  priority?: boolean; // Para otimização de LCP
 }
 
 // Componente de cartão de jogo para desenvolvedores
-export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProps) {
+export default function GameCardDev({ jogo, onClick, onDelete, priority = false }: GameCardDevProps) {
   const [modalDeleteAberto, setModalDeleteAberto] = useState(false);
   const [deletandoJogo, setDeletandoJogo] = useState(false);
 
@@ -106,6 +107,7 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
             src={jogo.imagem_capa} 
             alt={jogo.titulo}
             fill
+            priority={priority}
             className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             onError={(e) => {
@@ -197,25 +199,6 @@ export default function GameCardDev({ jogo, onClick, onDelete }: GameCardDevProp
               />
             </div>
           )}
-
-          {/* Ações rápidas no rodapé */}
-          <div className="flex items-center justify-end pt-2">
-            <div className="flex items-center gap-2">
-              {jogo.status === 'publicado' && (
-                <span className="text-green-600 text-xs flex items-center gap-1">
-                  <Icons.BsCheckCircle className="w-3 h-3" />
-                  Público
-                </span>
-              )}
-              
-              {jogo.status === 'rascunho' && (
-                <span className="text-yellow-600 text-xs flex items-center gap-1">
-                  <Icons.BsClock className="w-3 h-3" />
-                  Rascunho
-                </span>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 

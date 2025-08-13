@@ -83,7 +83,7 @@ export default function Header() {
                 alt="IndiBox"
                 width={48}
                 height={48}
-                priority
+                priority={false}
               />
               <h1 className="text-2xl font-bold whitespace-nowrap">
                 <span>Ind<span className="text-indigo-600">iBox</span></span>
@@ -308,7 +308,7 @@ export default function Header() {
                         <button
                           key={itemTema.id}
                           onClick={() => handleTrocaTema(itemTema.id)}
-                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-gray-600 dark:text-gray-400'
+                          className={`flex flex-col items-center space-y-1 p-3 rounded-lg hover:bg-indigo-600 hover:text-white transition-colors duration-200 ${tema === itemTema.id ? 'text-indigo-600 border border-indigo-600' : 'text-gray-600 dark:text-gray-400'
                             }`}
                         >
                           <IconeTema className="w-5 h-5" />

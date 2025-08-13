@@ -8,9 +8,10 @@ import type { Jogo } from '@/types';
 interface GameCardProps {
   jogo: Jogo;
   onClick?: () => void;
+  priority?: boolean; // Para otimização de LCP
 }
 
-export default function GameCard({ jogo, onClick }: GameCardProps) {
+export default function GameCard({ jogo, onClick, priority = false }: GameCardProps) {
   return (
     <div 
       className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"
@@ -23,6 +24,7 @@ export default function GameCard({ jogo, onClick }: GameCardProps) {
             src={jogo.imagem_capa} 
             alt={jogo.titulo}
             fill
+            priority={priority}
             className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             onError={(e) => {

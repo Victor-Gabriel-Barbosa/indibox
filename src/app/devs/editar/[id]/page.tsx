@@ -340,9 +340,10 @@ export default function EditarJogoPage() {
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {GENEROS_DISPONIVEIS.map((genero: string) => (
-                      <label key={genero} className="flex items-center">
+                      <label key={genero} htmlFor={`genero-${genero.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center">
                         <input
                           type="checkbox"
+                          id={`genero-${genero.toLowerCase().replace(/\s+/g, '-')}`}
                           checked={formData.genero.includes(genero)}
                           onChange={() => handleGeneroChange(genero)}
                           className="mr-2"
@@ -359,9 +360,10 @@ export default function EditarJogoPage() {
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {PLATAFORMAS_DISPONIVEIS.map((plataforma: string) => (
-                      <label key={plataforma} className="flex items-center">
+                      <label key={plataforma} htmlFor={`plataforma-${plataforma.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center">
                         <input
                           type="checkbox"
+                          id={`plataforma-${plataforma.toLowerCase().replace(/\s+/g, '-')}`}
                           checked={formData.plataforma.includes(plataforma)}
                           onChange={() => handlePlataformaChange(plataforma)}
                           className="mr-2"
