@@ -8,7 +8,7 @@ import {
   getJogoPorID, 
   getJogos,
   getFavoritosUsuario,
-  ehJogoFavoritado,
+  ehJogoFavorito,
   insertJogoFavorito,
   deleteJogoFavorito
 } from '@/lib/database';
@@ -164,6 +164,7 @@ export function useFavoritos() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Busca os favoritos do usuário
   const fetchFavoritos = async () => {
     if (!user?.id) return;
 
@@ -188,11 +189,12 @@ export function useFavoritos() {
     }
   };
 
+  // Alterna o status de favorito de um jogo
   const alternarFavorito = async (idJogo: string) => {
     if (!user?.id) return false;
 
     try {
-      const { ehFavorito } = await ehJogoFavoritado(user.id, idJogo);
+      const { ehFavorito } = await ehJogoFavorito(user.id, idJogo);
       
       if (ehFavorito) {
         const { success, error } = await deleteJogoFavorito(user.id, idJogo);
@@ -211,11 +213,11 @@ export function useFavoritos() {
     }
   };
 
-  const verificarSeFavoritado = async (idJogo: string): Promise<boolean> => {
+  const verificarFavorito = async (idJogo: string): Promise<boolean> => {
     if (!user?.id) return false;
 
     try {
-      const { ehFavorito } = await ehJogoFavoritado(user.id, idJogo);
+      const { ehFavorito } = await ehJogoFavorito(user.id, idJogo);
       return ehFavorito;
     } catch (err) {
       console.error('Erro ao verificar favorito:', err);
@@ -233,7 +235,7 @@ export function useFavoritos() {
     loading, 
     error, 
     alternarFavorito, 
-    verificarSeFavoritado,
+    verificarSeFavoritado: verificarFavorito,
     refetch: fetchFavoritos 
   };
 }

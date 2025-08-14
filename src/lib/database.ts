@@ -262,7 +262,7 @@ export async function getFavoritosUsuario(idUsuario: string) {
 }
 
 // Verifica se jogo está nos favoritos
-export async function ehJogoFavoritado(idUsuario: string, idJogo: string) {
+export async function ehJogoFavorito(idUsuario: string, idJogo: string) {
   if (!sbConfig || !sb) return { ehFavorito: ['1', '2'].includes(idJogo), error: null };
 
   try {
@@ -439,7 +439,7 @@ export async function getJogoPorId(idJogo: string) {
   }
 }
 
-// Função para obter desenvolvedores com estatísticas
+// Obtém desenvolvedores com estatísticas
 export async function getDev() {
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
@@ -485,7 +485,7 @@ export async function getDev() {
   }
 }
 
-// Função para obter um desenvolvedor específico com estatísticas
+// Obtém um desenvolvedor específico com estatísticas
 export async function getDevPorId(idDesenvolvedor: string) {
   if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
@@ -551,7 +551,7 @@ export async function deleteJogo(idJogo: string, idUsuario: string) {
 
     if (!jogoExistente) return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
 
-    // Se chegou até aqui, o usuário tem permissão para deletar o jogo
+    // Se chegou até aqui o usuário tem permissão para deletar o jogo
     const { error } = await sb
       .from('jogos')
       .delete()

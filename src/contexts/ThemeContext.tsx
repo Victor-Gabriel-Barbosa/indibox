@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 type Tema = 'light' | 'dark' | 'system';
 type TemaEfetivo = 'light' | 'dark';
 
+// Propriedades do contexto do tema
 interface ThemeContextProps {
   tema: Tema;
   setTema: (tema: Tema) => void;
@@ -14,6 +15,7 @@ interface ThemeContextProps {
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
+// Propriedades do provedor do tema
 interface ThemeProviderProps {
   children: ReactNode;
 }

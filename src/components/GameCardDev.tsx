@@ -39,20 +39,20 @@ export default function GameCardDev({ jogo, onClick, onDelete, priority = false 
     }
   };
 
-  // Handle para edição do jogo
+  // Lida com a edição de um jogo
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onClick) onClick();
   };
 
-  // Handle para exclusão do jogo
+  // Lida com a exclusão de um jogo
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     setModalDeleteAberto(true);
   };
 
-  // Handle para confirmação da exclusão
-  const confirmarDelete = async () => {
+  // Lida com a confirmação da exclusão
+  const confirmDelete = async () => {
     if (onDelete) {
       setDeletandoJogo(true);
       try {
@@ -204,15 +204,15 @@ export default function GameCardDev({ jogo, onClick, onDelete, priority = false 
 
       {/* Modal de confirmação para deletar */}
       <ConfirmModal
-        estaAberto={modalDeleteAberto}
+        isOpen={modalDeleteAberto}
         onClose={() => setModalDeleteAberto(false)}
-        onConfirm={confirmarDelete}
+        onConfirm={confirmDelete}
         titulo="Excluir Jogo"
         mensagem={`Tem certeza que deseja excluir o jogo "${jogo.titulo}"? Esta ação não pode ser desfeita.`}
         textoConfirmar="Excluir"
         textoCancelar="Cancelar"
         tipoConfirmacao="perigo"
-        carregando={deletandoJogo}
+        isLoading={deletandoJogo}
       />
     </div>
   );

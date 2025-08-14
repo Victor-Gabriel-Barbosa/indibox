@@ -31,21 +31,25 @@ export default function Header() {
   // Verifica se o link está ativo
   const isLinkActive = (href: string) => (href === '/') ? pathname === '/' : pathname.startsWith(href);
 
+  // Troca o tema
   const handleTrocaTema = (novoTema: 'light' | 'dark' | 'system') => {
     setTema(novoTema);
     setSeletorTemaAberto(false);
   };
 
+  // Abre a barra de pesquisa
   const handleAbrirPesquisa = () => {
     setPesquisaAberta(true);
     setTimeout(() => pesquisaRef.current?.focus(), 100);
   };
 
+  // Fecha a barra de pesquisa
   const handleFecharPesquisa = () => {
     setPesquisaAberta(false);
     setTermoPesquisa('');
   };
 
+  // Lida com a pesquisa
   const handlePesquisar = (e: React.FormEvent) => {
     e.preventDefault();
     if (termoPesquisa.trim()) {
@@ -59,7 +63,8 @@ export default function Header() {
   // Fecha o dropdown quando clica fora dele
   useEffect(() => {
     setIsMounted(true);
-    
+
+    // Fecha o seletor de tema ao clicar fora
     const handleClickOutside = (event: MouseEvent) => {
       if (seletorTemaRef.current && !seletorTemaRef.current.contains(event.target as Node)) setSeletorTemaAberto(false);
       if (pesquisaRef.current && !pesquisaRef.current.contains(event.target as Node)) setPesquisaAberta(false);
@@ -90,7 +95,7 @@ export default function Header() {
               </h1>
             </Link>
 
-            {/* Barra de Navegação - Desktop - Centralizada com flex-1 */}
+            {/* Barra de Navegação - Desktop */}
             <nav className="hidden md:flex items-center justify-center space-x-3 lg:space-x-6 flex-1">
               <Link href="/" className={`text-base hover:text-indigo-600 transition-colors whitespace-nowrap ${isLinkActive('/') ? 'text-indigo-600' : ''}`}>
                 Início
@@ -159,7 +164,7 @@ export default function Header() {
                 )}
               </div>
 
-              {/* Botão Login */}
+              {/* Botão de Login */}
               <button
                 onClick={() => setModalLoginAberto(true)}
                 className="text-base hover:text-indigo-600 transition-colors flex-shrink-0"
