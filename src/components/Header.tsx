@@ -21,6 +21,7 @@ export default function Header() {
   const [isMounted, setIsMounted] = useState(false);
   const seletorTemaRef = useRef<HTMLDivElement>(null);
   const pesquisaRef = useRef<HTMLInputElement>(null);
+  const pesquisaDesktopRef = useRef<HTMLInputElement>(null);
 
   const temas = [
     { id: 'light', nome: 'Claro', icone: Icons.BsSunFill },
@@ -60,7 +61,7 @@ export default function Header() {
     }
   };
 
-  // Fecha o dropdown quando clica fora dele
+  // Fecha o dropdown quando clica fora dele e adiciona atalho de teclado
   useEffect(() => {
     setIsMounted(true);
 
@@ -70,8 +71,23 @@ export default function Header() {
       if (pesquisaRef.current && !pesquisaRef.current.contains(event.target as Node)) setPesquisaAberta(false);
     };
 
+    // Adiciona atalho Ctrl + K para focar na pesquisa
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'k') {
+        event.preventDefault();
+        
+        if (window.innerWidth >= 768) pesquisaDesktopRef.current?.focus(); // No desktop foca na barra de pesquisa
+        else handleAbrirPesquisa(); // No mobile abre a barra de pesquisa
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   return (
@@ -118,8 +134,9 @@ export default function Header() {
                 <form onSubmit={handlePesquisar} className="relative">
                   <div className="relative">
                     <input
+                      ref={pesquisaDesktopRef}
                       type="text"
-                      placeholder="Buscar jogos..."
+                      placeholder="Buscar jogos... (Ctrl + K)"
                       value={termoPesquisa}
                       onChange={(e) => setTermoPesquisa(e.target.value)}
                       name="busca"
@@ -240,6 +257,7 @@ export default function Header() {
                     type="text"
                     placeholder="Buscar jogos..."
                     value={termoPesquisa}
+                    name="busca"
                     onChange={(e) => setTermoPesquisa(e.target.value)}
                     className="w-full pl-10 pr-12 py-3 bg-background border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base"
                   />

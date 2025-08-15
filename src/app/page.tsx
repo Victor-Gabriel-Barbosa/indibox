@@ -185,11 +185,8 @@ export default function Home() {
               A plataforma perfeita para descobrir e compartilhar jogos indie gratuitos, criada por e para a comunidade.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
-              {/* Gradiente sutil de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-800/30 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.BsEmojiLaughingFill className="w-8 h-8 text-white" />
@@ -217,7 +214,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden">
+            <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform overflow-hidden md:col-span-2 lg:col-span-1">
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-400 dark:shadow-indigo-600 transition-transform duration-300">
                   <Icons.BsStars className="w-8 h-8 text-white" />

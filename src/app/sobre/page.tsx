@@ -131,7 +131,16 @@ export default function Sobre() {
             </p>
           </div>
 
-          <DotLottieReact src="/assets/robot.lottie" loop autoplay style={{ margin: '0 auto', maxWidth: '500px', width: '100%', height: 'auto' }} />
+          <div className="mx-auto max-w-2xl overflow-x-clip">
+            <DotLottieReact src="/assets/robot.lottie" loop autoplay
+              style={{
+                margin: '0 auto',
+                maxWidth: '400px',
+                height: 'auto',
+                transform: 'scale(1.5)',
+                pointerEvents: 'none'
+              }} />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <div className="group relative p-8 rounded-2xl shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 dark:border-indigo-700 overflow-hidden">

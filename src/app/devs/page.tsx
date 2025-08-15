@@ -97,7 +97,7 @@ export default function DevsPage() {
         <div className="container mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Área do
-            <span className="text-indigo-600"> Desenvolvedor</span>
+            <span className="text-indigo-600"> Dev</span>
           </h1>
           <p className="text-xl mb-4 max-w-4xl mx-auto text-gray-600 dark:text-gray-400">
             Publique seus jogos indie gratuitos e compartilhe suas criações com uma comunidade apaixonada por jogos independentes.
@@ -113,23 +113,22 @@ export default function DevsPage() {
             </Link>
           </div>
         </div>
-        <div className="mx-auto max-w-2xl overflow-x-clip">
-          <DotLottieReact src="/assets/developer.lottie" loop autoplay
-            style={{
-              margin: '0 auto',
-              maxWidth: '350px',
-              width: '100%',
-              height: 'auto',
-              transform: 'scale(2.5) translateY(15px)',
-              pointerEvents: 'none'
-            }} />
-        </div>
       </section>
 
       {/* Estatísticas Rápidas */}
       <section className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
+        <div className="mx-auto max-w-2xl overflow-x-clip">
+          <DotLottieReact src="/assets/developer.lottie" loop autoplay
+            style={{
+              margin: '0 auto',
+              maxWidth: '400px',
+              height: 'auto',
+              transform: 'scale(2.5)',
+              pointerEvents: 'none'
+            }} />
+        </div>
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
               <Icons.BsController className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">{jogosDoUsuario.length}</h3>
@@ -142,7 +141,7 @@ export default function DevsPage() {
               </h3>
               <p>Total de Downloads</p>
             </div>
-            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
+            <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl md:col-span-2 lg:col-span-1">
               <Icons.BsStars className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.length > 0
