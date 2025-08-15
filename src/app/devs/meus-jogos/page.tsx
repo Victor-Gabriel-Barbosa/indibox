@@ -9,12 +9,12 @@ import type { Jogo } from '@/types';
 
 export default function MeusJogosPage() {
   const { usuario, loading } = useAuth();
-  const [jogosDoUsuario, setJogosDoUsuario] = useState<Jogo[]>([]);
+  const [jogosDoUsuario, setJogosUsuario] = useState<Jogo[]>([]);
   const [carregandoJogos, setCarregandoJogos] = useState(true);
   const [filtroStatus, setFiltroStatus] = useState<string>('todos');
 
   useEffect(() => {
-    async function carregarJogosDoUsuario() {
+    async function carregarJogosUsuario() {
       if (!usuario?.id) {
         setCarregandoJogos(false);
         return;
@@ -25,7 +25,7 @@ export default function MeusJogosPage() {
         const { data, error } = await getJogosUsuario(usuario.id);
         
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
-        else if (data) setJogosDoUsuario(data);
+        else if (data) setJogosUsuario(data);
       } catch (error) {
         console.error('Erro ao carregar jogos do usuário:', error);
       } finally {
@@ -33,7 +33,7 @@ export default function MeusJogosPage() {
       }
     }
 
-    carregarJogosDoUsuario();
+    carregarJogosUsuario();
   }, [usuario?.id]);
 
   const jogosFiltrados = jogosDoUsuario.filter(jogo => {
@@ -54,7 +54,7 @@ export default function MeusJogosPage() {
       }
 
       // Remove o jogo da lista local
-      setJogosDoUsuario(jogosAtuais => jogosAtuais.filter(jogo => jogo.id !== idJogo));
+      setJogosUsuario(jogosAtuais => jogosAtuais.filter(jogo => jogo.id !== idJogo));
       
       console.log('Jogo deletado com sucesso');
     } catch (error) {

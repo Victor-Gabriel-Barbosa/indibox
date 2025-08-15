@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { insertJogo } from '@/lib/database';
 import type { JogoInsert } from '@/types';
 import Link from 'next/link';
-import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/gameData';
+import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
 export default function NovoJogoPage() {
   const { usuario, loading } = useAuth();

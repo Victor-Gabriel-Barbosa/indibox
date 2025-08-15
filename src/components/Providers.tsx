@@ -1,9 +1,9 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { TemaProvider } from '@/contexts/TemaContext';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { UserSyncProvider } from './UserSyncProvider';
+import { SyncUsuario } from './SyncUsuario';
 
 // Propriedades do componente de provedores
 interface ProvidersProps {
@@ -14,11 +14,11 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <AuthProvider>
-      <ThemeProvider>
-        <UserSyncProvider>
+      <TemaProvider>
+        <SyncUsuario>
           {children}
-        </UserSyncProvider>
-      </ThemeProvider>
+        </SyncUsuario>
+      </TemaProvider>
     </AuthProvider>
   );
 }

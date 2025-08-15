@@ -6,7 +6,7 @@ import { Icons, ConfirmModal } from '@/components';
 import type { Jogo } from '@/types';
 
 // Propriedades do cartão de jogo
-interface GameCardDevProps {
+interface CardJogoDevProps {
   jogo: Jogo;
   onClick?: () => void;
   onDelete?: () => void;
@@ -15,7 +15,7 @@ interface GameCardDevProps {
 }
 
 // Componente de cartão de jogo para desenvolvedores
-export default function GameCardDev({ jogo, onClick, onDelete, priority = false }: GameCardDevProps) {
+export default function CardJogoDev({ jogo, onClick, onDelete, priority = false }: CardJogoDevProps) {
   const [modalDeleteAberto, setModalDeleteAberto] = useState(false);
   const [deletandoJogo, setDeletandoJogo] = useState(false);
 

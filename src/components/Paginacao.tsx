@@ -1,14 +1,14 @@
 'use client';
 
 // Propriedades do componente de paginação
-interface PaginationProps {
+interface PaginacaoProps {
   paginaAtual: number;
   totalPaginas: number;
   onMudarPagina: (pagina: number) => void;
 }
 
 // Componente de paginação
-export default function Pagination({ paginaAtual, totalPaginas, onMudarPagina }: PaginationProps) {
+export default function Paginacao({ paginaAtual, totalPaginas, onMudarPagina }: PaginacaoProps) {
   const gerarPaginas = () => {
     const paginas = [];
     const maxPaginasVisiveis = 5;

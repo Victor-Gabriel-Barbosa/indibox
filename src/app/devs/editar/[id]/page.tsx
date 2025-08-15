@@ -8,7 +8,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { getJogoPorId, updateJogo } from '@/lib/database';
 import type { Jogo, JogoUpdate } from '@/types';
 import Link from 'next/link';
-import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/gameData';
+import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
 export default function EditarJogoPage() {
   const { usuario, loading } = useAuth();

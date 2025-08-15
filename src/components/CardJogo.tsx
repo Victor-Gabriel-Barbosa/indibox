@@ -5,13 +5,13 @@ import { Icons } from '@/components';
 import type { Jogo } from '@/types';
 
 // Propriedades do cartão de jogo
-interface GameCardProps {
+interface CardJogoProps {
   jogo: Jogo;
   onClick?: () => void;
   priority?: boolean; // Para otimização de LCP
 }
 
-export default function GameCard({ jogo, onClick, priority = false }: GameCardProps) {
+export default function CardJogo({ jogo, onClick, priority = false }: CardJogoProps) {
   return (
     <div 
       className="relative h-full flex flex-col rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 hover:shadow-xl transition-all duration-300 transform cursor-pointer group overflow-hidden"

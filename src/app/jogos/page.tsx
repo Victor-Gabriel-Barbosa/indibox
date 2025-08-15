@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Header, Footer, GameCard, Pagination, Icons, DotLottieReact } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
-import { GENEROS_DISPONIVEIS } from '@/lib/gameData';
+import { GENEROS_DISPONIVEIS } from '@/lib/dadosJogos';
 
 interface FiltrosState {
   genero: string;

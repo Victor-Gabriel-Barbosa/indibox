@@ -4,13 +4,13 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { Icons, LoginModal } from '@/components';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTema } from '@/contexts/TemaContext';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Header() {
   const { usuario } = useAuth();
-  const { tema, setTema } = useTheme();
+  const { tema, setTema } = useTema();
   const pathname = usePathname();
   const router = useRouter();
   const [modalLoginAberto, setModalLoginAberto] = useState(false);

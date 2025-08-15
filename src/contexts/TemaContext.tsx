@@ -7,21 +7,21 @@ type Tema = 'light' | 'dark' | 'system';
 type TemaEfetivo = 'light' | 'dark';
 
 // Propriedades do contexto do tema
-interface ThemeContextProps {
+interface TemaContextProps {
   tema: Tema;
   setTema: (tema: Tema) => void;
   temaEfetivo: TemaEfetivo;
 }
 
-const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+const TemaContext = createContext<TemaContextProps | undefined>(undefined);
 
 // Propriedades do provedor do tema
-interface ThemeProviderProps {
+interface TemaProviderProps {
   children: ReactNode;
 }
 
 // Provedor do tema
-export function ThemeProvider({ children }: ThemeProviderProps) {
+export function TemaProvider({ children }: TemaProviderProps) {
   const [tema, setTema] = useState<Tema>('system');
   
   const [temaEfetivo, setTemaEfetivo] = useState<TemaEfetivo>('light');
@@ -61,15 +61,15 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   };
 
   return (
-    <ThemeContext.Provider value={{ tema, setTema: handleSetTema, temaEfetivo }}>
+    <TemaContext.Provider value={{ tema, setTema: handleSetTema, temaEfetivo }}>
       {children}
-    </ThemeContext.Provider>
+    </TemaContext.Provider>
   );
 }
 
 // Hook para acessar o contexto do tema
-export function useTheme() {
-  const context = useContext(ThemeContext);
+export function useTema() {
+  const context = useContext(TemaContext);
   if (context === undefined) throw new Error('useTheme deve ser usado dentro de um ThemeProvider');
   return context;
 }
