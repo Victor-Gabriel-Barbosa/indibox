@@ -13,7 +13,7 @@ interface LoginModalProps {
 
 // Componente de modal de login
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const { usuario: user, loading, signInGoogle, signInGithub, signOut } = useAuth();
+  const { usuario, loading, signInGoogle, signInGithub, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -54,14 +54,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       className="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-indigo-400 border:shadow-indigo-600 p-6 w-full max-w-md mx-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-indigo-400 dark:border-indigo-600 p-6 w-full max-w-md mx-4">
         <div className="relative mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
-            {user ? 'Minha Conta' : 'Entrar'}
+            {usuario ? 'Minha Conta' : 'Entrar'}
           </h2>
           <button
             onClick={onClose}
-            className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 "
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-400 hover:text-indigo-600"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -73,12 +73,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
           </div>
-        ) : user ? (
+        ) : usuario ? (
           <div className="text-center">
             <div className="mb-4">
-              {user?.image && (
+              {usuario?.image && (
                 <Image
-                  src={user.image}
+                  src={usuario.image}
                   alt="Avatar"
                   width={64}
                   height={64}
@@ -86,9 +86,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 />
               )}
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Olá, {user?.name}!
+                Olá, {usuario?.name}!
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
+              <p className="text-gray-600 dark:text-gray-300">{usuario?.email}</p>
             </div>
             <button
               onClick={handleSignOut}

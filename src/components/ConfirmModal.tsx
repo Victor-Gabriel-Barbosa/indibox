@@ -46,10 +46,10 @@ export default function ConfirmModal({
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
+      className="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-indigo-400 dark:border-indigo-600 p-6 w-full max-w-md mx-4 shadow-xl">
         <div className="relative mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
             {titulo}
@@ -58,9 +58,9 @@ export default function ConfirmModal({
           {!isLoading && (
             <button
               onClick={onClose}
-              className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
+              className="absolute -top-2 -right-2 w-8 h-8 text-gray-600 dark:text-gray-400 hover:text-indigo-600 flex items-center justify-center transition-colors"
             >
-              <Icons.FaXmark className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <Icons.FaXmark className="w-5 h-5" />
             </button>
           )}
         </div>
