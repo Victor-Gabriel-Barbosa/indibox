@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { user } = useAuth();
+  const { usuario } = useAuth();
   const { tema, setTema } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
@@ -187,11 +187,11 @@ export default function Header() {
                 className="text-base hover:text-indigo-600 transition-colors flex-shrink-0"
               >
                 <div className="flex items-center space-x-1 lg:space-x-2">
-                  {user ? (
-                    user.image ? (
+                  {usuario ? (
+                    usuario.image ? (
                       <Image
-                        src={user.image}
-                        alt={user.name || 'Avatar do usuário'}
+                        src={usuario.image}
+                        alt={usuario.name || 'Avatar do usuário'}
                         width={32}
                         height={32}
                         className="rounded-full"
@@ -199,7 +199,7 @@ export default function Header() {
                     ) : (
                       <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
                         <span className="text-white text-sm font-medium">
-                          {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                          {usuario.name?.charAt(0)?.toUpperCase() || 'U'}
                         </span>
                       </div>
                     )
@@ -339,11 +339,11 @@ export default function Header() {
                   }}
                   className="flex items-center justify-center space-x-2 text-base hover:text-indigo-600 transition-colors py-2"
                 >
-                  {user ? (
-                    user.image ? (
+                  {usuario ? (
+                    usuario.image ? (
                       <Image
-                        src={user.image}
-                        alt={user.name || 'Avatar do usuário'}
+                        src={usuario.image}
+                        alt={usuario.name || 'Avatar do usuário'}
                         width={32}
                         height={32}
                         className="rounded-full"
@@ -351,7 +351,7 @@ export default function Header() {
                     ) : (
                       <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
                         <span className="text-white text-sm font-medium">
-                          {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                          {usuario.name?.charAt(0)?.toUpperCase() || 'U'}
                         </span>
                       </div>
                     )

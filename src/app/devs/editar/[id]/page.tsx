@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/gameData';
 
 export default function EditarJogoPage() {
-  const { user, loading } = useAuth();
+  const { usuario, loading } = useAuth();
   const router = useRouter();
   const params = useParams();
   const idJogo = params.id as string;
@@ -54,7 +54,7 @@ export default function EditarJogoPage() {
         }
 
         // Verifica se o usuário é o dono do jogo
-        if (user?.id && data.id_usuario !== user.id) {
+        if (usuario?.id && data.id_usuario !== usuario.id) {
           setErro('Você não tem permissão para editar este jogo');
           return;
         }
@@ -88,7 +88,7 @@ export default function EditarJogoPage() {
     }
 
     carregarJogo();
-  }, [idJogo, user?.id]);
+  }, [idJogo, usuario?.id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -118,7 +118,7 @@ export default function EditarJogoPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id || !jogo) return;
+    if (!usuario?.id || !jogo) return;
 
     setEnviando(true);
     setErro(null);
@@ -171,7 +171,7 @@ export default function EditarJogoPage() {
     );
   }
 
-  if (!user) {
+  if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />

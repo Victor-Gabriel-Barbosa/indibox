@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/gameData';
 
 export default function NovoJogoPage() {
-  const { user, loading } = useAuth();
+  const { usuario, loading } = useAuth();
   const router = useRouter();
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -61,7 +61,7 @@ export default function NovoJogoPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id) return;
+    if (!usuario?.id) return;
 
     setEnviando(true);
     setErro(null);
@@ -84,7 +84,7 @@ export default function NovoJogoPage() {
         tamanho_arquivo: formData.tamanho_arquivo || null,
         plataforma: formData.plataforma,
         status: formData.status,
-        id_usuario: user.id,
+        id_usuario: usuario.id,
         destaque: false,
         avaliacao: 0,
         contador_download: 0
@@ -120,7 +120,7 @@ export default function NovoJogoPage() {
     );
   }
 
-  if (!user) {
+  if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />

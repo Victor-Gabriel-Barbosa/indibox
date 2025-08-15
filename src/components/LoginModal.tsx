@@ -13,7 +13,7 @@ interface LoginModalProps {
 
 // Componente de modal de login
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const { user, loading, signInWithGoogle, signInWithGithub, signOut } = useAuth();
+  const { usuario: user, loading, signInGoogle, signInGithub, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -22,8 +22,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleSignIn = async (provedor: 'google' | 'github') => {
     setIsLoading(provedor);
     try {
-      if (provedor === 'google') await signInWithGoogle();
-      else await signInWithGithub();
+      if (provedor === 'google') await signInGoogle();
+      else await signInGithub();
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     } finally {

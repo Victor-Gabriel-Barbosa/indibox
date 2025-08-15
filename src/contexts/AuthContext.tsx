@@ -6,6 +6,7 @@ import { sb } from '@/lib/supabase';
 import { upsertUsuario } from '@/lib/database';
 import { salvarUrlRedir } from '@/lib/redirect';
 
+// Interface para o usuário autenticado
 interface AuthUser {
   id: string;
   email: string;
@@ -18,25 +19,27 @@ interface AuthUser {
   nome_usuario_twitter?: string | null;
 }
 
+// Interface para o contexto de autenticação
 interface AuthContextType {
-  user: AuthUser | null;
-  session: Session | null;
+  usuario: AuthUser | null;
+  sessao: Session | null;
   loading: boolean;
-  loginSuccess: boolean;
-  setLoginSuccess: (success: boolean) => void;
-  signInWithGoogle: () => Promise<void>;
-  signInWithGithub: () => Promise<void>;
+  autenticado: boolean;
+  setAutenticado: (success: boolean) => void;
+  signInGoogle: () => Promise<void>;
+  signInGithub: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
+// Contexto de autenticação
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provedor de autenticação
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [usuario, setUsuario] = useState<AuthUser | null>(null);
+  const [sessao, setSessao] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [autenticado, setAutenticado] = useState(false);
 
   // Sincroniza dados do usuário
   const syncUsuarioDB = async (usuario: User) => {
@@ -100,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Busca sessão inicial
     sb.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+      setSessao(session);
       
       if (session?.user) {
         syncUsuarioDB(session.user).then(async () => {
@@ -108,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const userData = await fetchDadosUsuario(idUsuario);
           
           if (userData) {
-            setUser({
+            setUsuario({
               id: userData.id,
               email: userData.email,
               name: userData.nome || undefined,
@@ -129,7 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Escuta mudanças na autenticação
     const { data: { subscription } } = sb.auth.onAuthStateChange(
       async (event, session) => {
-        setSession(session);
+        setSessao(session);
         
         if (event === 'SIGNED_IN' && session?.user) {
           await syncUsuarioDB(session.user);
@@ -137,7 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const userData = await fetchDadosUsuario(idUsuario);
           
           if (userData) {
-            setUser({
+            setUsuario({
               id: userData.id,
               email: userData.email,
               name: userData.nome || undefined,
@@ -149,7 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               nome_usuario_twitter: userData.nome_usuario_twitter,
             });
           }
-        } else if (event === 'SIGNED_OUT') setUser(null);
+        } else if (event === 'SIGNED_OUT') setUsuario(null);
         
         setLoading(false);
       }
@@ -220,19 +223,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const value = {
-    user,
-    session,
+    usuario,
+    sessao,
     loading,
-    loginSuccess,
-    setLoginSuccess,
-    signInWithGoogle: signInGoogle,
-    signInWithGithub: signInGithub,
+    autenticado,
+    setAutenticado,
+    signInGoogle,
+    signInGithub,
     signOut,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// Hook para acessar o contexto de autenticação
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) throw new Error('useAuth deve ser usado dentro de um AuthProvider');

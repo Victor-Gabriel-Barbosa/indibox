@@ -11,7 +11,7 @@ import { validarUUID } from '@/lib/uuid';
  * Usa o ID nativo do Supabase Auth para consistência com a tabela usuarios
  */
 export function useSyncUsuario() {
-  const { user, loading } = useAuth();
+  const { usuario: user, loading } = useAuth();
 
   useEffect(() => {
     async function syncUsuario() {

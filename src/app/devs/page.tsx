@@ -8,16 +8,16 @@ import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
 
 export default function DevsPage() {
-  const { user, loading } = useAuth();
+  const { usuario, loading } = useAuth();
   const [jogosDoUsuario, setJogosDoUsuario] = useState<Jogo[]>([]);
 
   useEffect(() => {
     async function carregarJogosDoUsuario() {
-      if (!user?.id) return;
-      console.log('ID: ', user.id);
+      if (!usuario?.id) return;
+      console.log('ID: ', usuario.id);
 
       try {
-        const { data, error } = await getJogosUsuario(user.id);
+        const { data, error } = await getJogosUsuario(usuario.id);
 
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
         else if (data) setJogosDoUsuario(data);
@@ -27,13 +27,13 @@ export default function DevsPage() {
     }
 
     carregarJogosDoUsuario();
-  }, [user?.id]);
+  }, [usuario?.id]);
 
   const handleDeletarJogo = async (idJogo: string) => {
-    if (!user?.id) return;
+    if (!usuario?.id) return;
 
     try {
-      const { error } = await deleteJogo(idJogo, user.id);
+      const { error } = await deleteJogo(idJogo, usuario.id);
 
       if (error) {
         console.error('Erro ao deletar jogo:', error);
@@ -65,7 +65,7 @@ export default function DevsPage() {
     );
   }
 
-  if (!user) {
+  if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />

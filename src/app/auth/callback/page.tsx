@@ -9,8 +9,8 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function AuthCallback() {
   const router = useRouter();
-  const { setLoginSuccess } = useAuth();
-  const [showSuccess, setShowSuccess] = useState(false);
+  const { setAutenticado: setLoginSuccess } = useAuth();
+  const [exibirSucesso, setExibirSucesso] = useState(false);
 
   useEffect(() => {
     const handleAuthCallback = async () => {
@@ -30,7 +30,7 @@ export default function AuthCallback() {
 
         if (data.session) {
           // Mostra a animação de sucesso
-          setShowSuccess(true);
+          setExibirSucesso(true);
           setLoginSuccess(true);
           
           // Aguarda um tempo para mostrar a animação antes de redirecionar
@@ -57,7 +57,7 @@ export default function AuthCallback() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        {showSuccess ? (
+        {exibirSucesso ? (
           <>
             <DotLottieReact
               src="/assets/success.lottie"

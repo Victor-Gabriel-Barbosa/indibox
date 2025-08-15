@@ -159,7 +159,7 @@ export function useBuscaJogos() {
 
 // Hook para gerenciar favoritos
 export function useFavoritos() {
-  const { user } = useAuth();
+  const { usuario: user } = useAuth();
   const [favoritos, setFavoritos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
