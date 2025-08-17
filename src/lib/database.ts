@@ -1,6 +1,6 @@
 import { sb, sbAdmin, sbConfig } from './supabase';
 import type { JogoInsert, JogoUpdate, JogoEstatistica, UsuarioInsert } from '@/types';
-import { validarUUID } from './uuid';
+import { validate } from 'uuid';
 
 // ================================
 // OPERAÇÕES COM JOGOS
@@ -181,7 +181,7 @@ export async function upsertUsuario(usuario: UsuarioInsert) {
     // Valida o ID - deve ser um UUID válido vindo do Supabase Auth
     const usuarioId = usuario.id;
     
-    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !validarUUID(usuarioId)) throw new Error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
+    if (!usuarioId || typeof usuarioId !== 'string' || usuarioId === '{}' || usuarioId === '[object Object]' || !validate(usuarioId)) throw new Error('ID de usuário inválido - deve ser um UUID válido do Supabase Auth');
 
     // Cria objeto usuario com ID validado
     const dadosUsuario = { ...usuario, id: usuarioId };
@@ -241,7 +241,7 @@ export async function getFavoritosUsuario(idUsuario: string) {
 
   try {
     // Valida se é um UUID válido
-    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
     const { data, error } = await sb
       .from('favoritos')
@@ -267,7 +267,7 @@ export async function ehJogoFavorito(idUsuario: string, idJogo: string) {
 
   try {
     // Valida se é um UUID válido
-    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
     const { data, error } = await sb
       .from('favoritos')
@@ -294,7 +294,7 @@ export async function insertJogoFavorito(idUsuario: string, idJogo: string) {
 
   try {
     // Valida se é um UUID válido
-    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
     const { data, error } = await sb
       .from('favoritos')
@@ -320,7 +320,7 @@ export async function deleteJogoFavorito(idUsuario: string, idJogo: string) {
 
   try {
     // Valida se é um UUID válido
-    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
     const { error } = await sb
       .from('favoritos')
@@ -346,7 +346,7 @@ export async function insertJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' 
 
   try {
     // Valida se o ID do usuário é um UUID válido
-    if (!validarUUID(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
 
     const { data, error } = await sb
       .from('jogos')
@@ -396,7 +396,7 @@ export async function getJogosUsuario(idUsuario: string) {
 
   try {
     // Valida se é um UUID válido
-    if (!validarUUID(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
+    if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
     
     const { data, error } = await sb
       .from('jogos')
@@ -533,7 +533,7 @@ export async function getDevPorId(idDesenvolvedor: string) {
 // Deleta um jogo do banco de dados
 export async function deleteJogo(idJogo: string, idUsuario: string) {
   if (!sbConfig || !sb) return { error: { message: 'Banco de dados não configurado' } };
-  if (!validarUUID(idJogo) || !validarUUID(idUsuario)) return { error: { message: 'IDs inválidos fornecidos' } };
+  if (!validate(idJogo) || !validate(idUsuario)) return { error: { message: 'IDs inválidos fornecidos' } };
 
   try {
     // Verifica se o jogo pertence ao usuário

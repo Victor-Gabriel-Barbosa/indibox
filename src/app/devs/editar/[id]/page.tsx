@@ -3,11 +3,13 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, Breadcrumb, DotLottieReact } from '@/components';
+import { Header, Footer, Icons, Breadcrumb, DotLottieReact, SeletorArquivo, SeletorScreenshots } from '@/components';
 import { useRouter, useParams } from 'next/navigation';
 import { getJogoPorId, updateJogo } from '@/lib/database';
+import { uploadLote, formatarBytes } from '@/lib/storage';
 import type { Jogo, JogoUpdate } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
 export default function EditarJogoPage() {
@@ -17,9 +19,17 @@ export default function EditarJogoPage() {
   const idJogo = params.id as string;
   
   const [jogo, setJogo] = useState<Jogo | null>(null);
-  const [carregandoJogo, setCarregandoJogo] = useState(true);
+  const [loadingJogo, setLoadingJogo] = useState(true);
   const [enviando, setEnviando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [progressoUpload, setProgressoUpload] = useState(0);
+  
+  // Estados para arquivos selecionados
+  const [arquivosSelecionados, setArquivosSelecionados] = useState({
+    arquivoJogo: null as File | null,
+    imagemCapa: null as File | null,
+    screenshots: [] as File[]
+  });
   
   const [formData, setFormData] = useState({
     titulo: '',
@@ -34,7 +44,6 @@ export default function EditarJogoPage() {
     url_github: '',
     imagem_capa: '',
     capturas_tela: '',
-    tamanho_arquivo: '',
     plataforma: [] as string[],
     status: 'rascunho' as 'rascunho' | 'publicado' | 'arquivado'
   });
@@ -45,17 +54,17 @@ export default function EditarJogoPage() {
       if (!idJogo) return;
 
       try {
-        setCarregandoJogo(true);
+        setLoadingJogo(true);
         const { data, error } = await getJogoPorId(idJogo);
         
         if (error || !data) {
-          setErro('Jogo não encontrado');
+          setError('Jogo não encontrado');
           return;
         }
 
         // Verifica se o usuário é o dono do jogo
         if (usuario?.id && data.id_usuario !== usuario.id) {
-          setErro('Você não tem permissão para editar este jogo');
+          setError('Você não tem permissão para editar este jogo');
           return;
         }
 
@@ -75,21 +84,21 @@ export default function EditarJogoPage() {
           url_github: data.url_github || '',
           imagem_capa: data.imagem_capa || '',
           capturas_tela: data.capturas_tela?.join(', ') || '',
-          tamanho_arquivo: data.tamanho_arquivo || '',
           plataforma: data.plataforma || [],
           status: (data.status as 'rascunho' | 'publicado' | 'arquivado') || 'rascunho'
         });
       } catch (error) {
         console.error('Erro ao carregar jogo:', error);
-        setErro('Erro ao carregar dados do jogo');
+        setError('Erro ao carregar dados do jogo');
       } finally {
-        setCarregandoJogo(false);
+        setLoadingJogo(false);
       }
     }
 
     carregarJogo();
   }, [idJogo, usuario?.id]);
 
+  // Lida com alterações nos campos de entrada
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -98,6 +107,7 @@ export default function EditarJogoPage() {
     }));
   };
 
+  // Lida com seleção do gênero
   const handleGeneroChange = (genero: string) => {
     setFormData(prev => ({
       ...prev,
@@ -107,6 +117,7 @@ export default function EditarJogoPage() {
     }));
   };
 
+  // Lida com seleção da imagem de capa
   const handlePlataformaChange = (plataforma: string) => {
     setFormData(prev => ({
       ...prev,
@@ -116,15 +127,112 @@ export default function EditarJogoPage() {
     }));
   };
 
+  // Lida com seleção de arquivos
+  const handleArquivoJogoSelecionado = (arquivo: File | null) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      arquivoJogo: arquivo
+    }));
+  };
+
+  // Lida com seleção da imagem de capa
+  const handleImagemCapaSelecionada = (arquivo: File | null) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      imagemCapa: arquivo
+    }));
+  };
+
+  // Lida com seleção das screenshots
+  const handleScreenshotsSelecionadas = (arquivos: File[]) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      screenshots: arquivos
+    }));
+  };
+
+  // Lida com erros dos seletores de arquivos
+  const handleSeletorError = (mensagem: string) => setError(mensagem);
+
+  // Lida com o envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!usuario?.id || !jogo) return;
 
     setEnviando(true);
-    setErro(null);
+    setError(null);
+    setProgressoUpload(0);
 
     try {
-      // Preparar dados para atualização
+      // Verifica se há novos arquivos para upload
+      const arquivosParaUpload = [];
+      
+      if (arquivosSelecionados.arquivoJogo) {
+        arquivosParaUpload.push({
+          arquivo: arquivosSelecionados.arquivoJogo,
+          tipo: 'jogo' as const
+        });
+      }
+
+      if (arquivosSelecionados.imagemCapa) {
+        arquivosParaUpload.push({
+          arquivo: arquivosSelecionados.imagemCapa,
+          tipo: 'imagem' as const,
+          tipoImagem: 'capa' as const
+        });
+      }
+
+      // Adiciona screenshots se houver
+      arquivosSelecionados.screenshots.forEach(screenshot => {
+        arquivosParaUpload.push({
+          arquivo: screenshot,
+          tipo: 'imagem' as const,
+          tipoImagem: 'screenshot' as const
+        });
+      });
+
+      let novoArquivoJogoUrl = formData.url_download;
+      let novaImagemCapaUrl = formData.imagem_capa;
+      let novasScreenshotsUrls = formData.capturas_tela ? formData.capturas_tela.split(',').map(url => url.trim()) : [];
+
+      // Faz upload dos novos arquivos se houver
+      if (arquivosParaUpload.length > 0) {
+        const resultadoUpload = await uploadLote(
+          arquivosParaUpload,
+          usuario.id,
+          setProgressoUpload
+        );
+
+        if (!resultadoUpload.sucesso) {
+          setError(`Erro no upload: ${resultadoUpload.erros.join(', ')}`);
+          return;
+        }
+
+        // Atualiza URLs com os novos uploads
+        let indiceResultado = 0;
+        
+        if (arquivosSelecionados.arquivoJogo) {
+          const result = resultadoUpload.resultados[indiceResultado++];
+          if (result.data) novoArquivoJogoUrl = result.data.publicUrl;
+        }
+        
+        if (arquivosSelecionados.imagemCapa) {
+          const result = resultadoUpload.resultados[indiceResultado++];
+          if (result.data) novaImagemCapaUrl = result.data.publicUrl;
+        }
+
+        if (arquivosSelecionados.screenshots.length > 0) {
+          const screenshotsResults = resultadoUpload.resultados.slice(indiceResultado);
+          const novasScreenshots = screenshotsResults
+            .filter(result => result.data)
+            .map(result => result.data!.publicUrl);
+          
+          // Substitui screenshots existentes pelas novas
+          novasScreenshotsUrls = novasScreenshots;
+        }
+      }
+
+      // Prepara dados para atualização
       const dadosAtualizacao: JogoUpdate = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -133,31 +241,34 @@ export default function EditarJogoPage() {
         data_lancamento: formData.data_lancamento || null,
         genero: formData.genero,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        url_download: formData.url_download || null,
+        url_download: novoArquivoJogoUrl || null,
         url_site: formData.url_site || null,
         url_github: formData.url_github || null,
-        imagem_capa: formData.imagem_capa || null,
-        capturas_tela: formData.capturas_tela ? formData.capturas_tela.split(',').map(url => url.trim()) : [],
-        tamanho_arquivo: formData.tamanho_arquivo || null,
+        imagem_capa: novaImagemCapaUrl || null,
+        capturas_tela: novasScreenshotsUrls,
+        tamanho_arquivo: arquivosSelecionados.arquivoJogo 
+          ? formatarBytes(arquivosSelecionados.arquivoJogo.size)
+          : jogo?.tamanho_arquivo || null,
         plataforma: formData.plataforma,
         status: formData.status
       };
 
+      // Atualiza o jogo no banco de dados
       const { data, error } = await updateJogo(jogo.id, dadosAtualizacao);
 
       if (error) {
-        setErro('Erro ao atualizar o jogo. Tente novamente.');
+        setError('Erro ao atualizar o jogo. Tente novamente.');
         console.error('Erro ao atualizar jogo:', error);
       } else if (data) router.push('/devs/meus-jogos');
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
-      setErro('Erro inesperado. Tente novamente.');
+      setError('Erro inesperado. Tente novamente.');
     } finally {
       setEnviando(false);
     }
   };
 
-  if (loading || carregandoJogo) {
+  if (loading || loadingJogo) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />
@@ -194,7 +305,7 @@ export default function EditarJogoPage() {
     );
   }
 
-  if (erro) {
+  if (error) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Header />
@@ -203,7 +314,7 @@ export default function EditarJogoPage() {
             <Icons.BsExclamationTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-4">Erro</h1>
             <p className="text-xl mb-8 text-gray-600 dark:text-gray-400">
-              {erro}
+              {error}
             </p>
             <Link href="/devs/meus-jogos" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
               Voltar aos Meus Jogos
@@ -334,10 +445,10 @@ export default function EditarJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-3">
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-3">
                     Gêneros <span className="text-red-500">*</span>
-                  </label>
+                  </legend>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {GENEROS_DISPONIVEIS.map((genero: string) => (
                       <label key={genero} htmlFor={`genero-${genero.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center">
@@ -352,12 +463,12 @@ export default function EditarJogoPage() {
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
-                <div>
-                  <label className="block text-sm font-medium mb-3">
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-3">
                     Plataformas <span className="text-red-500">*</span>
-                  </label>
+                  </legend>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {PLATAFORMAS_DISPONIVEIS.map((plataforma: string) => (
                       <label key={plataforma} htmlFor={`plataforma-${plataforma.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center">
@@ -372,7 +483,7 @@ export default function EditarJogoPage() {
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 <div>
                   <label htmlFor="tags" className="block text-sm font-medium mb-2">
@@ -391,72 +502,71 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Links e Downloads */}
+            {/* Arquivos e Links */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <Icons.BsLink45Deg className="w-6 h-6 mr-2 text-indigo-600" />
-                Links e Downloads
+                <Icons.BsCloudUpload className="w-6 h-6 mr-2 text-indigo-600" />
+                Arquivos e Links
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="md:col-span-2">
-                  <label htmlFor="url_download" className="block text-sm font-medium mb-2">
-                    Link de Download
-                  </label>
-                  <input
-                    type="url"
-                    id="url_download"
-                    name="url_download"
-                    value={formData.url_download}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://..."
+              <div className="space-y-6">
+                {/* Upload do arquivo do jogo */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
+                    Arquivo do Jogo
+                  </legend>
+                  <SeletorArquivo
+                    tipo="jogo"
+                    onArquivoSelecionado={handleArquivoJogoSelecionado}
+                    onError={handleSeletorError}
+                    arquivoAtual={arquivosSelecionados.arquivoJogo}
+                    className="mb-2"
                   />
-                </div>
+                  {formData.url_download && !arquivosSelecionados.arquivoJogo && (
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                      📁 Arquivo atual: <a href={formData.url_download} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Download</a>
+                      {jogo?.tamanho_arquivo && (
+                        <>
+                          <br />
+                          📏 Tamanho: {jogo.tamanho_arquivo}
+                        </>
+                      )}
+                      <br />
+                      <span className="text-xs">Selecione um novo arquivo para substituir</span>
+                    </div>
+                  )}
+                </fieldset>
 
-                <div>
-                  <label htmlFor="url_site" className="block text-sm font-medium mb-2">
-                    Site do Jogo
-                  </label>
-                  <input
-                    type="url"
-                    id="url_site"
-                    name="url_site"
-                    value={formData.url_site}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://..."
-                  />
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="url_site" className="block text-sm font-medium mb-2">
+                      Site do Jogo
+                    </label>
+                    <input
+                      type="url"
+                      id="url_site"
+                      name="url_site"
+                      value={formData.url_site}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="https://..."
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="url_github" className="block text-sm font-medium mb-2">
-                    Repositório GitHub
-                  </label>
-                  <input
-                    type="url"
-                    id="url_github"
-                    name="url_github"
-                    value={formData.url_github}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://github.com/..."
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="tamanho_arquivo" className="block text-sm font-medium mb-2">
-                    Tamanho do Arquivo
-                  </label>
-                  <input
-                    type="text"
-                    id="tamanho_arquivo"
-                    name="tamanho_arquivo"
-                    value={formData.tamanho_arquivo}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Ex: 150MB, 1.2GB"
-                  />
+                  <div>
+                    <label htmlFor="url_github" className="block text-sm font-medium mb-2">
+                      Repositório GitHub
+                    </label>
+                    <input
+                      type="url"
+                      id="url_github"
+                      name="url_github"
+                      value={formData.url_github}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="https://github.com/..."
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -469,35 +579,87 @@ export default function EditarJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                <div>
-                  <label htmlFor="imagem_capa" className="block text-sm font-medium mb-2">
+                {/* Upload de imagem de capa */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
                     Imagem de Capa
-                  </label>
-                  <input
-                    type="url"
-                    id="imagem_capa"
-                    name="imagem_capa"
-                    value={formData.imagem_capa}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="URL da imagem de capa"
+                  </legend>
+                  <SeletorArquivo
+                    tipo="imagem"
+                    tipoImagem="capa"
+                    onArquivoSelecionado={handleImagemCapaSelecionada}
+                    onError={handleSeletorError}
+                    arquivoAtual={arquivosSelecionados.imagemCapa}
+                    className="mb-2"
                   />
-                </div>
+                  {formData.imagem_capa && !arquivosSelecionados.imagemCapa && (
+                    <div className="mt-2">
+                      <Image 
+                        src={formData.imagem_capa} 
+                        alt="Capa atual" 
+                        width={192}
+                        height={128}
+                        className="object-cover rounded-lg border"
+                      />
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        Imagem atual - selecione nova para substituir
+                      </p>
+                    </div>
+                  )}
+                  {arquivosSelecionados.imagemCapa && (
+                    <div className="mt-2">
+                      <Image 
+                        src={URL.createObjectURL(arquivosSelecionados.imagemCapa)} 
+                        alt="Nova capa" 
+                        width={192}
+                        height={128}
+                        className="object-cover rounded-lg border"
+                      />
+                      <p className="text-sm text-orange-600 mt-1">
+                        ⚠️ Nova imagem substituirá a atual
+                      </p>
+                    </div>
+                  )}
+                </fieldset>
 
-                <div>
-                  <label htmlFor="capturas_tela" className="block text-sm font-medium mb-2">
-                    Capturas de Tela (URLs separadas por vírgula)
-                  </label>
-                  <textarea
-                    id="capturas_tela"
-                    name="capturas_tela"
-                    value={formData.capturas_tela}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://exemplo.com/screenshot1.jpg, https://exemplo.com/screenshot2.jpg"
+                {/* Screenshots */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
+                    Capturas de Tela
+                  </legend>
+                  <SeletorScreenshots
+                    onArquivosSelecionados={handleScreenshotsSelecionadas}
+                    onError={handleSeletorError}
+                    arquivosAtuais={arquivosSelecionados.screenshots}
+                    maxArquivos={5}
+                    className="mb-2"
                   />
-                </div>
+                  {formData.capturas_tela && arquivosSelecionados.screenshots.length === 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Screenshots atuais:</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {formData.capturas_tela.split(',').filter(url => url.trim()).map((url, index) => (
+                          <Image 
+                            key={index}
+                            src={url.trim()} 
+                            alt={`Screenshot ${index + 1}`} 
+                            width={200}
+                            height={96}
+                            className="object-cover rounded-lg border"
+                          />
+                        ))}
+                      </div>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Selecione novas screenshots para substituir todas as atuais
+                      </p>
+                    </div>
+                  )}
+                  {arquivosSelecionados.screenshots.length > 0 && (
+                    <p className="text-sm text-orange-600 mt-2">
+                      ⚠️ {arquivosSelecionados.screenshots.length} nova(s) screenshot(s) substituirá(ão) as atuais
+                    </p>
+                  )}
+                </fieldset>
               </div>
             </div>
 
@@ -527,11 +689,11 @@ export default function EditarJogoPage() {
             </div>
 
             {/* Erro */}
-            {erro && (
+            {error && (
               <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
                 <div className="flex items-center">
                   <Icons.BsExclamationTriangle className="w-5 h-5 text-red-500 mr-2" />
-                  <span className="text-red-700 dark:text-red-200">{erro}</span>
+                  <span className="text-red-700 dark:text-red-200">{error}</span>
                 </div>
               </div>
             )}
@@ -544,19 +706,27 @@ export default function EditarJogoPage() {
               <button
                 type="submit"
                 disabled={enviando || !formData.titulo || !formData.desenvolvedor || formData.genero.length === 0 || formData.plataforma.length === 0}
-                className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg transition-colors flex items-center justify-center"
+                className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg transition-colors flex items-center justify-center relative overflow-hidden"
               >
-                {enviando ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Salvando...
-                  </>
-                ) : (
-                  <>
-                    <Icons.FaCheck className="w-4 h-4 mr-2" />
-                    Salvar Alterações
-                  </>
+                {enviando && progressoUpload > 0 && (
+                  <div 
+                    className="absolute left-0 top-0 h-full bg-indigo-400 transition-all duration-300"
+                    style={{ width: `${progressoUpload}%` }}
+                  />
                 )}
+                <div className="relative z-10 flex items-center">
+                  {enviando ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      {progressoUpload > 0 ? `Fazendo Upload... ${Math.round(progressoUpload)}%` : 'Salvando...'}
+                    </>
+                  ) : (
+                    <>
+                      <Icons.FaCheck className="w-4 h-4 mr-2" />
+                      Salvar Alterações
+                    </>
+                  )}
+                </div>
               </button>
             </div>
           </form>

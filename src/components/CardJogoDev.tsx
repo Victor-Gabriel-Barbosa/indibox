@@ -19,7 +19,7 @@ export default function CardJogoDev({ jogo, onClick, onDelete, priority = false 
   const [modalDeleteAberto, setModalDeleteAberto] = useState(false);
   const [deletandoJogo, setDeletandoJogo] = useState(false);
 
-  // Função para obter a cor de status
+  // Obtém a cor de status
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'publicado': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -29,7 +29,7 @@ export default function CardJogoDev({ jogo, onClick, onDelete, priority = false 
     }
   };
 
-  // Função para obter o ícone de status
+  // Obtém o ícone de status
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'publicado': return <Icons.BsCheckCircle className="w-3 h-3" />;

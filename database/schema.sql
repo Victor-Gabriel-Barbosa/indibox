@@ -286,3 +286,186 @@ INSERT INTO jogos (
 -- Para testar as funções, você pode usar:
 -- SELECT incrementar_contador_download('id-do-jogo-aqui');
 -- SELECT calcular_avaliacao_jogo('id-do-jogo-aqui');
+
+
+-- ================================
+-- CAMPOS DE STORAGE
+-- ================================
+
+-- Adicionar campos para armazenar caminhos dos arquivos no Supabase Storage
+ALTER TABLE jogos 
+ADD COLUMN arquivo_jogo_path TEXT, -- Caminho do arquivo do jogo no bucket 'jogos'
+ADD COLUMN imagem_capa_path TEXT,  -- Caminho da imagem de capa no bucket 'imagens'
+ADD COLUMN capturas_tela_paths TEXT[] DEFAULT '{}'; -- Caminhos das screenshots no bucket 'screenshots'
+
+-- Comentários para documentação
+COMMENT ON COLUMN jogos.arquivo_jogo_path IS 'Caminho do arquivo do jogo no Supabase Storage bucket "jogos"';
+COMMENT ON COLUMN jogos.imagem_capa_path IS 'Caminho da imagem de capa no Supabase Storage bucket "imagens"';
+COMMENT ON COLUMN jogos.capturas_tela_paths IS 'Array de caminhos das screenshots no Supabase Storage bucket "screenshots"';
+
+-- ================================
+-- POLÍTICAS DE STORAGE (RLS)
+-- ================================
+
+-- Política para bucket 'jogos' - permite upload apenas para desenvolvedores
+INSERT INTO storage.buckets (id, name, public) VALUES ('jogos', 'jogos', true);
+INSERT INTO storage.buckets (id, name, public) VALUES ('imagens', 'imagens', true);
+INSERT INTO storage.buckets (id, name, public) VALUES ('screenshots', 'screenshots', true);
+
+-- Política para upload de arquivos de jogos
+CREATE POLICY "Desenvolvedores podem fazer upload de jogos" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'jogos' AND 
+    auth.uid()::text = (storage.foldername(name))[1] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- Política para visualização de arquivos de jogos
+CREATE POLICY "Todos podem visualizar jogos públicos" ON storage.objects
+  FOR SELECT USING (bucket_id = 'jogos');
+
+-- Política para deletar arquivos de jogos (apenas o próprio desenvolvedor)
+CREATE POLICY "Desenvolvedores podem deletar seus próprios jogos" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'jogos' AND 
+    auth.uid()::text = (storage.foldername(name))[1] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- Política para upload de imagens de capa
+CREATE POLICY "Desenvolvedores podem fazer upload de imagens de capa" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'imagens' AND 
+    auth.uid()::text = (storage.foldername(name))[2] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- Política para visualização de imagens
+CREATE POLICY "Todos podem visualizar imagens" ON storage.objects
+  FOR SELECT USING (bucket_id = 'imagens');
+
+-- Política para deletar imagens (apenas o próprio desenvolvedor)
+CREATE POLICY "Desenvolvedores podem deletar suas próprias imagens" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'imagens' AND 
+    auth.uid()::text = (storage.foldername(name))[2] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- Política para upload de screenshots
+CREATE POLICY "Desenvolvedores podem fazer upload de screenshots" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'screenshots' AND 
+    auth.uid()::text = (storage.foldername(name))[2] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- Política para visualização de screenshots
+CREATE POLICY "Todos podem visualizar screenshots" ON storage.objects
+  FOR SELECT USING (bucket_id = 'screenshots');
+
+-- Política para deletar screenshots (apenas o próprio desenvolvedor)
+CREATE POLICY "Desenvolvedores podem deletar suas próprias screenshots" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'screenshots' AND 
+    auth.uid()::text = (storage.foldername(name))[2] AND
+    EXISTS (
+      SELECT 1 FROM usuarios 
+      WHERE id = auth.uid() AND papel = 'desenvolvedor'
+    )
+  );
+
+-- ================================
+-- FUNÇÕES PARA GERENCIAMENTO DE STORAGE
+-- ================================
+
+-- Função para limpar arquivos órfãos (arquivos sem referência na tabela jogos)
+CREATE OR REPLACE FUNCTION limpar_arquivos_orfaos()
+RETURNS INTEGER AS $$
+DECLARE
+  arquivos_removidos INTEGER := 0;
+  arquivo RECORD;
+BEGIN
+  -- Remove arquivos de jogos órfãos
+  FOR arquivo IN 
+    SELECT name FROM storage.objects 
+    WHERE bucket_id = 'jogos' 
+    AND name NOT IN (SELECT arquivo_jogo_path FROM jogos WHERE arquivo_jogo_path IS NOT NULL)
+  LOOP
+    DELETE FROM storage.objects WHERE bucket_id = 'jogos' AND name = arquivo.name;
+    arquivos_removidos := arquivos_removidos + 1;
+  END LOOP;
+  
+  -- Remove imagens de capa órfãs
+  FOR arquivo IN 
+    SELECT name FROM storage.objects 
+    WHERE bucket_id = 'imagens' 
+    AND name NOT IN (SELECT imagem_capa_path FROM jogos WHERE imagem_capa_path IS NOT NULL)
+  LOOP
+    DELETE FROM storage.objects WHERE bucket_id = 'imagens' AND name = arquivo.name;
+    arquivos_removidos := arquivos_removidos + 1;
+  END LOOP;
+  
+  -- Remove screenshots órfãs
+  FOR arquivo IN 
+    SELECT name FROM storage.objects 
+    WHERE bucket_id = 'screenshots' 
+    AND name NOT IN (
+      SELECT UNNEST(capturas_tela_paths) FROM jogos 
+      WHERE capturas_tela_paths IS NOT NULL AND array_length(capturas_tela_paths, 1) > 0
+    )
+  LOOP
+    DELETE FROM storage.objects WHERE bucket_id = 'screenshots' AND name = arquivo.name;
+    arquivos_removidos := arquivos_removidos + 1;
+  END LOOP;
+  
+  RETURN arquivos_removidos;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Função trigger para limpar arquivos quando um jogo é deletado
+CREATE OR REPLACE FUNCTION limpar_arquivos_jogo_deletado()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Remove arquivo do jogo
+  IF OLD.arquivo_jogo_path IS NOT NULL THEN
+    DELETE FROM storage.objects 
+    WHERE bucket_id = 'jogos' AND name = OLD.arquivo_jogo_path;
+  END IF;
+  
+  -- Remove imagem de capa
+  IF OLD.imagem_capa_path IS NOT NULL THEN
+    DELETE FROM storage.objects 
+    WHERE bucket_id = 'imagens' AND name = OLD.imagem_capa_path;
+  END IF;
+  
+  -- Remove screenshots
+  IF OLD.capturas_tela_paths IS NOT NULL AND array_length(OLD.capturas_tela_paths, 1) > 0 THEN
+    DELETE FROM storage.objects 
+    WHERE bucket_id = 'screenshots' AND name = ANY(OLD.capturas_tela_paths);
+  END IF;
+  
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger para executar limpeza automática quando jogo é deletado
+CREATE TRIGGER trigger_limpar_arquivos_jogo_deletado
+  BEFORE DELETE ON jogos
+  FOR EACH ROW
+  EXECUTE FUNCTION limpar_arquivos_jogo_deletado();

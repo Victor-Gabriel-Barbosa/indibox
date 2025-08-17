@@ -2,10 +2,11 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
-import { Header, Footer, Icons, Breadcrumb } from '@/components';
+import { Header, Footer, Icons, Breadcrumb, SeletorArquivo, SeletorScreenshots } from '@/components';
 import { useRouter } from 'next/navigation';
 import { insertJogo } from '@/lib/database';
-import type { JogoInsert } from '@/types';
+import { uploadLote, formatarBytes } from '@/lib/storage';
+import type { } from '@/types';
 import Link from 'next/link';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
@@ -13,7 +14,8 @@ export default function NovoJogoPage() {
   const { usuario, loading } = useAuth();
   const router = useRouter();
   const [enviando, setEnviando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [progressoUpload, setProgressoUpload] = useState(0);
   
   const [formData, setFormData] = useState({
     titulo: '',
@@ -23,16 +25,20 @@ export default function NovoJogoPage() {
     data_lancamento: '',
     genero: [] as string[],
     tags: '',
-    url_download: '',
     url_site: '',
     url_github: '',
-    imagem_capa: '',
-    capturas_tela: '',
-    tamanho_arquivo: '',
     plataforma: [] as string[],
     status: 'rascunho' as const
   });
 
+  // Estados para arquivos selecionados
+  const [arquivosSelecionados, setArquivosSelecionados] = useState({
+    arquivoJogo: null as File | null,
+    imagemCapa: null as File | null,
+    screenshots: [] as File[]
+  });
+
+  // Lida com alterações nos campos de entrada
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -41,6 +47,7 @@ export default function NovoJogoPage() {
     }));
   };
 
+  // Lida com seleção do gênero
   const handleGeneroChange = (genero: string) => {
     setFormData(prev => ({
       ...prev,
@@ -50,6 +57,7 @@ export default function NovoJogoPage() {
     }));
   };
 
+  // Lida com seleção da imagem de capa
   const handlePlataformaChange = (plataforma: string) => {
     setFormData(prev => ({
       ...prev,
@@ -59,16 +67,112 @@ export default function NovoJogoPage() {
     }));
   };
 
+  // Lida com seleção de arquivos
+  const handleArquivoJogoSelecionado = (arquivo: File | null) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      arquivoJogo: arquivo
+    }));
+  };
+
+  // Lida com seleção da imagem de capa
+  const handleImagemCapaSelecionada = (arquivo: File | null) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      imagemCapa: arquivo
+    }));
+  };
+
+  // Lida com seleção das screenshots
+  const handleScreenshotsSelecionadas = (arquivos: File[]) => {
+    setArquivosSelecionados(prev => ({
+      ...prev,
+      screenshots: arquivos
+    }));
+  };
+
+  // Lida com erros dos seletores de arquivos
+  const handleSeletorError = (mensagem: string) => setError(mensagem);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!usuario?.id) return;
 
+    // Validar se os arquivos obrigatórios foram selecionados
+    if (!arquivosSelecionados.arquivoJogo) {
+      setError('Por favor, selecione o arquivo do jogo.');
+      return;
+    }
+
+    if (!arquivosSelecionados.imagemCapa) {
+      setError('Por favor, selecione a imagem de capa.');
+      return;
+    }
+
     setEnviando(true);
-    setErro(null);
+    setError(null);
+    setProgressoUpload(0);
 
     try {
-      // Prepara dados para inserção
-      const dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' | 'atualizado_em'> = {
+      // Prepara lista de arquivos para upload
+      const arquivosParaUpload: {
+        arquivo: File;
+        tipo: 'jogo' | 'imagem';
+        tipoImagem?: 'capa' | 'screenshot';
+      }[] = [
+        {
+          arquivo: arquivosSelecionados.arquivoJogo,
+          tipo: 'jogo'
+        },
+        {
+          arquivo: arquivosSelecionados.imagemCapa,
+          tipo: 'imagem',
+          tipoImagem: 'capa'
+        }
+      ];
+
+      // Adiciona screenshots se houver
+      arquivosSelecionados.screenshots.forEach(screenshot => {
+        arquivosParaUpload.push({
+          arquivo: screenshot,
+          tipo: 'imagem',
+          tipoImagem: 'screenshot'
+        });
+      });
+
+      // Faz upload dos arquivos
+      const resultadoUpload = await uploadLote(
+        arquivosParaUpload,
+        usuario.id,
+        setProgressoUpload
+      );
+
+      if (!resultadoUpload.sucesso) {
+        setError(`Erro no upload: ${resultadoUpload.erros.join(', ')}`);
+        return;
+      }
+
+      // Extrai URLs dos uploads
+      const arquivoJogoResult = resultadoUpload.resultados[0];
+      const imagemCapaResult = resultadoUpload.resultados[1];
+      const screenshotsResults = resultadoUpload.resultados.slice(2); // Screenshots começam no índice 2
+
+      if (!arquivoJogoResult.data || !imagemCapaResult.data) {
+        setError('Erro ao processar uploads dos arquivos obrigatórios.');
+        return;
+      }
+
+      // Extrai URLs das screenshots
+      const screenshotsUrls = screenshotsResults
+        .filter(result => result.data)
+        .map(result => result.data!.publicUrl);
+      
+      const screenshotsPaths = screenshotsResults
+        .filter(result => result.data)
+        .map(result => result.data!.path);
+
+      // Prepara dados para inserção no banco
+      const dadosJogo = {
         titulo: formData.titulo,
         descricao: formData.descricao,
         descricao_curta: formData.descricao_curta,
@@ -76,33 +180,36 @@ export default function NovoJogoPage() {
         data_lancamento: formData.data_lancamento || null,
         genero: formData.genero,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        url_download: formData.url_download || null,
+        url_download: arquivoJogoResult.data.publicUrl,
         url_site: formData.url_site || null,
         url_github: formData.url_github || null,
-        imagem_capa: formData.imagem_capa || null,
-        capturas_tela: formData.capturas_tela ? formData.capturas_tela.split(',').map(url => url.trim()) : [],
-        tamanho_arquivo: formData.tamanho_arquivo || null,
+        imagem_capa: imagemCapaResult.data.publicUrl,
+        capturas_tela: screenshotsUrls,
+        tamanho_arquivo: formatarBytes(arquivosSelecionados.arquivoJogo.size),
         plataforma: formData.plataforma,
         status: formData.status,
         id_usuario: usuario.id,
         destaque: false,
         avaliacao: 0,
-        contador_download: 0
-      };
+        contador_download: 0,
+        arquivo_jogo_path: arquivoJogoResult.data.path,
+        imagem_capa_path: imagemCapaResult.data.path,
+        capturas_tela_paths: screenshotsPaths
+      } as const;
 
+      // Insere no banco de dados
       const { data, error } = await insertJogo(dadosJogo);
 
       if (error) {
-        setErro('Erro ao publicar o jogo. Tente novamente.');
+        setError('Erro ao publicar o jogo. Tente novamente.');
         console.error('Erro ao inserir jogo:', error);
-      } else if (data) {
-        router.push('/devs');
-      }
+      } else if (data) router.push('/devs');
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
-      setErro('Erro inesperado. Tente novamente.');
+      setError('Erro inesperado. Tente novamente.');
     } finally {
       setEnviando(false);
+      setProgressoUpload(0);
     }
   };
 
@@ -214,7 +321,7 @@ export default function NovoJogoPage() {
                     name="data_lancamento"
                     value={formData.data_lancamento}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
 
@@ -259,14 +366,16 @@ export default function NovoJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-3">
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-3">
                     Gêneros <span className="text-red-500">*</span>
-                  </label>
+                  </legend>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {GENEROS_DISPONIVEIS.map((genero: string) => (
-                      <label key={genero} className="flex items-center">
+                      <label htmlFor={genero} key={genero} className="flex items-center">
                         <input
+                          id={genero}
+                          name="genero"
                           type="checkbox"
                           checked={formData.genero.includes(genero)}
                           onChange={() => handleGeneroChange(genero)}
@@ -276,16 +385,18 @@ export default function NovoJogoPage() {
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
-                <div>
-                  <label className="block text-sm font-medium mb-3">
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-3">
                     Plataformas <span className="text-red-500">*</span>
-                  </label>
+                  </legend>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {PLATAFORMAS_DISPONIVEIS.map((plataforma: string) => (
-                      <label key={plataforma} className="flex items-center">
+                      <label htmlFor={plataforma} key={plataforma} className="flex items-center">
                         <input
+                          id={plataforma}
+                          name="plataforma"
                           type="checkbox"
                           checked={formData.plataforma.includes(plataforma)}
                           onChange={() => handlePlataformaChange(plataforma)}
@@ -295,7 +406,7 @@ export default function NovoJogoPage() {
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 <div>
                   <label htmlFor="tags" className="block text-sm font-medium mb-2">
@@ -318,68 +429,54 @@ export default function NovoJogoPage() {
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsLink45Deg className="w-6 h-6 mr-2 text-indigo-600" />
-                Links e Downloads
+                Arquivo do Jogo e Links
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="md:col-span-2">
-                  <label htmlFor="url_download" className="block text-sm font-medium mb-2">
-                    Link de Download
-                  </label>
-                  <input
-                    type="url"
-                    id="url_download"
-                    name="url_download"
-                    value={formData.url_download}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://..."
+              <div className="space-y-6">
+                {/* Upload do arquivo do jogo */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
+                    Arquivo do Jogo <span className="text-red-500">*</span>
+                  </legend>
+                  <SeletorArquivo
+                    tipo="jogo"
+                    onArquivoSelecionado={handleArquivoJogoSelecionado}
+                    onError={handleSeletorError}
+                    arquivoAtual={arquivosSelecionados.arquivoJogo}
+                    className="mb-4"
                   />
-                </div>
+                </fieldset>
 
-                <div>
-                  <label htmlFor="url_site" className="block text-sm font-medium mb-2">
-                    Site do Jogo
-                  </label>
-                  <input
-                    type="url"
-                    id="url_site"
-                    name="url_site"
-                    value={formData.url_site}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://..."
-                  />
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="url_site" className="block text-sm font-medium mb-2">
+                      Site do Jogo
+                    </label>
+                    <input
+                      type="url"
+                      id="url_site"
+                      name="url_site"
+                      value={formData.url_site}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="https://..."
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="url_github" className="block text-sm font-medium mb-2">
-                    Repositório GitHub
-                  </label>
-                  <input
-                    type="url"
-                    id="url_github"
-                    name="url_github"
-                    value={formData.url_github}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://github.com/..."
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="tamanho_arquivo" className="block text-sm font-medium mb-2">
-                    Tamanho do Arquivo
-                  </label>
-                  <input
-                    type="text"
-                    id="tamanho_arquivo"
-                    name="tamanho_arquivo"
-                    value={formData.tamanho_arquivo}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Ex: 150MB, 1.2GB"
-                  />
+                  <div>
+                    <label htmlFor="url_github" className="block text-sm font-medium mb-2">
+                      Repositório GitHub
+                    </label>
+                    <input
+                      type="url"
+                      id="url_github"
+                      name="url_github"
+                      value={formData.url_github}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="https://github.com/..."
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -392,35 +489,34 @@ export default function NovoJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                <div>
-                  <label htmlFor="imagem_capa" className="block text-sm font-medium mb-2">
-                    Imagem de Capa
-                  </label>
-                  <input
-                    type="url"
-                    id="imagem_capa"
-                    name="imagem_capa"
-                    value={formData.imagem_capa}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="URL da imagem de capa"
+                {/* Upload de imagem de capa */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
+                    Imagem de Capa <span className="text-red-500">*</span>
+                  </legend>
+                  <SeletorArquivo
+                    tipo="imagem"
+                    tipoImagem="capa"
+                    onArquivoSelecionado={handleImagemCapaSelecionada}
+                    onError={handleSeletorError}
+                    arquivoAtual={arquivosSelecionados.imagemCapa}
+                    className="mb-2"
                   />
-                </div>
+                </fieldset>
 
-                <div>
-                  <label htmlFor="capturas_tela" className="block text-sm font-medium mb-2">
-                    Capturas de Tela (URLs separadas por vírgula)
-                  </label>
-                  <textarea
-                    id="capturas_tela"
-                    name="capturas_tela"
-                    value={formData.capturas_tela}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="https://exemplo.com/screenshot1.jpg, https://exemplo.com/screenshot2.jpg"
+                {/* Screenshots */}
+                <fieldset>
+                  <legend className="block text-sm font-medium mb-2">
+                    Capturas de Tela <span className="text-sm text-gray-500">(opcional)</span>
+                  </legend>
+                  <SeletorScreenshots
+                    onArquivosSelecionados={handleScreenshotsSelecionadas}
+                    onError={handleSeletorError}
+                    arquivosAtuais={arquivosSelecionados.screenshots}
+                    maxArquivos={5}
+                    className="mb-2"
                   />
-                </div>
+                </fieldset>
               </div>
             </div>
 
@@ -449,11 +545,11 @@ export default function NovoJogoPage() {
             </div>
 
             {/* Erro */}
-            {erro && (
+            {error && (
               <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
                 <div className="flex items-center">
                   <Icons.BsExclamationTriangle className="w-5 h-5 text-red-500 mr-2" />
-                  <span className="text-red-700 dark:text-red-200">{erro}</span>
+                  <span className="text-red-700 dark:text-red-200">{error}</span>
                 </div>
               </div>
             )}
@@ -465,20 +561,28 @@ export default function NovoJogoPage() {
               </Link>
               <button
                 type="submit"
-                disabled={enviando || !formData.titulo || !formData.desenvolvedor || formData.genero.length === 0 || formData.plataforma.length === 0}
-                className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg transition-colors flex items-center justify-center"
+                disabled={enviando || !formData.titulo || !formData.desenvolvedor || formData.genero.length === 0 || formData.plataforma.length === 0 || !arquivosSelecionados.arquivoJogo || !arquivosSelecionados.imagemCapa}
+                className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg transition-colors flex items-center justify-center relative overflow-hidden"
               >
-                {enviando ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Publicando...
-                  </>
-                ) : (
-                  <>
-                    <Icons.BsCheck2 className="w-4 h-4 mr-2" />
-                    {formData.status === 'rascunho' ? 'Salvar Rascunho' : 'Publicar Jogo'}
-                  </>
+                {enviando && progressoUpload > 0 && (
+                  <div 
+                    className="absolute left-0 top-0 h-full bg-indigo-400 transition-all duration-300"
+                    style={{ width: `${progressoUpload}%` }}
+                  />
                 )}
+                <div className="relative z-10 flex items-center">
+                  {enviando ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      {progressoUpload > 0 ? `Fazendo Upload... ${Math.round(progressoUpload)}%` : 'Publicando...'}
+                    </>
+                  ) : (
+                    <>
+                      <Icons.BsCheck2 className="w-4 h-4 mr-2" />
+                      {formData.status === 'rascunho' ? 'Salvar Rascunho' : 'Publicar Jogo'}
+                    </>
+                  )}
+                </div>
               </button>
             </div>
           </form>

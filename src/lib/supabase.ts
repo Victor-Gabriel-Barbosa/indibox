@@ -31,7 +31,7 @@ const sbAdmin = sbConfig && process.env.SUPABASE_SERVICE_ROLE_KEY ?
     }
   ) : null;
 
-// Função para verificar conexão
+// Verifica conexão com Supabase
 const testarConexao = async () => {
   if (!sb) {
     console.warn('⚠️ Supabase não configurado');
@@ -48,5 +48,80 @@ const testarConexao = async () => {
   }
 };
 
-// Exporta status de configuração
-export { sbConfig, sb, sbAdmin, testarConexao };
+// Faz upload de arquivo no bucket especificado
+const uploadArquivo = async (bucket: string, caminho: string, arquivo: File) => {
+  if (!sb) {
+    console.warn('⚠️ Supabase não configurado');
+    return { data: null, error: { message: 'Supabase não configurado' } };
+  }
+
+  try {
+    const { data, error } = await sb.storage
+      .from(bucket)
+      .upload(caminho, arquivo, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      return { data: null, error: { message: error.message || 'Erro no upload' } };
+    }
+
+    // Obtém URL pública do arquivo
+    const { data: urlData } = sb.storage
+      .from(bucket)
+      .getPublicUrl(caminho);
+
+    return { 
+      data: { 
+        ...data, 
+        publicUrl: urlData.publicUrl 
+      }, 
+      error: null 
+    };
+  } catch (error) {
+    console.error('❌ Erro no upload:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    return { data: null, error: { message: errorMessage } };
+  }
+};
+
+// Deletar arquivo no bucket especificado
+const deleteArquivo = async (bucket: string, caminho: string) => {
+  if (!sb) {
+    console.warn('⚠️ Supabase não configurado');
+    return { error: { message: 'Supabase não configurado' } };
+  }
+
+  try {
+    const { error } = await sb.storage
+      .from(bucket)
+      .remove([caminho]);
+
+    if (error) {
+      return { error: { message: error.message || 'Erro ao deletar arquivo' } };
+    }
+    return { error: null };
+  } catch (error) {
+    console.error('❌ Erro ao deletar arquivo:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    return { error: { message: errorMessage } };
+  }
+};
+
+// Obtém URL pública do arquivo no bucket especificado
+const getUrlPublica = (bucket: string, caminho: string) => {
+  if (!sb) {
+    console.warn('⚠️ Supabase não configurado');
+    return null;
+  }
+
+  const { data } = sb.storage
+    .from(bucket)
+    .getPublicUrl(caminho);
+
+  return data.publicUrl;
+};
+
+// Exporta status de configuração e funções de storage
+export { sbConfig, sb, sbAdmin, testarConexao, uploadArquivo, deleteArquivo as deletarArquivo, getUrlPublica as obterUrlPublica };
