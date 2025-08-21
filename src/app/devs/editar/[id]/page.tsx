@@ -30,8 +30,9 @@ export default function EditarJogoPage() {
     imagemCapa: null as File | null,
     screenshots: [] as File[]
   });
-  
-  const [formData, setFormData] = useState({
+
+  // Estado para dados do formulário
+  const [formData, setFormData] = useState({ 
     titulo: '',
     descricao: '',
     descricao_curta: '',
@@ -268,6 +269,7 @@ export default function EditarJogoPage() {
     }
   };
 
+  // Exibe loading enquanto carrega dados do jogo
   if (loading || loadingJogo) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -282,6 +284,7 @@ export default function EditarJogoPage() {
     );
   }
 
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -305,6 +308,7 @@ export default function EditarJogoPage() {
     );
   }
 
+  // Verifica se houve erro ou se o jogo não foi encontrado
   if (error) {
     return (
       <main className="min-h-screen bg-background text-foreground">

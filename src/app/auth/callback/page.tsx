@@ -12,6 +12,7 @@ export default function AuthCallback() {
   const { setAutenticado: setLoginSuccess } = useAuth();
   const [exibirSucesso, setExibirSucesso] = useState(false);
 
+  // Efeito para lidar com o callback de autenticação
   useEffect(() => {
     const handleAuthCallback = async () => {
       if (!sb) {

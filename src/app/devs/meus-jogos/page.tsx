@@ -13,6 +13,7 @@ export default function MeusJogosPage() {
   const [carregandoJogos, setCarregandoJogos] = useState(true);
   const [filtroStatus, setFiltroStatus] = useState<string>('todos');
 
+  // Efeito para carregar jogos do usuário
   useEffect(() => {
     async function carregarJogosUsuario() {
       if (!usuario?.id) {
@@ -36,11 +37,13 @@ export default function MeusJogosPage() {
     carregarJogosUsuario();
   }, [usuario?.id]);
 
+  // Filtra os jogos pelo status selecionado
   const jogosFiltrados = jogosDoUsuario.filter(jogo => {
     if (filtroStatus === 'todos') return true;
     return jogo.status === filtroStatus;
   });
 
+  // Lida com a exclusão de um jogo
   const handleDeletarJogo = async (idJogo: string) => {
     if (!usuario?.id) return;
 
@@ -63,6 +66,7 @@ export default function MeusJogosPage() {
     }
   };
 
+  // Exibe loading enquanto carrega dados do usuário
   if (loading) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -77,6 +81,7 @@ export default function MeusJogosPage() {
     );
   }
 
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">

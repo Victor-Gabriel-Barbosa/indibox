@@ -17,6 +17,7 @@ export default function NovoJogoPage() {
   const [error, setError] = useState<string | null>(null);
   const [progressoUpload, setProgressoUpload] = useState(0);
   
+  // Estado para dados do formulário
   const [formData, setFormData] = useState({
     titulo: '',
     descricao: '',
@@ -213,6 +214,7 @@ export default function NovoJogoPage() {
     }
   };
 
+  // Exibe loading enquanto carrega dados do usuário
   if (loading) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -227,6 +229,7 @@ export default function NovoJogoPage() {
     );
   }
 
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">

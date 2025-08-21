@@ -7,6 +7,7 @@ import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
 import { GENEROS_DISPONIVEIS } from '@/lib/dadosJogos';
 
+// Definição do estado dos filtros
 interface FiltrosState {
   genero: string;
   ordenarPor: 'criado_em' | 'avaliacao' | 'contador_download' | 'titulo';
@@ -14,6 +15,7 @@ interface FiltrosState {
   busca?: string;
 }
 
+// Componente principal para exibição dos jogos
 function JogosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -29,8 +31,10 @@ function JogosContent() {
     busca: ''
   });
 
+  // Definição da quantidade de jogos por página
   const jogosPorPagina = 12;
 
+  // Carrega jogos com base na página e filtros
   const carregarJogos = async (pagina: number = 1, novosFiltros?: FiltrosState) => {
     try {
       setCarregando(true);
@@ -47,9 +51,8 @@ function JogosContent() {
         }
       );
 
-      if (error) {
-        console.error('Erro ao carregar jogos:', error);
-      } else if (data) {
+      if (error) console.error('Erro ao carregar jogos:', error);
+      else if (data) {
         setJogos(data);
         setTotalJogos(totalJogos);
         setTotalPaginas(totalPaginas);
@@ -62,6 +65,7 @@ function JogosContent() {
     }
   };
 
+  // Efeito para carregar jogos iniciais
   useEffect(() => {
     const carregarJogosIniciais = async () => {
       try {
@@ -91,9 +95,8 @@ function JogosContent() {
           }
         );
 
-        if (error) {
-          console.error('Erro ao carregar jogos:', error);
-        } else if (data) {
+        if (error) console.error('Erro ao carregar jogos:', error);
+        else if (data) {
           setJogos(data);
           setTotalJogos(totalJogos);
           setTotalPaginas(totalPaginas);
@@ -111,26 +114,26 @@ function JogosContent() {
 
   // UseEffect para mudanças nos filtros
   useEffect(() => {
-    if (filtros.busca !== undefined) { // Executa apenas após inicialização
-      carregarJogos(1);
-    }
+    // Executa apenas após inicialização
+    if (filtros.busca !== undefined) carregarJogos(1);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros.genero, filtros.ordenarPor, filtros.ordem]);
 
-  const handleMudarPagina = (novaPagina: number) => {
-    carregarJogos(novaPagina);
-  };
+  // Função para mudar a página
+  const handleMudarPagina = (novaPagina: number) => carregarJogos(novaPagina);
 
+  // Muda os filtros aplicados
   const handleMudarFiltro = (novosFiltros: Partial<FiltrosState>) => {
     const filtrosAtualizados = { ...filtros, ...novosFiltros };
     setFiltros(filtrosAtualizados);
     carregarJogos(1, filtrosAtualizados);
   };
 
-  const handleJogoClick = (jogo: Jogo) => {
-    router.push(`/jogos/${jogo.id}`);
-  };
+  // Lida com o clique em um jogo
+  const handleJogoClick = (jogo: Jogo) => router.push(`/jogos/${jogo.id}`);
 
+  // Gêneros disponíveis
   const generos = ['todos', ...GENEROS_DISPONIVEIS];
 
   return (

@@ -15,6 +15,7 @@ export default function DetalhesJogoPage() {
   const [error, setError] = useState<string | null>(null);
   const [imagemAtiva, setImagemAtiva] = useState(0);
 
+  // Efeito para carregar os detalhes do jogo
   useEffect(() => {
     const carregarJogo = async () => {
       if (!id || typeof id !== 'string') {
@@ -43,10 +44,12 @@ export default function DetalhesJogoPage() {
     carregarJogo();
   }, [id]);
 
+  // Lida com o download do jogo
   const handleDownload = () => {
     if (jogo?.url_download) window.open(jogo.url_download, '_blank');
   };
 
+  // Formata a data para exibição
   const formatarData = (data: string) => {
     return new Date(data).toLocaleDateString('pt-BR', {
       year: 'numeric',
@@ -55,6 +58,7 @@ export default function DetalhesJogoPage() {
     });
   };
 
+  // Formata o tamanho do arquivo para exibição
   const formatarTamanho = (tamanho: string | null) => {
     if (!tamanho) return 'Não informado';
     return tamanho;
@@ -77,6 +81,7 @@ export default function DetalhesJogoPage() {
     );
   }
 
+  // Lida com erros ou jogo não encontrado
   if (error || !jogo) {
     return (
       <div className="min-h-screen">
@@ -104,6 +109,7 @@ export default function DetalhesJogoPage() {
     );
   }
 
+  // Obtém as imagens do jogo
   const imagens = jogo.capturas_tela.length > 0 ? jogo.capturas_tela : jogo.imagem_capa ? [jogo.imagem_capa] : [];
 
   return (

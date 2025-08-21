@@ -11,6 +11,7 @@ export default function DevsPage() {
   const { usuario, loading } = useAuth();
   const [jogosDoUsuario, setJogosDoUsuario] = useState<Jogo[]>([]);
 
+  // Efeito para carregar jogos do usuário
   useEffect(() => {
     async function carregarJogosDoUsuario() {
       if (!usuario?.id) return;
@@ -29,6 +30,7 @@ export default function DevsPage() {
     carregarJogosDoUsuario();
   }, [usuario?.id]);
 
+  // Lida com a exclusão de um jogo
   const handleDeletarJogo = async (idJogo: string) => {
     if (!usuario?.id) return;
 
@@ -51,6 +53,7 @@ export default function DevsPage() {
     }
   };
 
+  // Exibe loading enquanto carrega dados do usuário
   if (loading) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -65,6 +68,7 @@ export default function DevsPage() {
     );
   }
 
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">

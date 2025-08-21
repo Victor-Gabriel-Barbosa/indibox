@@ -15,6 +15,7 @@ export default function Home() {
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
   const [carregandoJogos, setCarregandoJogos] = useState(true);
 
+  // Efeito para carregar jogos em destaque
   useEffect(() => {
     async function carregarJogosDestaque() {
       try {
@@ -33,9 +34,8 @@ export default function Home() {
     carregarJogosDestaque();
   }, []);
 
-  const handleJogoClick = (jogoId: string) => {
-    router.push(`/jogos/${jogoId}`);
-  };
+  // Lida com o clique em um jogo
+  const handleJogoClick = (jogoId: string) => router.push(`/jogos/${jogoId}`);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -62,6 +62,7 @@ export default function Home() {
         </div>
       </section>
 
+      { /* Seção de Jogos em Destaque */}
       <Swiper
         effect={'coverflow'}
         grabCursor={true}
