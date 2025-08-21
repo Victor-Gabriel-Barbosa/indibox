@@ -15,7 +15,7 @@ export default function DetalhesJogoPage() {
   const [error, setError] = useState<string | null>(null);
   const [imagemAtiva, setImagemAtiva] = useState(0);
 
-  // Efeito para carregar os detalhes do jogo
+  // Carrega dados do jogo
   useEffect(() => {
     const carregarJogo = async () => {
       if (!id || typeof id !== 'string') {
@@ -44,12 +44,12 @@ export default function DetalhesJogoPage() {
     carregarJogo();
   }, [id]);
 
-  // Lida com o download do jogo
+  // Processa download do jogo
   const handleDownload = () => {
     if (jogo?.url_download) window.open(jogo.url_download, '_blank');
   };
 
-  // Formata a data para exibição
+  // Formata data para exibição
   const formatarData = (data: string) => {
     return new Date(data).toLocaleDateString('pt-BR', {
       year: 'numeric',
@@ -58,12 +58,10 @@ export default function DetalhesJogoPage() {
     });
   };
 
-  // Formata o tamanho do arquivo para exibição
-  const formatarTamanho = (tamanho: string | null) => {
-    if (!tamanho) return 'Não informado';
-    return tamanho;
-  };
+  // Formata tamanho do arquivo
+  const formatarTamanho = (tamanho: string | null) => (!tamanho) ? 'Não informado' : tamanho;
 
+  // Exibe loading durante carregamento
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -81,7 +79,7 @@ export default function DetalhesJogoPage() {
     );
   }
 
-  // Lida com erros ou jogo não encontrado
+  // Exibe erros de validação
   if (error || !jogo) {
     return (
       <div className="min-h-screen">
@@ -109,7 +107,7 @@ export default function DetalhesJogoPage() {
     );
   }
 
-  // Obtém as imagens do jogo
+  // Monta galeria de imagens
   const imagens = jogo.capturas_tela.length > 0 ? jogo.capturas_tela : jogo.imagem_capa ? [jogo.imagem_capa] : [];
 
   return (
@@ -123,13 +121,13 @@ export default function DetalhesJogoPage() {
         ]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Coluna principal - Imagens e informações básicas */}
+          {/* Conteúdo principal */}
           <div className="lg:col-span-2">
             {/* Galeria de imagens */}
             <div className="mb-8">
               {imagens.length > 0 ? (
                 <div className="space-y-4">
-                  {/* Imagem principal */}
+                  {/* Imagem em destaque */}
                   <div className="relative w-full h-[65vmin] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <Image
                       src={imagens[imagemAtiva]}
@@ -140,7 +138,7 @@ export default function DetalhesJogoPage() {
                     />
                   </div>
 
-                  {/* Miniaturas */}
+                  {/* Navegação de imagens */}
                   {imagens.length > 1 && (
                     <div className="flex space-x-2 overflow-x-auto pb-2">
                       {imagens.map((imagem, index) => (
@@ -174,7 +172,7 @@ export default function DetalhesJogoPage() {
               )}
             </div>
 
-            {/* Descrição */}
+            {/* Seção de descrição */}
             <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <h2 className="text-2xl font-bold mb-4">
                 Sobre o jogo
@@ -193,9 +191,9 @@ export default function DetalhesJogoPage() {
             </div>
           </div>
 
-          {/* Sidebar - Informações do jogo */}
+          {/* Informações laterais */}
           <div className="space-y-6">
-            {/* Card principal com título e ações */}
+            {/* Card principal */}
             <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold mb-2">
@@ -213,7 +211,7 @@ export default function DetalhesJogoPage() {
                 )}
               </div>
 
-              {/* Estatísticas principais */}
+              {/* Estatísticas do jogo */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="text-center p-3 rounded-lg">
                   <div className="flex items-center justify-center mb-1">
@@ -236,7 +234,7 @@ export default function DetalhesJogoPage() {
                 </div>
               </div>
 
-              {/* Botão de download */}
+              {/* Botão principal de download */}
               {jogo.url_download && (
                 <button
                   onClick={handleDownload}
@@ -247,7 +245,7 @@ export default function DetalhesJogoPage() {
                 </button>
               )}
 
-              {/* Links adicionais */}
+              {/* Links externos */}
               <div className="space-y-2">
                 {jogo.url_site && (
                   <a
@@ -275,7 +273,7 @@ export default function DetalhesJogoPage() {
               </div>
             </div>
 
-            {/* Informações técnicas */}
+            {/* Detalhes técnicos */}
             <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
               <h3 className="text-xl font-bold mb-4">
                 Informações Técnicas
@@ -304,7 +302,7 @@ export default function DetalhesJogoPage() {
                   </p>
                 </div>
 
-                {/* Plataformas */}
+                {/* Plataformas compatíveis */}
                 <div>
                   <h4 className="font-medium mb-2">
                     Plataformas
@@ -321,7 +319,7 @@ export default function DetalhesJogoPage() {
                   </div>
                 </div>
 
-                {/* Gêneros */}
+                {/* Gêneros do jogo */}
                 <div>
                   <h4 className="font-medium mb-2">
                     Gêneros
@@ -338,7 +336,7 @@ export default function DetalhesJogoPage() {
                   </div>
                 </div>
 
-                {/* Tags */}
+                {/* Tags do jogo */}
                 {jogo.tags.length > 0 && (
                   <div>
                     <h4 className="font-medium mb-2">
