@@ -17,7 +17,7 @@ export default function NovoJogoPage() {
   const [error, setError] = useState<string | null>(null);
   const [progressoUpload, setProgressoUpload] = useState(0);
   
-  // Estado para dados do formulário
+  // Dados do formulário
   const [formData, setFormData] = useState({
     titulo: '',
     descricao: '',
@@ -32,14 +32,14 @@ export default function NovoJogoPage() {
     status: 'rascunho' as const
   });
 
-  // Estados para arquivos selecionados
+  // Arquivos selecionados pelo usuário
   const [arquivosSelecionados, setArquivosSelecionados] = useState({
     arquivoJogo: null as File | null,
     imagemCapa: null as File | null,
     screenshots: [] as File[]
   });
 
-  // Lida com alterações nos campos de entrada
+  // Atualiza campos do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -48,7 +48,7 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com seleção do gênero
+  // Gerencia seleção de gêneros
   const handleGeneroChange = (genero: string) => {
     setFormData(prev => ({
       ...prev,
@@ -58,7 +58,7 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com seleção da imagem de capa
+  // Gerencia seleção de plataformas
   const handlePlataformaChange = (plataforma: string) => {
     setFormData(prev => ({
       ...prev,
@@ -68,7 +68,7 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com seleção de arquivos
+  // Seleciona arquivo do jogo
   const handleArquivoJogoSelecionado = (arquivo: File | null) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -76,7 +76,7 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com seleção da imagem de capa
+  // Seleciona imagem de capa
   const handleImagemCapaSelecionada = (arquivo: File | null) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -84,7 +84,7 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com seleção das screenshots
+  // Seleciona screenshots
   const handleScreenshotsSelecionadas = (arquivos: File[]) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -92,14 +92,14 @@ export default function NovoJogoPage() {
     }));
   };
 
-  // Lida com erros dos seletores de arquivos
+  // Trata erros de upload
   const handleSeletorError = (mensagem: string) => setError(mensagem);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!usuario?.id) return;
 
-    // Validar se os arquivos obrigatórios foram selecionados
+    // Valida arquivos obrigatórios
     if (!arquivosSelecionados.arquivoJogo) {
       setError('Por favor, selecione o arquivo do jogo.');
       return;
@@ -115,7 +115,7 @@ export default function NovoJogoPage() {
     setProgressoUpload(0);
 
     try {
-      // Prepara lista de arquivos para upload
+      // Prepara arquivos para upload
       const arquivosParaUpload: {
         arquivo: File;
         tipo: 'jogo' | 'imagem';
@@ -132,7 +132,7 @@ export default function NovoJogoPage() {
         }
       ];
 
-      // Adiciona screenshots se houver
+      // Adiciona screenshots
       arquivosSelecionados.screenshots.forEach(screenshot => {
         arquivosParaUpload.push({
           arquivo: screenshot,
@@ -141,7 +141,7 @@ export default function NovoJogoPage() {
         });
       });
 
-      // Faz upload dos arquivos
+      // Executa upload dos arquivos
       const resultadoUpload = await uploadLote(
         arquivosParaUpload,
         usuario.id,
@@ -153,10 +153,10 @@ export default function NovoJogoPage() {
         return;
       }
 
-      // Extrai URLs dos uploads
+      // Processa resultados do upload
       const arquivoJogoResult = resultadoUpload.resultados[0];
       const imagemCapaResult = resultadoUpload.resultados[1];
-      const screenshotsResults = resultadoUpload.resultados.slice(2); // Screenshots começam no índice 2
+      const screenshotsResults = resultadoUpload.resultados.slice(2);
 
       if (!arquivoJogoResult.data || !imagemCapaResult.data) {
         setError('Erro ao processar uploads dos arquivos obrigatórios.');
@@ -172,7 +172,7 @@ export default function NovoJogoPage() {
         .filter(result => result.data)
         .map(result => result.data!.path);
 
-      // Prepara dados para inserção no banco
+      // Monta dados do jogo
       const dadosJogo = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -198,7 +198,7 @@ export default function NovoJogoPage() {
         capturas_tela_paths: screenshotsPaths
       } as const;
 
-      // Insere no banco de dados
+      // Salva no banco de dados
       const { data, error } = await insertJogo(dadosJogo);
 
       if (error) {
@@ -214,7 +214,7 @@ export default function NovoJogoPage() {
     }
   };
 
-  // Exibe loading enquanto carrega dados do usuário
+  // Exibe loading durante carregamento
   if (loading) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -229,7 +229,7 @@ export default function NovoJogoPage() {
     );
   }
 
-  // Verifica se o usuário está autenticado
+  // Verifica autenticação
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -272,7 +272,7 @@ export default function NovoJogoPage() {
             </p>
           </div>
 
-          {/* Formulário */}
+          {/* Formulário principal */}
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Informações Básicas */}
             <div className="p-6 rounded-lg shadow-md">
@@ -361,7 +361,7 @@ export default function NovoJogoPage() {
               </div>
             </div>
 
-            {/* Categorização */}
+            {/* Seção de categorização */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsTags className="w-6 h-6 mr-2 text-indigo-600" />
@@ -428,7 +428,7 @@ export default function NovoJogoPage() {
               </div>
             </div>
 
-            {/* Links e Downloads */}
+            {/* Seção de arquivos e links */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsLink45Deg className="w-6 h-6 mr-2 text-indigo-600" />
@@ -436,7 +436,7 @@ export default function NovoJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                {/* Upload do arquivo do jogo */}
+                {/* Seletor de arquivo do jogo */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Arquivo do Jogo <span className="text-red-500">*</span>
@@ -484,7 +484,7 @@ export default function NovoJogoPage() {
               </div>
             </div>
 
-            {/* Mídia */}
+            {/* Seção de imagens */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsImage className="w-6 h-6 mr-2 text-indigo-600" />
@@ -492,7 +492,7 @@ export default function NovoJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                {/* Upload de imagem de capa */}
+                {/* Seletor de imagem de capa */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Imagem de Capa <span className="text-red-500">*</span>
@@ -507,7 +507,7 @@ export default function NovoJogoPage() {
                   />
                 </fieldset>
 
-                {/* Screenshots */}
+                {/* Seletor de screenshots */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Capturas de Tela <span className="text-sm text-gray-500">(opcional)</span>
@@ -523,7 +523,7 @@ export default function NovoJogoPage() {
               </div>
             </div>
 
-            {/* Status */}
+            {/* Configurações de status */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsGear className="w-6 h-6 mr-2 text-indigo-600" />
@@ -547,7 +547,7 @@ export default function NovoJogoPage() {
               </div>
             </div>
 
-            {/* Erro */}
+            {/* Exibição de erros */}
             {error && (
               <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
                 <div className="flex items-center">
@@ -557,7 +557,7 @@ export default function NovoJogoPage() {
               </div>
             )}
 
-            {/* Botões */}
+            {/* Botões de ação */}
             <div className="flex flex-col sm:flex-row gap-4 justify-end">
               <Link href="/devs" className="w-full sm:w-auto px-6 py-2 border border-gray-600 rounded-lg text-gray-600 hover:bg-gray-600 hover:text-white transition-colors">
                 Cancelar

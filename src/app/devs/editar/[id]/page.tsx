@@ -24,14 +24,14 @@ export default function EditarJogoPage() {
   const [error, setError] = useState<string | null>(null);
   const [progressoUpload, setProgressoUpload] = useState(0);
   
-  // Estados para arquivos selecionados
+  // Arquivos selecionados pelo usuário
   const [arquivosSelecionados, setArquivosSelecionados] = useState({
     arquivoJogo: null as File | null,
     imagemCapa: null as File | null,
     screenshots: [] as File[]
   });
 
-  // Estado para dados do formulário
+  // Dados do formulário
   const [formData, setFormData] = useState({ 
     titulo: '',
     descricao: '',
@@ -49,7 +49,7 @@ export default function EditarJogoPage() {
     status: 'rascunho' as 'rascunho' | 'publicado' | 'arquivado'
   });
 
-  // Carrega dados do jogo
+  // Carrega e valida dados do jogo
   useEffect(() => {
     async function carregarJogo() {
       if (!idJogo) return;
@@ -63,7 +63,7 @@ export default function EditarJogoPage() {
           return;
         }
 
-        // Verifica se o usuário é o dono do jogo
+        // Verifica permissão do usuário
         if (usuario?.id && data.id_usuario !== usuario.id) {
           setError('Você não tem permissão para editar este jogo');
           return;
@@ -71,7 +71,7 @@ export default function EditarJogoPage() {
 
         setJogo(data);
         
-        // Preenche formulário com dados do jogo
+        // Preenche formulário
         setFormData({
           titulo: data.titulo || '',
           descricao: data.descricao || '',
@@ -99,7 +99,7 @@ export default function EditarJogoPage() {
     carregarJogo();
   }, [idJogo, usuario?.id]);
 
-  // Lida com alterações nos campos de entrada
+  // Atualiza campos do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -108,7 +108,7 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com seleção do gênero
+  // Gerencia seleção de gêneros
   const handleGeneroChange = (genero: string) => {
     setFormData(prev => ({
       ...prev,
@@ -118,7 +118,7 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com seleção da imagem de capa
+  // Gerencia seleção de plataformas
   const handlePlataformaChange = (plataforma: string) => {
     setFormData(prev => ({
       ...prev,
@@ -128,7 +128,7 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com seleção de arquivos
+  // Seleciona arquivo do jogo
   const handleArquivoJogoSelecionado = (arquivo: File | null) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -136,7 +136,7 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com seleção da imagem de capa
+  // Seleciona imagem de capa
   const handleImagemCapaSelecionada = (arquivo: File | null) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -144,7 +144,7 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com seleção das screenshots
+  // Seleciona screenshots
   const handleScreenshotsSelecionadas = (arquivos: File[]) => {
     setArquivosSelecionados(prev => ({
       ...prev,
@@ -152,10 +152,10 @@ export default function EditarJogoPage() {
     }));
   };
 
-  // Lida com erros dos seletores de arquivos
+  // Trata erros de upload
   const handleSeletorError = (mensagem: string) => setError(mensagem);
 
-  // Lida com o envio do formulário
+  // Processa envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!usuario?.id || !jogo) return;
@@ -165,7 +165,7 @@ export default function EditarJogoPage() {
     setProgressoUpload(0);
 
     try {
-      // Verifica se há novos arquivos para upload
+      // Prepara arquivos para upload
       const arquivosParaUpload = [];
       
       if (arquivosSelecionados.arquivoJogo) {
@@ -183,7 +183,7 @@ export default function EditarJogoPage() {
         });
       }
 
-      // Adiciona screenshots se houver
+      // Adiciona screenshots
       arquivosSelecionados.screenshots.forEach(screenshot => {
         arquivosParaUpload.push({
           arquivo: screenshot,
@@ -196,7 +196,7 @@ export default function EditarJogoPage() {
       let novaImagemCapaUrl = formData.imagem_capa;
       let novasScreenshotsUrls = formData.capturas_tela ? formData.capturas_tela.split(',').map(url => url.trim()) : [];
 
-      // Faz upload dos novos arquivos se houver
+      // Executa upload de novos arquivos
       if (arquivosParaUpload.length > 0) {
         const resultadoUpload = await uploadLote(
           arquivosParaUpload,
@@ -209,7 +209,7 @@ export default function EditarJogoPage() {
           return;
         }
 
-        // Atualiza URLs com os novos uploads
+        // Atualiza URLs dos arquivos
         let indiceResultado = 0;
         
         if (arquivosSelecionados.arquivoJogo) {
@@ -228,12 +228,12 @@ export default function EditarJogoPage() {
             .filter(result => result.data)
             .map(result => result.data!.publicUrl);
           
-          // Substitui screenshots existentes pelas novas
+          // Substitui screenshots existentes
           novasScreenshotsUrls = novasScreenshots;
         }
       }
 
-      // Prepara dados para atualização
+      // Monta dados de atualização
       const dadosAtualizacao: JogoUpdate = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -254,7 +254,7 @@ export default function EditarJogoPage() {
         status: formData.status
       };
 
-      // Atualiza o jogo no banco de dados
+      // Salva no banco de dados
       const { data, error } = await updateJogo(jogo.id, dadosAtualizacao);
 
       if (error) {
@@ -269,7 +269,7 @@ export default function EditarJogoPage() {
     }
   };
 
-  // Exibe loading enquanto carrega dados do jogo
+  // Exibe loading durante carregamento
   if (loading || loadingJogo) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -284,7 +284,7 @@ export default function EditarJogoPage() {
     );
   }
 
-  // Verifica se o usuário está autenticado
+  // Verifica autenticação
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -308,7 +308,7 @@ export default function EditarJogoPage() {
     );
   }
 
-  // Verifica se houve erro ou se o jogo não foi encontrado
+  // Exibe erros de validação
   if (error) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -352,7 +352,7 @@ export default function EditarJogoPage() {
             </p>
           </div>
 
-          {/* Formulário */}
+          {/* Formulário principal */}
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Informações Básicas */}
             <div className="p-6 rounded-lg shadow-md">
@@ -441,7 +441,7 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Categorização */}
+            {/* Seção de categorização */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsTags className="w-6 h-6 mr-2 text-indigo-600" />
@@ -506,7 +506,7 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Arquivos e Links */}
+            {/* Seção de arquivos e links */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsCloudUpload className="w-6 h-6 mr-2 text-indigo-600" />
@@ -514,7 +514,7 @@ export default function EditarJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                {/* Upload do arquivo do jogo */}
+                {/* Seletor de arquivo do jogo */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Arquivo do Jogo
@@ -575,7 +575,7 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Mídia */}
+            {/* Seção de imagens */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsImage className="w-6 h-6 mr-2 text-indigo-600" />
@@ -583,7 +583,7 @@ export default function EditarJogoPage() {
               </h2>
 
               <div className="space-y-6">
-                {/* Upload de imagem de capa */}
+                {/* Seletor de imagem de capa */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Imagem de Capa
@@ -626,7 +626,7 @@ export default function EditarJogoPage() {
                   )}
                 </fieldset>
 
-                {/* Screenshots */}
+                {/* Seletor de screenshots */}
                 <fieldset>
                   <legend className="block text-sm font-medium mb-2">
                     Capturas de Tela
@@ -667,7 +667,7 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Status */}
+            {/* Configurações de status */}
             <div className="p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Icons.BsGear className="w-6 h-6 mr-2 text-indigo-600" />
@@ -692,7 +692,7 @@ export default function EditarJogoPage() {
               </div>
             </div>
 
-            {/* Erro */}
+            {/* Exibição de erros */}
             {error && (
               <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
                 <div className="flex items-center">
@@ -702,7 +702,7 @@ export default function EditarJogoPage() {
               </div>
             )}
 
-            {/* Botões */}
+            {/* Botões de ação */}
             <div className="flex flex-col sm:flex-row gap-4 justify-end">
               <Link href="/devs/meus-jogos" className="w-full sm:w-auto px-6 py-2 border border-gray-600 rounded-lg text-gray-600 hover:bg-gray-600 hover:text-white transition-colors">
                 Cancelar

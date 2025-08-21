@@ -15,7 +15,7 @@ export default function Home() {
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
   const [carregandoJogos, setCarregandoJogos] = useState(true);
 
-  // Efeito para carregar jogos em destaque
+  // Carrega jogos em destaque
   useEffect(() => {
     async function carregarJogosDestaque() {
       try {
@@ -34,7 +34,7 @@ export default function Home() {
     carregarJogosDestaque();
   }, []);
 
-  // Lida com o clique em um jogo
+  // Navega para página do jogo
   const handleJogoClick = (jogoId: string) => router.push(`/jogos/${jogoId}`);
 
   return (
@@ -124,7 +124,7 @@ export default function Home() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority={true}
                     onError={(e) => {
-                      // Se a imagem falhar, mostra placeholder
+                      // Exibe placeholder se imagem falhar
                       e.currentTarget.style.display = 'none';
                       const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
                       if (placeholder) placeholder.style.display = 'flex';

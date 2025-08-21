@@ -7,7 +7,7 @@ import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
 import { GENEROS_DISPONIVEIS } from '@/lib/dadosJogos';
 
-// Definição do estado dos filtros
+// Estado dos filtros de busca e ordenação
 interface FiltrosState {
   genero: string;
   ordenarPor: 'criado_em' | 'avaliacao' | 'contador_download' | 'titulo';
@@ -15,7 +15,7 @@ interface FiltrosState {
   busca?: string;
 }
 
-// Componente principal para exibição dos jogos
+// Componente principal da página de jogos
 function JogosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,10 +31,10 @@ function JogosContent() {
     busca: ''
   });
 
-  // Definição da quantidade de jogos por página
+  // Quantidade máxima de jogos por página
   const jogosPorPagina = 12;
 
-  // Carrega jogos com base na página e filtros
+  // Carrega jogos aplicando filtros e paginação
   const carregarJogos = async (pagina: number = 1, novosFiltros?: FiltrosState) => {
     try {
       setCarregando(true);
@@ -65,7 +65,7 @@ function JogosContent() {
     }
   };
 
-  // Efeito para carregar jogos iniciais
+  // Carrega jogos na inicialização do componente
   useEffect(() => {
     const carregarJogosIniciais = async () => {
       try {
@@ -112,7 +112,7 @@ function JogosContent() {
     carregarJogosIniciais();
   }, [searchParams]);
 
-  // UseEffect para mudanças nos filtros
+  // Recarrega jogos quando filtros mudam
   useEffect(() => {
     // Executa apenas após inicialização
     if (filtros.busca !== undefined) carregarJogos(1);
@@ -130,10 +130,10 @@ function JogosContent() {
     carregarJogos(1, filtrosAtualizados);
   };
 
-  // Lida com o clique em um jogo
+  // Navega para página do jogo
   const handleJogoClick = (jogo: Jogo) => router.push(`/jogos/${jogo.id}`);
 
-  // Gêneros disponíveis
+  // Carrega os gêneros de jogos disponíveis
   const generos = ['todos', ...GENEROS_DISPONIVEIS];
 
   return (
@@ -228,7 +228,7 @@ function JogosContent() {
                 </select>
               </div>
 
-              {/* Ordem */}
+              {/* Ordenação (crescente ou decrescente) */}
               <button
                 onClick={() => handleMudarFiltro({ 
                   ordem: filtros.ordem === 'desc' ? 'asc' : 'desc' 
