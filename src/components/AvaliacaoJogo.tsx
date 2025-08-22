@@ -12,11 +12,13 @@ import {
 } from '@/lib/database';
 import type { Avaliacao } from '@/types';
 
+// Propriedades para o componente de avaliação do jogo
 interface AvaliacaoJogoProps {
   idJogo: string;
   avaliacaoMedia: number;
 }
 
+// Interface para avaliação com informações do usuário
 interface AvaliacaoComUsuario extends Avaliacao {
   usuarios: {
     nome: string;
