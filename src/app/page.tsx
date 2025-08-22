@@ -8,18 +8,24 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard } from 'swiper/modules';
 import { useEffect, useState } from 'react';
 import { getJogosEmDestaque } from '@/lib/database';
+import { useHasMounted } from '@/hooks/useHasMounted';
 import type { Jogo } from '@/types';
 
 export default function Home() {
   const router = useRouter();
+  const hasMounted = useHasMounted();
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
   const [carregandoJogos, setCarregandoJogos] = useState(true);
 
   // Carrega jogos em destaque
   useEffect(() => {
+    // Só executa após a hidratação
+    if (!hasMounted) return;
+
     async function carregarJogosDestaque() {
       try {
         setCarregandoJogos(true);
+        
         const { data, error } = await getJogosEmDestaque();
 
         if (error) console.error('Erro ao carregar jogos em destaque:', error);
@@ -32,10 +38,27 @@ export default function Home() {
     }
 
     carregarJogosDestaque();
-  }, []);
+  }, [hasMounted]);
 
   // Navega para página do jogo
   const handleJogoClick = (jogoId: string) => router.push(`/jogos/${jogoId}`);
+
+  // Não renderiza nada até a hidratação para evitar mismatch
+  if (!hasMounted) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <Header />
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <DotLottieReact
+            src="/assets/loading.lottie"
+            autoplay
+            loop
+            className="w-16 h-16"
+          />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background text-foreground">

@@ -1,16 +1,26 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/supabase';
 
-const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const sbAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Obtém as variáveis de ambiente de forma segura
+const getSupabaseConfig = () => {
+  // Verifica se está no lado do cliente
+  if (typeof window === 'undefined')  return { sbUrl: null, sbAnonKey: null, sbConfig: false };
 
-// Verifica se as variáveis estão configuradas
-const sbConfig = sbUrl && sbAnonKey && sbUrl !== 'your_supabase_project_url' && sbAnonKey !== 'your_supabase_anon_key';
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!sbConfig) console.warn('⚠️ Supabase não configurado. Configure as variáveis de ambiente.');
+  // Verifica se as variáveis estão configuradas
+  const sbConfig = sbUrl && sbAnonKey && sbUrl !== 'your_supabase_project_url' && sbAnonKey !== 'your_supabase_anon_key';
+
+  if (!sbConfig && typeof window !== 'undefined') console.warn('⚠️ Supabase não configurado.');
+
+  return { sbUrl, sbAnonKey, sbConfig };
+};
+
+const { sbUrl, sbAnonKey, sbConfig } = getSupabaseConfig();
 
 // Cliente principal do Supabase (client-side)
-const sb = sbConfig ? createClient<Database>(sbUrl, sbAnonKey, {
+const sb = sbConfig && sbUrl && sbAnonKey && typeof window !== 'undefined' ? createClient<Database>(sbUrl, sbAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -19,7 +29,7 @@ const sb = sbConfig ? createClient<Database>(sbUrl, sbAnonKey, {
 }) : null;
 
 // Cliente com service role (server-side apenas)
-const sbAdmin = sbConfig && process.env.SUPABASE_SERVICE_ROLE_KEY ? 
+const sbAdmin = sbConfig && sbUrl && process.env.SUPABASE_SERVICE_ROLE_KEY ? 
   createClient<Database>(
     sbUrl,
     process.env.SUPABASE_SERVICE_ROLE_KEY,
