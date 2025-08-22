@@ -25,17 +25,17 @@ export default function Footer() {
           <div>
             <h6 className="font-semibold mb-4">Jogadores</h6>
             <ul className="space-y-2 text-md">
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Explorar Jogos</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Gêneros</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Novidades</a></li>
+              <li><Link href="/" className="hover:text-indigo-600 transition-colors">Inicio</Link></li>
+              <li><Link href="/jogos" className="hover:text-indigo-600 transition-colors">Explorar Jogos</Link></li>
+              <li><Link href="/sobre" className="hover:text-indigo-600 transition-colors">Sobre</Link></li>
             </ul>
           </div>
           <div>
             <h6 className="font-semibold mb-4">Desenvolvedores</h6>
             <ul className="space-y-2 text-md">
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Publicar Jogo</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Documentação</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Comunidade</a></li>
+              <li><Link href="/devs" className="hover:text-indigo-600 transition-colors">Desenvolvedor</Link></li>
+              <li><Link href="/devs/meus-jogos" className="hover:text-indigo-600 transition-colors">Seus Jogos</Link></li>
+              <li><Link href="/devs/novo-jogo" className="hover:text-indigo-600 transition-colors">Publicar Jogo</Link></li>
             </ul>
           </div>
           <div>
