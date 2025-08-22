@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Header, Footer, Icons, Breadcrumb } from '@/components';
+import { Header, Footer, Icons, Breadcrumb, AvaliacaoJogo } from '@/components';
 import { getJogoPorID } from '@/lib/database';
 import type { Jogo } from '@/types';
 
@@ -173,7 +173,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Seção de descrição */}
-            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg p-6 mb-8">
               <h2 className="text-2xl font-bold mb-4">
                 Sobre o jogo
               </h2>
@@ -189,12 +189,18 @@ export default function DetalhesJogoPage() {
                 )}
               </div>
             </div>
+
+            {/* Seção de avaliações */}
+            <AvaliacaoJogo 
+              idJogo={jogo.id} 
+              avaliacaoMedia={jogo.avaliacao || 0} 
+            />
           </div>
 
           {/* Informações laterais */}
           <div className="space-y-6">
             {/* Card principal */}
-            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg p-6">
               <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold mb-2">
                   {jogo.titulo}
@@ -274,7 +280,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Detalhes técnicos */}
-            <div className="rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 p-6">
+            <div className="rounded-lg shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4">
                 Informações Técnicas
               </h3>

@@ -233,7 +233,7 @@ export default function Home() {
       </section>
 
       {/* Seção de Exploração */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-linear-to-t from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto text-center">
           <h3 className="text-3xl font-bold mb-4">Pronto para descobrir?</h3>
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto text-gray-600 dark:text-gray-400">

@@ -11,6 +11,7 @@ export { default as Breadcrumb } from "./Breadcrumb";
 export { default as UploadArquivo } from "./UploadArquivo";
 export { default as SeletorArquivo } from "./SeletorArquivo";
 export { default as SeletorScreenshots } from "./SeletorScreenshots";
+export { default as AvaliacaoJogo } from "./AvaliacaoJogo";
 export type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb";
 
 // Importa ícones da biblioteca do React

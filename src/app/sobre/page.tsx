@@ -122,7 +122,7 @@ export default function Sobre() {
       </section>
 
       {/* Seção Valores */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-linear-to-t from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Nossos <span className="text-indigo-600">Valores</span></h2>
@@ -239,7 +239,7 @@ export default function Sobre() {
       </section>
 
       {/* Seção Tecnologia */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4 bg-linear-to-t from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Tecno<span className="text-indigo-600">logia</span></h2>

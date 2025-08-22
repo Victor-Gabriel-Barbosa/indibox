@@ -97,7 +97,7 @@ export default function DevsPage() {
       <Header />
 
       {/* Seção Principal */}
-      <section className="pt-10 px-4">
+      <section className="pt-10 px-4 bg-linear-to-br from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Área do
@@ -120,7 +120,7 @@ export default function DevsPage() {
       </section>
 
       {/* Estatísticas Rápidas */}
-      <section className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
+      <section className="py-10 px-4 bg-linear-to-tr from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="mx-auto max-w-2xl overflow-x-clip">
           <DotLottieReact src="/assets/developer.lottie" loop autoplay
             style={{

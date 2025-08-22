@@ -122,9 +122,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               nome_usuario_github: userData.nome_usuario_github,
               nome_usuario_twitter: userData.nome_usuario_twitter,
             });
+            setAutenticado(true);
           }
         });
-      }
+      } else setAutenticado(false);
       
       setLoading(false);
     });

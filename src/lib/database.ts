@@ -569,3 +569,123 @@ export async function deleteJogo(idJogo: string, idUsuario: string) {
     return { error: { message: 'Erro interno do servidor' } };
   }
 }
+
+// ================================
+// OPERAÇÕES COM AVALIAÇÕES
+// ================================
+
+// Busca avaliações de um jogo
+export async function getAvaliacoesJogo(idJogo: string) {
+  if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
+  if (!validate(idJogo)) return { data: [], error: { message: 'ID do jogo inválido' } };
+
+  try {
+    const { data, error } = await sb
+      .from('avaliacoes')
+      .select(`
+        *,
+        usuarios (
+          nome,
+          url_avatar
+        )
+      `)
+      .eq('id_jogo', idJogo)
+      .order('criado_em', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao buscar avaliações:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao buscar avaliações:', error);
+    return { data: [], error: { message: 'Erro interno do servidor' } };
+  }
+}
+
+// Busca avaliação específica do usuário para um jogo
+export async function getAvaliacaoUsuario(idJogo: string, idUsuario: string) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
+  if (!validate(idJogo) || !validate(idUsuario)) return { data: null, error: { message: 'IDs inválidos' } };
+
+  try {
+    const { data, error } = await sb
+      .from('avaliacoes')
+      .select('*')
+      .eq('id_jogo', idJogo)
+      .eq('id_usuario', idUsuario)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Erro ao buscar avaliação do usuário:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao buscar avaliação do usuário:', error);
+    return { data: null, error: { message: 'Erro interno do servidor' } };
+  }
+}
+
+// Cria ou atualiza uma avaliação
+export async function upsertAvaliacao(
+  idJogo: string, 
+  idUsuario: string, 
+  avaliacao: number, 
+  comentario?: string
+) {
+  if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
+  if (!validate(idJogo) || !validate(idUsuario)) return { data: null, error: { message: 'IDs inválidos' } };
+  if (avaliacao < 1 || avaliacao > 5) return { data: null, error: { message: 'Avaliação deve ser entre 1 e 5 estrelas' } };
+
+  try {
+    const { data, error } = await sb
+      .from('avaliacoes')
+      .upsert({
+        id_jogo: idJogo,
+        id_usuario: idUsuario,
+        avaliacao,
+        comentario: comentario || null
+      }, {
+        onConflict: 'id_jogo,id_usuario'
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Erro ao salvar avaliação:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Erro ao salvar avaliação:', error);
+    return { data: null, error: { message: 'Erro interno do servidor' } };
+  }
+}
+
+// Remove uma avaliação
+export async function deleteAvaliacao(idJogo: string, idUsuario: string) {
+  if (!sbConfig || !sb) return { error: { message: 'Banco de dados não configurado' } };
+  if (!validate(idJogo) || !validate(idUsuario)) return { error: { message: 'IDs inválidos' } };
+
+  try {
+    const { error } = await sb
+      .from('avaliacoes')
+      .delete()
+      .eq('id_jogo', idJogo)
+      .eq('id_usuario', idUsuario);
+
+    if (error) {
+      console.error('Erro ao deletar avaliação:', error);
+      return { error };
+    }
+
+    return { error: null };
+  } catch (error) {
+    console.error('Erro ao deletar avaliação:', error);
+    return { error: { message: 'Erro interno do servidor' } };
+  }
+}
