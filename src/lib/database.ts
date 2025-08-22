@@ -280,9 +280,9 @@ export async function ehJogoFavorito(idUsuario: string, idJogo: string) {
       .select('id')
       .eq('id_usuario', idUsuario)
       .eq('id_jogo', idJogo)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Erro ao verificar favorito:', error);
       return { ehFavorito: false, error };
     }
@@ -621,9 +621,9 @@ export async function getAvaliacaoUsuario(idJogo: string, idUsuario: string) {
       .select('*')
       .eq('id_jogo', idJogo)
       .eq('id_usuario', idUsuario)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Erro ao buscar avaliação do usuário:', error);
       return { data: null, error };
     }
