@@ -139,7 +139,7 @@ export default function DevsPage() {
               <p>Jogos Publicados</p>
             </div>
             <div className="p-6 rounded-lg shadow-lg shadow-indigo-400 dark:shadow-indigo-600 duration-300 text-center hover:shadow-xl">
-              <Icons.BsDownload className="w-12 h-12 text-green-600 mx-auto mb-4" />
+              <Icons.BsDownload className="w-12 h-12 text-indigo-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">
                 {jogosDoUsuario.reduce((total, jogo) => total + (jogo.contador_download || 0), 0)}
               </h3>

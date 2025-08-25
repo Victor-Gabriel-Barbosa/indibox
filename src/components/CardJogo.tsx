@@ -93,7 +93,7 @@ export default function CardJogo({ jogo, onClick, priority = false }: CardJogoPr
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              <Icons.BsDownload className="w-4 h-4 text-green-500" />
+              <Icons.BsDownload className="w-4 h-4 text-indigo-500" />
               <span>
                 {jogo.contador_download || 0}
               </span>

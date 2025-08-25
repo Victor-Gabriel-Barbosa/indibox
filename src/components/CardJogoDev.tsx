@@ -178,7 +178,7 @@ export default function CardJogoDev({ jogo, onClick, onDelete, priority = false 
                   <span>{jogo.avaliacao?.toFixed(1) || 'N/A'}</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Icons.BsDownload className="w-4 h-4 text-green-500" />
+                  <Icons.BsDownload className="w-4 h-4 text-indigo-500" />
                   <span>{jogo.contador_download || 0}</span>
                 </div>
               </div>

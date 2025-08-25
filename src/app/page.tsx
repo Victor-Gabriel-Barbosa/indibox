@@ -181,7 +181,7 @@ export default function Home() {
                       <span className="text-white text-sm">{jogo.avaliacao?.toFixed(1) || 'N/A'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Icons.BsDownload className="w-4 h-4 text-gray-300" />
+                      <Icons.BsDownload className="w-4 h-4 text-indigo-500" />
                       <span className="text-white text-sm">{jogo.contador_download || 0}</span>
                     </div>
                   </div>

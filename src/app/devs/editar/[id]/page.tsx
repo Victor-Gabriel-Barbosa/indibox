@@ -404,7 +404,7 @@ export default function EditarJogoPage() {
                     name="data_lancamento"
                     value={formData.data_lancamento}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="scheme-light dark:scheme-dark w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
 
