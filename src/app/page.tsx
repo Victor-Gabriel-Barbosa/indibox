@@ -204,7 +204,7 @@ export default function Home() {
       <section id="jogos" className="py-10 px-4 bg-linear-to-b from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold mb-4">Por que IndiBox?</h3>
+            <h3 className="text-3xl font-bold mb-4">Por que Ind<span className="text-indigo-600">iBox?</span></h3>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               A plataforma perfeita para descobrir e compartilhar jogos indie gratuitos, criada por e para a comunidade.
             </p>
@@ -258,7 +258,7 @@ export default function Home() {
       {/* Seção de Exploração */}
       <section className="py-10 px-4 bg-linear-to-t from-white dark:from-black to-indigo-200 dark:to-indigo-950">
         <div className="container mx-auto text-center">
-          <h3 className="text-3xl font-bold mb-4">Pronto para descobrir?</h3>
+          <h3 className="text-3xl font-bold mb-4">Pronto para <span className="text-indigo-600">descobrir?</span></h3>
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
             Junte-se à nossa comunidade de jogadores e desenvolvedores apaixonados por jogos indie gratuitos.
           </p>
