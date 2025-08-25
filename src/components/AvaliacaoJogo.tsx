@@ -215,7 +215,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
       {/* Seção para avaliar (apenas usuários logados) */}
       {usuario ? (
-        <div className="mb-6 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="mb-6 p-3 sm:p-4 rounded-lg">
           {avaliacaoUsuario ? (
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
@@ -316,7 +316,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
           )}
         </div>
       ) : (
-        <div className="mb-6 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-center">
+        <div className="mb-6 p-3 sm:p-4 rounded-lg text-center">
           <p className="text-gray-600 dark:text-gray-400 mb-2">
             Faça login para avaliar este jogo
           </p>
