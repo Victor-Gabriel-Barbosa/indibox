@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 export function useHasMounted() {
   const [hasMounted, setHasMounted] = useState(false);
 
+  // Define que o componente foi montado
   useEffect(() => {
     setHasMounted(true);
   }, []);

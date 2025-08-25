@@ -47,9 +47,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
       setLoading(true);
       try {
         const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-        if (avaliacoesData) {
-          setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
-        }
+        if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
 
         // Se o usuário está logado, carrega sua avaliação
         if (usuario?.id) {
@@ -94,9 +92,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
       // Recarrega avaliações
       const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-      if (avaliacoesData) {
-        setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
-      }
+      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
     } catch (error) {
       console.error('Erro ao salvar avaliação:', error);
       alert('Erro inesperado ao salvar avaliação');
@@ -128,9 +124,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
       // Recarrega avaliações
       const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-      if (avaliacoesData) {
-        setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
-      }
+      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
     } catch (error) {
       console.error('Erro ao remover avaliação:', error);
       alert('Erro inesperado ao remover avaliação');
