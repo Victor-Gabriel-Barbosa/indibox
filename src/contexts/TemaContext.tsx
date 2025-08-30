@@ -70,6 +70,6 @@ export function TemaProvider({ children }: TemaProviderProps) {
 // Hook para acessar o contexto do tema
 export function useTema() {
   const context = useContext(TemaContext);
-  if (context === undefined) throw new Error('useTheme deve ser usado dentro de um ThemeProvider');
+  if (context === undefined) throw new Error('useTema deve ser usado dentro de um TemaProvider');
   return context;
 }
