@@ -76,19 +76,19 @@ export default function EditarJogoPage() {
         
         // Preenche formulário
         setFormData({
-          titulo: data.titulo ?? '',
-          descricao: data.descricao ?? '',
-          descricao_curta: data.descricao_curta ?? '',
-          desenvolvedor: data.desenvolvedor ?? '',
+          titulo: data.titulo || '',
+          descricao: data.descricao || '',
+          descricao_curta: data.descricao_curta || '',
+          desenvolvedor: data.desenvolvedor || '',
           data_lancamento: data.data_lancamento ?? '',
-          genero: data.genero ?? [],
-          tags: data.tags?.join(', ') ?? '',
-          url_download: data.url_download ?? '',
-          url_site: data.url_site ?? '',
-          url_github: data.url_github ?? '',
-          imagem_capa: data.imagem_capa ?? '',
-          capturas_tela: data.capturas_tela?.join(', ') ?? '',
-          plataforma: data.plataforma ?? [],
+          genero: data.genero || [],
+          tags: data.tags?.join(', ') || '',
+          url_download: data.url_download || '',
+          url_site: data.url_site || '',
+          url_github: data.url_github || '',
+          imagem_capa: data.imagem_capa || '',
+          capturas_tela: data.capturas_tela?.join(', ') || '',
+          plataforma: data.plataforma || [],
           status: (data.status as 'rascunho' | 'publicado' | 'arquivado') || 'rascunho'
         });
       } catch (error) {
@@ -249,17 +249,17 @@ export default function EditarJogoPage() {
         descricao: formData.descricao,
         descricao_curta: formData.descricao_curta,
         desenvolvedor: formData.desenvolvedor,
-        data_lancamento: formData.data_lancamento ?? null,
+        data_lancamento: formData.data_lancamento || null,
         genero: formData.genero,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        url_download: novoArquivoJogoUrl ?? null,
-        url_site: formData.url_site ?? null,
-        url_github: formData.url_github ?? null,
-        imagem_capa: novaImagemCapaUrl ?? null,
+        url_download: novoArquivoJogoUrl || null,
+        url_site: formData.url_site || null,
+        url_github: formData.url_github || null,
+        imagem_capa: novaImagemCapaUrl || null,
         capturas_tela: novasScreenshotsUrls,
         tamanho_arquivo: arquivosSelecionados.arquivoJogo 
           ? formatarBytes(arquivosSelecionados.arquivoJogo.size)
-          : jogo?.tamanho_arquivo ?? null,
+          : jogo?.tamanho_arquivo || null,
         plataforma: formData.plataforma,
         status: formData.status
       };
