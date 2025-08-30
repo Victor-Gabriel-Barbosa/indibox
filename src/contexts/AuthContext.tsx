@@ -5,7 +5,6 @@ import { User, Session } from '@supabase/supabase-js';
 import { sb } from '@/lib/supabase';
 import { upsertUsuario } from '@/lib/database';
 import { salvarUrlRedir } from '@/lib/redirect';
-import { useHasMounted } from '@/hooks/useHasMounted';
 
 // Interface para o usuário autenticado
 interface AuthUser {
@@ -37,7 +36,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provedor de autenticação
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const hasMounted = useHasMounted();
   const [usuario, setUsuario] = useState<AuthUser | null>(null);
   const [sessao, setSessao] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -97,9 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Só executa após a hidratação para evitar mismatch
-    if (!hasMounted) return;
-
     // Verifica se o Supabase está disponível
     if (!sb) {
       setLoading(false);
@@ -165,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     return () => subscription.unsubscribe();
-  }, [hasMounted]);
+  }, []);
 
   // Login com Google
   const signInGoogle = async () => {

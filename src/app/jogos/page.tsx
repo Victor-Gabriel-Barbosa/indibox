@@ -4,7 +4,6 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Header, Footer, GameCard, Pagination, Icons, DotLottieReact } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
-import { useHasMounted } from '@/hooks/useHasMounted';
 import type { Jogo } from '@/types';
 import { GENEROS_DISPONIVEIS } from '@/lib/dadosJogos';
 
@@ -20,7 +19,6 @@ interface FiltrosState {
 function JogosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const hasMounted = useHasMounted();
   const [jogos, setJogos] = useState<Jogo[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [paginaAtual, setPaginaAtual] = useState(1);
@@ -69,9 +67,6 @@ function JogosContent() {
 
   // Carrega jogos na inicialização do componente
   useEffect(() => {
-    // Só executa após a hidratação
-    if (!hasMounted) return;
-
     const carregarJogosIniciais = async () => {
       try {
         setCarregando(true);
@@ -115,7 +110,7 @@ function JogosContent() {
     };
 
     carregarJogosIniciais();
-  }, [hasMounted, searchParams]);
+  }, [searchParams]);
 
   // Recarrega jogos quando filtros mudam
   useEffect(() => {

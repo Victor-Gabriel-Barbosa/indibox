@@ -99,7 +99,6 @@ export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promi
       },
       error: null
     };
-
   } catch (error) {
     console.error('Erro no upload do arquivo do jogo:', error);
     return {
@@ -149,7 +148,6 @@ export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa
       },
       error: null
     };
-
   } catch (error) {
     console.error('Erro no upload da imagem:', error);
     return {

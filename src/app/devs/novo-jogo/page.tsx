@@ -154,23 +154,23 @@ export default function NovoJogoPage() {
       }
 
       // Processa resultados do upload
-      const arquivoJogoResult = resultadoUpload.resultados[0];
-      const imagemCapaResult = resultadoUpload.resultados[1];
-      const screenshotsResults = resultadoUpload.resultados.slice(2);
+      const arquivoJogo = resultadoUpload.resultados[0];
+      const imagemCapa = resultadoUpload.resultados[1];
+      const screenshots = resultadoUpload.resultados.slice(2);
 
-      if (!arquivoJogoResult.data || !imagemCapaResult.data) {
+      if (!arquivoJogo.data || !imagemCapa.data) {
         setError('Erro ao processar uploads dos arquivos obrigatórios.');
         return;
       }
 
       // Extrai URLs das screenshots
-      const screenshotsUrls = screenshotsResults
-        .filter(result => result.data)
-        .map(result => result.data!.publicUrl);
+      const screenshotsUrls = screenshots
+        .filter(res => res.data)
+        .map(res => res.data!.publicUrl);
       
-      const screenshotsPaths = screenshotsResults
-        .filter(result => result.data)
-        .map(result => result.data!.path);
+      const screenshotsPaths = screenshots
+        .filter(res => res.data)
+        .map(res => res.data!.path);
 
       // Monta dados do jogo
       const dadosJogo = {
@@ -181,10 +181,10 @@ export default function NovoJogoPage() {
         data_lancamento: formData.data_lancamento || null,
         genero: formData.genero,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        url_download: arquivoJogoResult.data.publicUrl,
+        url_download: arquivoJogo.data.publicUrl,
         url_site: formData.url_site || null,
         url_github: formData.url_github || null,
-        imagem_capa: imagemCapaResult.data.publicUrl,
+        imagem_capa: imagemCapa.data.publicUrl,
         capturas_tela: screenshotsUrls,
         tamanho_arquivo: formatarBytes(arquivosSelecionados.arquivoJogo.size),
         plataforma: formData.plataforma,
@@ -193,8 +193,8 @@ export default function NovoJogoPage() {
         destaque: false,
         avaliacao: 0,
         contador_download: 0,
-        arquivo_jogo_path: arquivoJogoResult.data.path,
-        imagem_capa_path: imagemCapaResult.data.path,
+        arquivo_jogo_path: arquivoJogo.data.path,
+        imagem_capa_path: imagemCapa.data.path,
         capturas_tela_paths: screenshotsPaths
       } as const;
 

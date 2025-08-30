@@ -213,20 +213,20 @@ export default function EditarJogoPage() {
         let indiceResultado = 0;
         
         if (arquivosSelecionados.arquivoJogo) {
-          const result = resultadoUpload.resultados[indiceResultado++];
-          if (result.data) novoArquivoJogoUrl = result.data.publicUrl;
+          const res = resultadoUpload.resultados[indiceResultado++];
+          if (res.data) novoArquivoJogoUrl = res.data.publicUrl;
         }
         
         if (arquivosSelecionados.imagemCapa) {
-          const result = resultadoUpload.resultados[indiceResultado++];
-          if (result.data) novaImagemCapaUrl = result.data.publicUrl;
+          const res = resultadoUpload.resultados[indiceResultado++];
+          if (res.data) novaImagemCapaUrl = res.data.publicUrl;
         }
 
         if (arquivosSelecionados.screenshots.length > 0) {
-          const screenshotsResults = resultadoUpload.resultados.slice(indiceResultado);
-          const novasScreenshots = screenshotsResults
-            .filter(result => result.data)
-            .map(result => result.data!.publicUrl);
+          const screenshots = resultadoUpload.resultados.slice(indiceResultado);
+          const novasScreenshots = screenshots
+            .filter(res => res.data)
+            .map(res => res.data!.publicUrl);
           
           // Substitui screenshots existentes
           novasScreenshotsUrls = novasScreenshots;

@@ -3,16 +3,13 @@ import type { Database } from '@/types/supabase';
 
 // Obtém as variáveis de ambiente de forma segura
 const getSupabaseConfig = () => {
-  // Verifica se está no lado do cliente
-  if (typeof window === 'undefined')  return { sbUrl: null, sbAnonKey: null, sbConfig: false };
-
   const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const sbAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   // Verifica se as variáveis estão configuradas
   const sbConfig = sbUrl && sbAnonKey && sbUrl !== 'your_supabase_project_url' && sbAnonKey !== 'your_supabase_anon_key';
 
-  if (!sbConfig && typeof window !== 'undefined') console.warn('⚠️ Supabase não configurado.');
+  if (!sbConfig) console.warn('⚠️ Supabase não configurado.');
 
   return { sbUrl, sbAnonKey, sbConfig };
 };
@@ -20,7 +17,7 @@ const getSupabaseConfig = () => {
 const { sbUrl, sbAnonKey, sbConfig } = getSupabaseConfig();
 
 // Cliente principal do Supabase (client-side)
-const sb = sbConfig && sbUrl && sbAnonKey && typeof window !== 'undefined' ? createClient<Database>(sbUrl, sbAnonKey, {
+const sb = sbConfig && sbUrl && sbAnonKey ? createClient<Database>(sbUrl, sbAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,

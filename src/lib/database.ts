@@ -8,9 +8,6 @@ import { validate } from 'uuid';
 
 // Busca todos os jogos publicados
 export async function getJogosPublicados() {
-  // Verificação adicional para SSR
-  if (typeof window === 'undefined') return { data: [], error: { message: 'Função executada no servidor' } };
-
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
@@ -34,9 +31,6 @@ export async function getJogosPublicados() {
 
 // Busca jogos em destaque
 export async function getJogosEmDestaque() {
-  // Verificação adicional para SSR
-  if (typeof window === 'undefined') return { data: [], error: { message: 'Função executada no servidor' } };
-
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {

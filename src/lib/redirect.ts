@@ -13,7 +13,7 @@ export function validarUrlRedir(url: string): boolean {
     
     // Para URLs absolutas verifica se são do mesmo domínio
     const urlObj = new URL(url);
-    const dominioAtual = typeof window !== 'undefined' ? window.location.hostname : '';
+    const dominioAtual = window.location.hostname;
     
     return urlObj.hostname === dominioAtual;
   } catch {
@@ -23,7 +23,6 @@ export function validarUrlRedir(url: string): boolean {
 
 // Obtém a URL de redirecionamento segura do localStorage
 export function getUrlSegura(): string {
-  if (typeof window === 'undefined') return '/';
   const redirUrl = localStorage.getItem('redirAposLogin');
   if (!redirUrl || !validarUrlRedir(redirUrl)) return '/';
   return redirUrl;
@@ -31,8 +30,6 @@ export function getUrlSegura(): string {
 
 // Armazena a URL atual para redirecionamento após login
 export function salvarUrlRedir(): void {
-  if (typeof window === 'undefined') return;
-  
   const currentUrl = window.location.pathname + window.location.search;
   
   // Não armazena URLs de autenticação
@@ -43,6 +40,5 @@ export function salvarUrlRedir(): void {
 
 // Remove a URL de redirecionamento do localStorage
 export function removerUrlRedir(): void {
-  if (typeof window === 'undefined') return;
   localStorage.removeItem('redirAposLogin');
 }
