@@ -189,7 +189,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
   // Exibe placeholder durante carregamento
   if (loading) {
     return (
-      <div className="rounded-lg shadow-lg p-6">
+      <div className="rounded-lg p-6">
         <div className="animate-pulse">
           <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
           <div className="space-y-3">
@@ -202,7 +202,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
   }
 
   return (
-    <div className="rounded-lg shadow-lg p-4 sm:p-6">
+    <div className="rounded-lg p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
         <h3 className="text-xl font-bold">Avaliações</h3>
         <div className="flex items-center space-x-2">

@@ -177,7 +177,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Seção de descrição */}
-            <div className="rounded-lg shadow-lg p-6 mb-8">
+            <div className="rounded-lg mb-8">
               <h2 className="text-2xl font-bold mb-4">
                 Sobre o jogo
               </h2>
@@ -204,7 +204,7 @@ export default function DetalhesJogoPage() {
           {/* Informações laterais */}
           <div className="space-y-6 sticky top-15 self-start">
             {/* Card principal */}
-            <div className="rounded-lg shadow-lg p-6">
+            <div className="rounded-lg">
               <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold mb-2">
                   {jogo.titulo}
@@ -284,7 +284,7 @@ export default function DetalhesJogoPage() {
             </div>
 
             {/* Detalhes técnicos */}
-            <div className="rounded-lg shadow-lg p-6">
+            <div className="rounded-lg">
               <h3 className="text-xl font-bold mb-4">
                 Informações Técnicas
               </h3>
