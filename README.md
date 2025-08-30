@@ -1,68 +1,6 @@
 # 🎮 IndieBox
 
-**IndieBox** é uma plataforma web inspirada no [itch.io](https://itch.io), dedicada exclusivamente a **jogos indie gratuitos**. Nosso objetivo é criar um espaço acessível onde desenvolvedores independentes possam compartilhar suas criações e jogadores descubram exper## 💡 Próximas Funcio---
-
-## 🤝 Contribuições
-
-Sinta-se à vontade para abrir **issues**, enviar **pull requests** ou sugerir ideias. A IndieBox é um projeto comunitário, feito para devs e por devs!
-
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
----
-
-## 💡 Próximas Funcionalidades
-
-### 🚀 Curto Prazo
-
-* 📊 **Dashboard analítico** para desenvolvedores com métricas avançadas
-* 🔗 **Sistema de favoritos** para jogadores
-* 🏷️ **Tags customizáveis** e melhor categorização
-* 🔔 **Notificações** em tempo real para atualizações
-
-### 🎯 Médio Prazo
-
-* 👥 **Sistema de seguidores** entre usuários
-* 🎮 **Collections** temáticas curadas
-* 🏆 **Sistema de conquistas** para desenvolvedores
-* 📱 **PWA** (Progressive Web App) para mobile
-
-### 🌟 Longo Prazo
-
-* 🤖 **Recomendações com IA** baseadas em preferências
-* 💬 **Chat em tempo real** entre desenvolvedores
-* 🌍 **Suporte multi-idioma** completo
-* 📈 **Monetização opcional** para desenvolvedores
-
----
-
-## ✨ Entre em Contato
-
-> Links de contato
-
-* GitHub: [@Victor-Gabriel-Barbosa](https://github.com/Victor-Gabriel-Barbosa)urto Prazo
-
-* 📊 **Dashboard analítico** para desenvolvedores com métricas avançadas
-* 🔗 **Sistema de favoritos** para jogadores
-* 🏷️ **Tags customizáveis** e melhor categorização
-* 🔔 **Notificações** em tempo real para atualizações
-
-### 🎯 Médio Prazo
-
-* 👥 **Sistema de seguidores** entre usuários
-* 🎮 **Collections** temáticas curadas
-* 🏆 **Sistema de conquistas** para desenvolvedores
-* 📱 **PWA** (Progressive Web App) para mobile
-
-### 🌟 Longo Prazo
-
-* 🤖 **Recomendações com IA** baseadas em preferências
-* 💬 **Chat em tempo real** entre desenvolvedores
-* 🌍 **Suporte multi-idioma** completo
-* 📈 **Monetização opcional** para desenvolvedoresativas e **100% sem custo**.
+**IndieBox** é uma plataforma web inspirada no [itch.io](https://itch.io), dedicada exclusivamente a **jogos indie gratuitos**. Nosso objetivo é criar um espaço acessível onde desenvolvedores independentes possam compartilhar suas criações e jogadores descubram experiências únicas, criativas e **100% sem custo**.
 
 **🌐 Acesse a plataforma:** [indibox.vercel.app](https://indibox.vercel.app/)
 
@@ -168,23 +106,16 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 * 🗃️ **Supabase Storage** - Armazenamento de arquivos (jogos/imagens)
 * 🔒 **OAuth Integração** - Google e GitHub via Supabase Auth
 
-**Gerenciamento de Estado:**
+**DevTools:**
 
-* ⚛️ **React Context** - Estados globais (Auth, Tema)
-* 🪝 **Custom Hooks** - Lógica reutilizável
-* 🔄 **Real-time Sync** - Sincronização automática com Supabase
-
-**DevTools & Qualidade:**
-
+* 📘 **TypeScript** - Tipagem estática
 * 🧹 **ESLint** - Linting e qualidade de código
 * 📝 **Documentação** - Guias de configuração inclusos
-* 🔧 **Turbopack** - Build tool otimizado do Next.js
 
 **Deploy & Hospedagem:**
 
 * ▲ **Vercel** - Hospedagem e deploy automático
 * 🌐 **Domínio**: [indibox.vercel.app](https://indibox.vercel.app/)
-* 🚀 **Deploy Contínuo** - Automático via Git
 
 ---
 
@@ -234,19 +165,19 @@ Para funcionalidades completas, configure:
 
 ```text
 src/
-├── app/                           # App Router (Next.js 15)
-│   ├── auth/callback/             # Callback de autenticação OAuth
-│   ├── devs/                      # Área do desenvolvedor
+├── app/                          # App Router (Next.js 15)
+│   ├── auth/callback/            # Callback de autenticação OAuth
+│   ├── devs/                     # Área do desenvolvedor
 │   │   ├── editar/[id]/          # Editar jogo específico
 │   │   ├── meus-jogos/           # Lista de jogos do dev
 │   │   └── novo-jogo/            # Criar novo jogo
-│   ├── jogos/                     # Catálogo de jogos
+│   ├── jogos/                    # Catálogo de jogos
 │   │   └── [id]/                 # Detalhes do jogo
-│   ├── sobre/                     # Página sobre o projeto
-│   ├── layout.tsx                 # Layout principal
-│   ├── page.tsx                   # Página inicial
-│   └── globals.css                # Estilos globais
-├── components/                    # Componentes React reutilizáveis
+│   ├── sobre/                    # Página sobre o projeto
+│   ├── layout.tsx                # Layout principal
+│   ├── page.tsx                  # Página inicial
+│   └── globals.css               # Estilos globais
+├── components/                   # Componentes React reutilizáveis
 │   ├── AvaliacaoJogo.tsx         # Sistema de avaliações
 │   ├── Breadcrumb.tsx            # Navegação em trilha
 │   ├── CardJogo.tsx              # Card de jogo no catálogo
@@ -261,23 +192,23 @@ src/
 │   ├── SyncUsuario.tsx           # Sincronização de usuário
 │   ├── UploadArquivo.tsx         # Sistema de upload avançado
 │   └── Layout.tsx                # Layout wrapper
-├── contexts/                      # Contextos React
+├── contexts/                     # Contextos React
 │   ├── AuthContext.tsx           # Gerenciamento de autenticação
 │   └── TemaContext.tsx           # Gerenciamento de temas
-├── hooks/                         # Hooks customizados
+├── hooks/                        # Hooks customizados
 │   ├── useSupabase.ts            # Hook para Supabase
 │   └── useSyncUsuario.ts         # Hook de sincronização
-├── lib/                           # Utilities e configurações
+├── lib/                          # Utilities e configurações
 │   ├── database.ts               # Operações de banco de dados
 │   ├── storage.ts                # Gerenciamento de arquivos
 │   ├── supabase.ts               # Cliente Supabase
 │   ├── dadosJogos.ts             # Dados estáticos (gêneros)
 │   └── redirect.ts               # Redirecionamentos
-├── types/                         # Definições TypeScript
+├── types/                        # Definições TypeScript
 │   ├── gameData.ts               # Tipos de dados de jogos
 │   ├── supabase.ts               # Tipos do banco Supabase
 │   └── index.ts                  # Exportações de tipos
-└── database/                      # Scripts de banco
+└── database/                     # Scripts de banco
     ├── schema.sql                # Schema do banco
     └── dev-policies.sql          # Políticas de segurança
 ```
@@ -301,35 +232,6 @@ O projeto está hospedado no **Vercel** com deploy automático:
 
 ---
 
-## 📁 Tipos de Arquivo Suportados
-
-### 🎮 Jogos (até 50MB)
-
-* `.zip` - Arquivos compactados
-* `.rar` - Arquivos WinRAR
-* `.7z` - Arquivos 7-Zip
-* `.exe` - Executáveis Windows
-* `.msi` - Instaladores Windows
-* `.pkg` - Pacotes macOS
-* `.dmg` - Imagens de disco macOS
-* `.deb` - Pacotes Debian/Ubuntu
-* `.AppImage` - Aplicações Linux portáteis
-
-### 🖼️ Imagens (até 5MB)
-
-* `.jpg/.jpeg` - Imagens JPEG
-* `.png` - Imagens PNG
-* `.gif` - Imagens GIF animadas
-* `.webp` - Imagens WebP modernas
-
-### 📄 Documentos (até 10MB)
-
-* `.pdf` - Documentos PDF
-* `.txt` - Arquivos de texto
-* `.md` - Documentos Markdown
-
----
-
 ## 🤝 Contribuições
 
 Sinta-se à vontade para abrir **issues**, enviar **pull requests** ou sugerir ideias. A IndieBox é um projeto comunitário, feito para devs e por devs!
@@ -342,25 +244,12 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
 
-## 💡 Próximas Funcionalidades
+## 💡 Ideias Futuras
 
-### 🚀 Curto Prazo
-* � **Dashboard analítico** para desenvolvedores com métricas avançadas
-* 🔗 **Sistema de favoritos** para jogadores
-* 🏷️ **Tags customizáveis** e melhor categorização
-* 🔔 **Notificações** em tempo real para atualizações
-
-### 🎯 Médio Prazo
-* 👥 **Sistema de seguidores** entre usuários
-* 🎮 **Collections** temáticas curadas
-* 🏆 **Sistema de conquistas** para desenvolvedores
-* 📱 **PWA** (Progressive Web App) para mobile
-
-### 🌟 Longo Prazo
-* 🤖 **Recomendações com IA** baseadas em preferências
-* 💬 **Chat em tempo real** entre desenvolvedores
-* 🌍 **Suporte multi-idioma** completo
-* 📈 **Monetização opcional** para desenvolvedores
+* 💾 Galeria de jogos para baixar direto do navegador
+* 🌐 Sistema de tags e curadoria por temas
+* 📈 Métricas para desenvolvedores acompanharem o desempenho de seus jogos
+* 🧑‍🤝‍🧑 Rankings e recomendações personalizadas
 
 ---
 
