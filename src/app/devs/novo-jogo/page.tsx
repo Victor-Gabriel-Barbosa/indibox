@@ -10,6 +10,7 @@ import type { } from '@/types';
 import Link from 'next/link';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
+// Página para adicionar um novo jogo
 export default function NovoJogoPage() {
   const { usuario, loading } = useAuth();
   const router = useRouter();
@@ -95,16 +96,19 @@ export default function NovoJogoPage() {
   // Trata erros de upload
   const handleSeletorError = (mensagem: string) => setError(mensagem);
 
+  // Processa envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Verifica se o usuário está autenticado
     if (!usuario?.id) return;
 
-    // Valida arquivos obrigatórios
+    // Valida arquivo do jogo
     if (!arquivosSelecionados.arquivoJogo) {
       setError('Por favor, selecione o arquivo do jogo.');
       return;
     }
 
+    // Valida imagem de capa
     if (!arquivosSelecionados.imagemCapa) {
       setError('Por favor, selecione a imagem de capa.');
       return;
@@ -148,6 +152,7 @@ export default function NovoJogoPage() {
         setProgressoUpload
       );
 
+      // Verifica se houve erros no upload
       if (!resultadoUpload.sucesso) {
         setError(`Erro no upload: ${resultadoUpload.erros.join(', ')}`);
         return;
@@ -158,6 +163,7 @@ export default function NovoJogoPage() {
       const imagemCapa = resultadoUpload.resultados[1];
       const screenshots = resultadoUpload.resultados.slice(2);
 
+      // Verifica se os arquivos obrigatórios foram enviados
       if (!arquivoJogo.data || !imagemCapa.data) {
         setError('Erro ao processar uploads dos arquivos obrigatórios.');
         return;
@@ -167,7 +173,8 @@ export default function NovoJogoPage() {
       const screenshotsUrls = screenshots
         .filter(res => res.data)
         .map(res => res.data!.publicUrl);
-      
+
+      // Extrai caminhos das screenshots
       const screenshotsPaths = screenshots
         .filter(res => res.data)
         .map(res => res.data!.path);
@@ -201,6 +208,7 @@ export default function NovoJogoPage() {
       // Salva no banco de dados
       const { data, error } = await insertJogo(dadosJogo);
 
+      // Verifica se houve erro ao inserir jogo
       if (error) {
         setError('Erro ao publicar o jogo. Tente novamente.');
         console.error('Erro ao inserir jogo:', error);
@@ -229,7 +237,7 @@ export default function NovoJogoPage() {
     );
   }
 
-  // Verifica autenticação
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">

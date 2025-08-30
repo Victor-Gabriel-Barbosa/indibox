@@ -7,19 +7,21 @@ import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
 
+// Página para gerenciar jogos do desenvolvedor
 export default function DevsPage() {
   const { usuario, loading } = useAuth();
   const [jogosDoUsuario, setJogosDoUsuario] = useState<Jogo[]>([]);
 
-  // Efeito para carregar jogos do usuário
+  // Carrega jogos do usuário
   useEffect(() => {
     async function carregarJogosDoUsuario() {
       if (!usuario?.id) return;
-      console.log('ID: ', usuario.id);
 
       try {
+        // Obtém jogos do usuário
         const { data, error } = await getJogosUsuario(usuario.id);
 
+        // Verifica se houve erro ao carregar jogos
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
         else if (data) setJogosDoUsuario(data);
       } catch (error) {
@@ -35,8 +37,10 @@ export default function DevsPage() {
     if (!usuario?.id) return;
 
     try {
+      // Deleta o jogo
       const { error } = await deleteJogo(idJogo, usuario.id);
 
+      // Verifica se houve erro ao deletar jogo
       if (error) {
         console.error('Erro ao deletar jogo:', error);
         alert('Erro ao deletar o jogo. Tente novamente.');

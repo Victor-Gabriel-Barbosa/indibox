@@ -8,6 +8,7 @@ import { useTema } from '@/contexts/TemaContext';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+// Componente de cabeçalho
 export default function Header() {
   const { usuario } = useAuth();
   const { tema, setTema } = useTema();
@@ -75,9 +76,10 @@ export default function Header() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key === 'k') {
         event.preventDefault();
-        
-        if (window.innerWidth >= 768) pesquisaDesktopRef.current?.focus(); // No desktop foca na barra de pesquisa
-        else handleAbrirPesquisa(); // No mobile abre a barra de pesquisa
+
+        // No desktop foca na barra de pesquisa e no mobile abre a barra de pesquisa
+        if (window.innerWidth >= 768) pesquisaDesktopRef.current?.focus();
+        else handleAbrirPesquisa();
       }
     };
 

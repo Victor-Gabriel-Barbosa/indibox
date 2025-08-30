@@ -11,6 +11,7 @@ interface CardJogoProps {
   priority?: boolean; // Para otimização de LCP
 }
 
+// Componente principal do cartão de jogo
 export default function CardJogo({ jogo, onClick, priority = false }: CardJogoProps) {
   return (
     <div 

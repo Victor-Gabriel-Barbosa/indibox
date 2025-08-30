@@ -8,7 +8,6 @@ const getSupabaseConfig = () => {
 
   // Verifica se as variáveis estão configuradas
   const sbConfig = sbUrl && sbAnonKey && sbUrl !== 'your_supabase_project_url' && sbAnonKey !== 'your_supabase_anon_key';
-
   if (!sbConfig) console.warn('⚠️ Supabase não configurado.');
 
   return { sbUrl, sbAnonKey, sbConfig };
@@ -46,7 +45,13 @@ const testarConexao = async () => {
   }
 
   try {
-    const { error } = await sb.from('jogos').select('count').limit(1);
+    // Testa a conexão com o banco de dados
+    const { error } = await sb
+      .from('jogos')
+      .select('count')
+      .limit(1);
+
+    // Verifica se houve erro na consulta
     if (error) throw error;
     return true;
   } catch (error) {
@@ -63,6 +68,7 @@ const uploadArquivo = async (bucket: string, caminho: string, arquivo: File) => 
   }
 
   try {
+    // Faz o upload do arquivo
     const { data, error } = await sb.storage
       .from(bucket)
       .upload(caminho, arquivo, {
@@ -93,7 +99,7 @@ const uploadArquivo = async (bucket: string, caminho: string, arquivo: File) => 
   }
 };
 
-// Deletar arquivo no bucket especificado
+// Deleta arquivo no bucket especificado
 const deleteArquivo = async (bucket: string, caminho: string) => {
   if (!sb) {
     console.warn('⚠️ Supabase não configurado');
@@ -101,13 +107,13 @@ const deleteArquivo = async (bucket: string, caminho: string) => {
   }
 
   try {
+    // Faz a remoção do arquivo
     const { error } = await sb.storage
       .from(bucket)
       .remove([caminho]);
 
-    if (error) {
-      return { error: { message: error.message || 'Erro ao deletar arquivo' } };
-    }
+    // Verifica se houve erro na remoção
+    if (error) return { error: { message: error.message || 'Erro ao deletar arquivo' } };
     return { error: null };
   } catch (error) {
     console.error('❌ Erro ao deletar arquivo:', error);
@@ -123,6 +129,7 @@ const getUrlPublica = (bucket: string, caminho: string) => {
     return null;
   }
 
+  // Obtém URL pública do arquivo
   const { data } = sb.storage
     .from(bucket)
     .getPublicUrl(caminho);
@@ -131,4 +138,4 @@ const getUrlPublica = (bucket: string, caminho: string) => {
 };
 
 // Exporta status de configuração e funções de storage
-export { sbConfig, sb, sbAdmin, testarConexao, uploadArquivo, deleteArquivo as deletarArquivo, getUrlPublica as obterUrlPublica };
+export { sbConfig, sb, sbAdmin, testarConexao, uploadArquivo, deleteArquivo, getUrlPublica };

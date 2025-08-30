@@ -7,30 +7,34 @@ import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
 
+// Página para exibição dos jogos do usuário
 export default function MeusJogosPage() {
   const { usuario, loading } = useAuth();
   const [jogosDoUsuario, setJogosUsuario] = useState<Jogo[]>([]);
-  const [carregandoJogos, setCarregandoJogos] = useState(true);
+  const [loadingJogos, setLoadingJogos] = useState(true);
   const [filtroStatus, setFiltroStatus] = useState<string>('todos');
 
-  // Efeito para carregar jogos do usuário
+  // Carrega jogos do usuário
   useEffect(() => {
     async function carregarJogosUsuario() {
+      // Verifica se o usuário está autenticado
       if (!usuario?.id) {
-        setCarregandoJogos(false);
+        setLoadingJogos(false);
         return;
       }
 
       try {
-        setCarregandoJogos(true);
+        setLoadingJogos(true);
+        // Obtém jogos do usuário
         const { data, error } = await getJogosUsuario(usuario.id);
-        
+
+        // Verifica se houve erro ao obter jogos do usuário
         if (error) console.error('Erro ao carregar jogos do usuário:', error);
         else if (data) setJogosUsuario(data);
       } catch (error) {
         console.error('Erro ao carregar jogos do usuário:', error);
       } finally {
-        setCarregandoJogos(false);
+        setLoadingJogos(false);
       }
     }
 
@@ -48,8 +52,10 @@ export default function MeusJogosPage() {
     if (!usuario?.id) return;
 
     try {
+      // Deleta o jogo
       const { error } = await deleteJogo(idJogo, usuario.id);
-      
+
+      // Verifica se houve erro ao deletar jogo
       if (error) {
         console.error('Erro ao deletar jogo:', error);
         alert('Erro ao deletar o jogo. Tente novamente.');
@@ -155,7 +161,7 @@ export default function MeusJogosPage() {
         </div>
 
         {/* Lista de jogos */}
-        {carregandoJogos ? (
+        {loadingJogos ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="rounded-lg shadow-md overflow-hidden animate-pulse">

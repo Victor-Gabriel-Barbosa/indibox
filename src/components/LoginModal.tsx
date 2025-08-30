@@ -16,6 +16,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { usuario, loading, signInGoogle, signInGithub, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
+  // Verifica se o modal está aberto
   if (!isOpen) return null;
 
   // Lida com o login

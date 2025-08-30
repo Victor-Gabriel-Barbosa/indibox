@@ -4,12 +4,8 @@
  */
 export function validarUrlRedir(url: string): boolean {
   try {
-    // URLs que começam com / são rotas internas válidas
-    if (url.startsWith('/')) {
-      // Evita URLs que tentam escapar do domínio
-      if (url.startsWith('//')) return false;
-      return true;
-    }
+    // Verifica se a URL é relativa e evita URLs que tentam escapar do domínio
+    if (url.startsWith('/')) return !(url.startsWith('//'));
     
     // Para URLs absolutas verifica se são do mesmo domínio
     const urlObj = new URL(url);
@@ -17,7 +13,7 @@ export function validarUrlRedir(url: string): boolean {
     
     return urlObj.hostname === dominioAtual;
   } catch {
-    return false; // Se a URL não é válida retorna false
+    return false; 
   }
 }
 
@@ -30,12 +26,12 @@ export function getUrlSegura(): string {
 
 // Armazena a URL atual para redirecionamento após login
 export function salvarUrlRedir(): void {
-  const currentUrl = window.location.pathname + window.location.search;
+  const urlAtual = window.location.pathname + window.location.search;
   
   // Não armazena URLs de autenticação
-  if (currentUrl.startsWith('/auth/')) return;
+  if (urlAtual.startsWith('/auth/')) return;
   
-  localStorage.setItem('redirAposLogin', currentUrl);
+  localStorage.setItem('redirAposLogin', urlAtual);
 }
 
 // Remove a URL de redirecionamento do localStorage

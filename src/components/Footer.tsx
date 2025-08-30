@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Componente de rodapé
 export default function Footer() {
   return (
     <footer className="relative bg-background py-12 px-4 top-0">

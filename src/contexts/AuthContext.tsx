@@ -214,9 +214,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Supabase não configurado');
       return;
     }
-    
+
+    // Faz o logout
     const { error } = await sb.auth.signOut();
-    
+
+    // V
     if (error) {
       console.error('Erro no logout:', error);
       throw error;

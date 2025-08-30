@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Header, Footer, Icons, DotLottieReact } from '@/components';
 
+// Página Sobre a plataforma IndiBox
 export default function Sobre() {
   return (
     <main className="min-h-screen bg-background text-foreground">

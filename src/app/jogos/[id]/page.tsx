@@ -8,6 +8,7 @@ import { Header, Footer, Icons, Breadcrumb, AvaliacaoJogo } from '@/components';
 import { getJogoPorID } from '@/lib/database';
 import type { Jogo } from '@/types';
 
+// Página de detalhes do jogo
 export default function DetalhesJogoPage() {
   const { id } = useParams();
   const [jogo, setJogo] = useState<Jogo | null>(null);
@@ -18,6 +19,7 @@ export default function DetalhesJogoPage() {
   // Carrega dados do jogo
   useEffect(() => {
     const carregarJogo = async () => {
+      // Verifica se o ID do jogo é válido
       if (!id || typeof id !== 'string') {
         setError('ID do jogo inválido');
         setLoading(false);
@@ -26,8 +28,10 @@ export default function DetalhesJogoPage() {
 
       try {
         setLoading(true);
+        // Obtém dados do jogo
         const { data, error } = await getJogoPorID(id);
 
+        // Verifica se houve erro ao obter dados do jogo
         if (error) {
           console.error('Erro ao carregar jogo:', error);
           setError('Erro ao carregar detalhes do jogo');

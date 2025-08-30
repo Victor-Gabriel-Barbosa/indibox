@@ -13,13 +13,13 @@ import type { Jogo } from '@/types';
 export default function Home() {
   const router = useRouter();
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
-  const [carregandoJogos, setCarregandoJogos] = useState(true);
+  const [loadingJogos, setLoadingJogos] = useState(true);
 
   // Carrega jogos em destaque
   useEffect(() => {
     async function carregarJogosDestaque() {
       try {
-        setCarregandoJogos(true);
+        setLoadingJogos(true);
         
         const { data, error } = await getJogosEmDestaque();
 
@@ -28,7 +28,7 @@ export default function Home() {
       } catch (error) {
         console.error('Erro ao carregar jogos em destaque:', error);
       } finally {
-        setCarregandoJogos(false);
+        setLoadingJogos(false);
       }
     }
 
@@ -97,7 +97,7 @@ export default function Home() {
         modules={[EffectCoverflow, Pagination, Autoplay, Navigation, Keyboard]}
         className="swiper-top-games mx-auto mb-10"
       >
-        {carregandoJogos ? (
+        {loadingJogos ? (
           // Esqueleto de carregamento
           Array.from({ length: 5 }).map((_, index) => (
             <SwiperSlide key={`skeleton-${index}`}>

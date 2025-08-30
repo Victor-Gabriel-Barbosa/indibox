@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { GENEROS_DISPONIVEIS, PLATAFORMAS_DISPONIVEIS } from '@/lib/dadosJogos';
 
+// Página para edição de jogos
 export default function EditarJogoPage() {
   const { usuario, loading } = useAuth();
   const router = useRouter();
@@ -56,8 +57,10 @@ export default function EditarJogoPage() {
 
       try {
         setLoadingJogo(true);
+        // Obtém dados do jogo
         const { data, error } = await getJogoPorId(idJogo);
-        
+
+        // Verifica se houve erro ao obter dados do jogo
         if (error || !data) {
           setError('Jogo não encontrado');
           return;
@@ -73,19 +76,19 @@ export default function EditarJogoPage() {
         
         // Preenche formulário
         setFormData({
-          titulo: data.titulo || '',
-          descricao: data.descricao || '',
-          descricao_curta: data.descricao_curta || '',
-          desenvolvedor: data.desenvolvedor || '',
-          data_lancamento: data.data_lancamento || '',
-          genero: data.genero || [],
-          tags: data.tags?.join(', ') || '',
-          url_download: data.url_download || '',
-          url_site: data.url_site || '',
-          url_github: data.url_github || '',
-          imagem_capa: data.imagem_capa || '',
-          capturas_tela: data.capturas_tela?.join(', ') || '',
-          plataforma: data.plataforma || [],
+          titulo: data.titulo ?? '',
+          descricao: data.descricao ?? '',
+          descricao_curta: data.descricao_curta ?? '',
+          desenvolvedor: data.desenvolvedor ?? '',
+          data_lancamento: data.data_lancamento ?? '',
+          genero: data.genero ?? [],
+          tags: data.tags?.join(', ') ?? '',
+          url_download: data.url_download ?? '',
+          url_site: data.url_site ?? '',
+          url_github: data.url_github ?? '',
+          imagem_capa: data.imagem_capa ?? '',
+          capturas_tela: data.capturas_tela?.join(', ') ?? '',
+          plataforma: data.plataforma ?? [],
           status: (data.status as 'rascunho' | 'publicado' | 'arquivado') || 'rascunho'
         });
       } catch (error) {
@@ -158,6 +161,7 @@ export default function EditarJogoPage() {
   // Processa envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Verifica se o usuário está autenticado e se o jogo existe
     if (!usuario?.id || !jogo) return;
 
     setEnviando(true);
@@ -167,7 +171,8 @@ export default function EditarJogoPage() {
     try {
       // Prepara arquivos para upload
       const arquivosParaUpload = [];
-      
+
+      // Adiciona arquivo do jogo
       if (arquivosSelecionados.arquivoJogo) {
         arquivosParaUpload.push({
           arquivo: arquivosSelecionados.arquivoJogo,
@@ -175,6 +180,7 @@ export default function EditarJogoPage() {
         });
       }
 
+      // Adiciona imagem de capa
       if (arquivosSelecionados.imagemCapa) {
         arquivosParaUpload.push({
           arquivo: arquivosSelecionados.imagemCapa,
@@ -204,6 +210,7 @@ export default function EditarJogoPage() {
           setProgressoUpload
         );
 
+        // Verifica se houve erro no upload
         if (!resultadoUpload.sucesso) {
           setError(`Erro no upload: ${resultadoUpload.erros.join(', ')}`);
           return;
@@ -211,17 +218,20 @@ export default function EditarJogoPage() {
 
         // Atualiza URLs dos arquivos
         let indiceResultado = 0;
-        
+
+        // Adiciona arquivo do jogo
         if (arquivosSelecionados.arquivoJogo) {
           const res = resultadoUpload.resultados[indiceResultado++];
           if (res.data) novoArquivoJogoUrl = res.data.publicUrl;
         }
-        
+
+        // Adiciona imagem de capa
         if (arquivosSelecionados.imagemCapa) {
           const res = resultadoUpload.resultados[indiceResultado++];
           if (res.data) novaImagemCapaUrl = res.data.publicUrl;
         }
 
+        // Adiciona screenshots
         if (arquivosSelecionados.screenshots.length > 0) {
           const screenshots = resultadoUpload.resultados.slice(indiceResultado);
           const novasScreenshots = screenshots
@@ -239,17 +249,17 @@ export default function EditarJogoPage() {
         descricao: formData.descricao,
         descricao_curta: formData.descricao_curta,
         desenvolvedor: formData.desenvolvedor,
-        data_lancamento: formData.data_lancamento || null,
+        data_lancamento: formData.data_lancamento ?? null,
         genero: formData.genero,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        url_download: novoArquivoJogoUrl || null,
-        url_site: formData.url_site || null,
-        url_github: formData.url_github || null,
-        imagem_capa: novaImagemCapaUrl || null,
+        url_download: novoArquivoJogoUrl ?? null,
+        url_site: formData.url_site ?? null,
+        url_github: formData.url_github ?? null,
+        imagem_capa: novaImagemCapaUrl ?? null,
         capturas_tela: novasScreenshotsUrls,
         tamanho_arquivo: arquivosSelecionados.arquivoJogo 
           ? formatarBytes(arquivosSelecionados.arquivoJogo.size)
-          : jogo?.tamanho_arquivo || null,
+          : jogo?.tamanho_arquivo ?? null,
         plataforma: formData.plataforma,
         status: formData.status
       };
@@ -257,6 +267,7 @@ export default function EditarJogoPage() {
       // Salva no banco de dados
       const { data, error } = await updateJogo(jogo.id, dadosAtualizacao);
 
+      // Verifica se houve erro ao inserir jogo
       if (error) {
         setError('Erro ao atualizar o jogo. Tente novamente.');
         console.error('Erro ao atualizar jogo:', error);
@@ -284,7 +295,7 @@ export default function EditarJogoPage() {
     );
   }
 
-  // Verifica autenticação
+  // Verifica se o usuário está autenticado
   if (!usuario) {
     return (
       <main className="min-h-screen bg-background text-foreground">

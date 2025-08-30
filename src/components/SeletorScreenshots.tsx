@@ -35,7 +35,6 @@ const SeletorScreenshots: React.FC<SeletorScreenshotsProps> = ({
       // Valida tipo do arquivo
       const extensao = '.' + arquivo.name.split('.').pop()?.toLowerCase();
       const extensaoValida = TIPOS_ARQUIVO_PERMITIDOS.IMAGENS.some(tipo => tipo === extensao);
-      
       if (!extensaoValida) {
         onError(`Arquivo ${arquivo.name}: Tipo não permitido. Use: ${TIPOS_ARQUIVO_PERMITIDOS.IMAGENS.join(', ')}`);
         continue;
@@ -98,6 +97,7 @@ const SeletorScreenshots: React.FC<SeletorScreenshotsProps> = ({
   // Processa arquivos selecionados através do input file
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => handleFileSelect(e.target.files);
 
+  // Remove um arquivo específico da lista
   const removerArquivo = (index: number) => {
     const novosArquivos = arquivosAtuais.filter((_, i) => i !== index);
     onArquivosSelecionados(novosArquivos);

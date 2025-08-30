@@ -23,14 +23,17 @@ export function useJogos() {
   const fetchJogos = async () => {
     try {
       setLoading(true);
+      // Busca jogos publicados
       const { data, error } = await getJogosPublicados();
-      
+
+      // Verifica se houve erro na busca
       if (error) {
         setError(error.message);
         return;
       }
 
-      setJogos(data || []);
+      // Atualiza o estado com os jogos publicados
+      setJogos(data ?? []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos');
@@ -40,6 +43,7 @@ export function useJogos() {
     }
   };
 
+  // Executa a busca ao montar o componente
   useEffect(() => {
     fetchJogos();
   }, []);
@@ -53,17 +57,20 @@ export function useJogosEmDestaque() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Busca jogos em destaque
   const fetchJogosEmDestaque = async () => {
     try {
       setLoading(true);
+      // Busca jogos em destaque
       const { data, error } = await getJogosEmDestaque();
-      
+
+      // Verifica se houve erro na busca
       if (error) {
         setError(error.message);
         return;
       }
 
-      setJogos(data || []);
+      setJogos(data ?? []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos em destaque');
@@ -73,6 +80,7 @@ export function useJogosEmDestaque() {
     }
   };
 
+  // Executa a busca ao montar o componente
   useEffect(() => {
     fetchJogosEmDestaque();
   }, []);
@@ -86,6 +94,7 @@ export function useJogo(idJogo: string | null) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Busca um jogo específico
   const fetchJogo = async () => {
     if (!idJogo) {
       setLoading(false);
@@ -94,13 +103,16 @@ export function useJogo(idJogo: string | null) {
 
     try {
       setLoading(true);
+      // Busca o jogo pelo ID
       const { data, error } = await getJogoPorID(idJogo);
-      
+
+      // Verifica se houve erro na busca
       if (error) {
         setError(error.message);
         return;
       }
 
+      // Atualiza o estado com os dados do jogo
       setJogo(data);
       setError(null);
     } catch (err) {
@@ -111,6 +123,7 @@ export function useJogo(idJogo: string | null) {
     }
   };
 
+  // Executa a busca ao montar o componente
   useEffect(() => {
     if (idJogo) fetchJogo();
     else {
@@ -124,12 +137,14 @@ export function useJogo(idJogo: string | null) {
 }
 
 // Hook para pesquisar jogos
-export function useBuscaJogos() {
+export function useBuscarJogos() {
   const [jogos, setJogos] = useState<Jogo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Busca jogos com base na query
   const buscarJogosQuery = async (query: string) => {
+    // Verifica se a query está vazia
     if (!query.trim()) {
       setJogos([]);
       return;
@@ -137,14 +152,17 @@ export function useBuscaJogos() {
 
     try {
       setLoading(true);
+      // Busca jogos com base na query
       const { data, error } = await getJogos(query);
-      
+
+      // Verifica se houve erro na busca
       if (error) {
         setError(error.message);
         return;
       }
 
-      setJogos(data || []);
+      // Atualiza os jogos encontrados
+      setJogos(data ?? []);
       setError(null);
     } catch (err) {
       setError('Erro na pesquisa');
@@ -164,21 +182,26 @@ export function useFavoritos() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Busca os favoritos do usuário
+  // Busca os jogos favoritos do usuário
   const fetchFavoritos = async () => {
+    // Verifica se o usuário está autenticado
     if (!usuario?.id) return;
 
     try {
       setLoading(true);
+      // Busca os jogos favoritos do usuário
       const { data, error } = await getFavoritosUsuario(usuario.id);
-      
+
+      // Verifica se houve erro na busca
       if (error) {
         setError(error.message);
         return;
       }
 
       // Extrai apenas os jogos dos favoritos
-      const jogosFavoritos = data?.map(fav => fav.jogos).filter(Boolean) || [];
+      const jogosFavoritos = data?.map(fav => fav.jogos).filter(Boolean) ?? [];
+
+      // Atualiza o estado com os jogos favoritos
       setFavoritos(jogosFavoritos as Jogo[]);
       setError(null);
     } catch (err) {
@@ -191,11 +214,14 @@ export function useFavoritos() {
 
   // Alterna o status de favorito de um jogo
   const alternarFavorito = async (idJogo: string) => {
+    // Verifica se o usuário está autenticado
     if (!usuario?.id) return false;
 
     try {
+      // Verifica se o jogo já é favorito
       const { ehFavorito } = await ehJogoFavorito(usuario.id, idJogo);
-      
+
+      // Alterna o status de favorito
       if (ehFavorito) {
         const { success, error } = await deleteJogoFavorito(usuario.id, idJogo);
         if (error) throw error;
@@ -213,10 +239,12 @@ export function useFavoritos() {
     }
   };
 
+  // Verifica se o jogo já é favorito
   const verificarFavorito = async (idJogo: string): Promise<boolean> => {
     if (!usuario?.id) return false;
 
     try {
+      // Verifica se o jogo é favorito
       const { ehFavorito } = await ehJogoFavorito(usuario.id, idJogo);
       return ehFavorito;
     } catch (err) {
@@ -225,6 +253,7 @@ export function useFavoritos() {
     }
   };
 
+  // Executa a busca ao montar o componente
   useEffect(() => {
     if (usuario?.id) fetchFavoritos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +264,7 @@ export function useFavoritos() {
     loading, 
     error: error, 
     alternarFavorito, 
-    verificarSeFavoritado: verificarFavorito,
+    verificarFavorito,
     refetch: fetchFavoritos 
   };
 }

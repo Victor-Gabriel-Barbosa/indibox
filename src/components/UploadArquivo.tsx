@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { uploadArquivoJogo, uploadImagem, formatarBytes, TIPOS_ARQUIVO_PERMITIDOS, TAMANHO_MAXIMO } from '@/lib/storage';
 
-// Propriedades do componente de upload de arquivo
+// Propriedades de componente de upload de arquivo
 interface UploadArquivoProps {
   tipo: 'jogo' | 'imagem';
   tipoImagem?: 'capa' | 'screenshot';
@@ -45,7 +45,8 @@ const UploadArquivo: React.FC<UploadArquivoProps> = ({
         setProgress(((i + 1) / filesToProcess.length) * 100);
 
         let resultado;
-        
+
+        // Faz o upload baseado no tipo do arquivo
         if (tipo === 'jogo') resultado = await uploadArquivoJogo(arquivo, idUsuario);
         else if (tipo === 'imagem' && tipoImagem) resultado = await uploadImagem(arquivo, idUsuario, tipoImagem);
         else {
@@ -53,12 +54,14 @@ const UploadArquivo: React.FC<UploadArquivoProps> = ({
           return;
         }
 
+        // Verifica se o upload foi bem-sucedido
         if (resultado.error) {
           console.error('❌ Erro no upload:', resultado.error);
           onError(resultado.error.message);
           return;
         }
 
+        // Se o upload foi bem-sucedido chama o callback
         if (resultado.data) onUploadCompleto(resultado.data.publicUrl, resultado.data.path);
       }
     } catch (error) {

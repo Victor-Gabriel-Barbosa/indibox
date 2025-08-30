@@ -16,7 +16,7 @@ interface FiltrosState {
 }
 
 // Componente principal da página de jogos
-function JogosContent() {
+function AreaJogos() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [jogos, setJogos] = useState<Jogo[]>([]);
@@ -38,7 +38,7 @@ function JogosContent() {
   const carregarJogos = async (pagina: number = 1, novosFiltros?: FiltrosState) => {
     try {
       setCarregando(true);
-      const filtrosParaUsar = novosFiltros || filtros;
+      const filtrosParaUsar = novosFiltros ?? filtros;
       
       const { data, error, totalJogos, totalPaginas } = await getJogosComPaginacao(
         pagina,
@@ -51,6 +51,7 @@ function JogosContent() {
         }
       );
 
+      // Verifica se houve erro ao carregar jogos
       if (error) console.error('Erro ao carregar jogos:', error);
       else if (data) {
         setJogos(data);
@@ -95,6 +96,7 @@ function JogosContent() {
           }
         );
 
+        // Verifica se houve erro ao carregar jogos
         if (error) console.error('Erro ao carregar jogos:', error);
         else if (data) {
           setJogos(data);
@@ -120,7 +122,7 @@ function JogosContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros.genero, filtros.ordenarPor, filtros.ordem]);
 
-  // Função para mudar a página
+  // Muda a página atual
   const handleMudarPagina = (novaPagina: number) => carregarJogos(novaPagina);
 
   // Muda os filtros aplicados
@@ -304,6 +306,7 @@ function JogosContent() {
   );
 }
 
+// Página de jogos
 export default function JogosPage() {
   return (
     <Suspense fallback={
@@ -322,7 +325,7 @@ export default function JogosPage() {
         <Footer />
       </main>
     }>
-      <JogosContent />
+      <AreaJogos />
     </Suspense>
   );
 }

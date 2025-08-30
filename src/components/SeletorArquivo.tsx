@@ -46,7 +46,6 @@ const SeletorArquivo: React.FC<SeletorArquivoProps> = ({
 
     // Valida tamanho
     const tamanhoMaximo = tipo === 'jogo' ? TAMANHO_MAXIMO.JOGO : TAMANHO_MAXIMO.IMAGEM;
-
     if (arquivo.size > tamanhoMaximo) {
       onError(`Arquivo muito grande. Tamanho máximo: ${formatarBytes(tamanhoMaximo)}`);
       return false;

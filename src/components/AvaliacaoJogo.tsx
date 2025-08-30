@@ -19,16 +19,17 @@ interface AvaliacaoJogoProps {
 }
 
 // Interface para avaliação com informações do usuário
-interface AvaliacaoComUsuario extends Avaliacao {
+interface AvaliacaoUsuario extends Avaliacao {
   usuarios: {
     nome: string;
     url_avatar: string;
   };
 }
 
+// Componente de avaliação de jogo
 export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoProps) {
   const { usuario } = useAuth();
-  const [avaliacoes, setAvaliacoes] = useState<AvaliacaoComUsuario[]>([]);
+  const [avaliacoes, setAvaliacoes] = useState<AvaliacaoUsuario[]>([]);
   const [avaliacaoUsuario, setAvaliacaoUsuario] = useState<Avaliacao | null>(null);
   const [loading, setLoading] = useState(true);
   const [salvando, setSalvando] = useState(false);
@@ -37,17 +38,14 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
   const [comentarioTemporario, setComentarioTemporario] = useState('');
   const [hoverEstrela, setHoverEstrela] = useState(0);
 
-  // Debug para verificar o estado do usuário
-  console.log('AvaliacaoJogo - usuario:', usuario);
-  console.log('AvaliacaoJogo - idJogo:', idJogo);
-
   // Carrega avaliações do jogo
   useEffect(() => {
     const carregarAvaliacoes = async () => {
       setLoading(true);
       try {
+        // Carrega avaliações do jogo
         const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-        if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
+        if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoUsuario[]);
 
         // Se o usuário está logado, carrega sua avaliação
         if (usuario?.id) {
@@ -74,6 +72,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
     setSalvando(true);
     try {
+      // Salva ou atualiza a avaliação
       const { data, error } = await upsertAvaliacao(
         idJogo,
         usuario.id,
@@ -81,6 +80,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
         comentarioTemporario
       );
 
+      // Verifica se houve erro ao salvar a avaliação
       if (error) {
         alert('Erro ao salvar avaliação: ' + error.message);
         return;
@@ -92,7 +92,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
       // Recarrega avaliações
       const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
+      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoUsuario[]);
     } catch (error) {
       console.error('Erro ao salvar avaliação:', error);
       alert('Erro inesperado ao salvar avaliação');
@@ -109,8 +109,10 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
     setSalvando(true);
     try {
+      // Remove a avaliação
       const { error } = await deleteAvaliacao(idJogo, usuario.id);
-      
+
+      // Verifica se houve erro ao remover a avaliação
       if (error) {
         alert('Erro ao remover avaliação: ' + error.message);
         return;
@@ -124,7 +126,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
 
       // Recarrega avaliações
       const { data: avaliacoesData } = await getAvaliacoesJogo(idJogo);
-      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoComUsuario[]);
+      if (avaliacoesData) setAvaliacoes(avaliacoesData as AvaliacaoUsuario[]);
     } catch (error) {
       console.error('Erro ao remover avaliação:', error);
       alert('Erro inesperado ao remover avaliação');
@@ -184,6 +186,7 @@ export default function AvaliacaoJogo({ idJogo, avaliacaoMedia }: AvaliacaoJogoP
     });
   };
 
+  // Exibe placeholder durante carregamento
   if (loading) {
     return (
       <div className="rounded-lg shadow-lg p-6">

@@ -37,6 +37,7 @@ export const PLATAFORMAS_DISPONIVEIS = [
 export type Genero = typeof GENEROS_DISPONIVEIS[number];
 export type Plataforma = typeof PLATAFORMAS_DISPONIVEIS[number];
 
+// Interface para os dados do jogo
 export interface GameData {
   generos: Genero[];
   plataformas: Plataforma[];

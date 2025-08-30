@@ -13,6 +13,7 @@ import { validate } from 'uuid';
 export function useSyncUsuario() {
   const { usuario, loading } = useAuth();
 
+  // Sincroniza usuário com Supabase
   useEffect(() => {
     async function syncUsuario() {
       if (!loading && usuario) {

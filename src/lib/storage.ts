@@ -1,4 +1,4 @@
-import { uploadArquivo, deletarArquivo, obterUrlPublica } from './supabase';
+import { uploadArquivo, deleteArquivo, getUrlPublica } from './supabase';
 
 // Configurações dos buckets
 export const BUCKETS = {
@@ -63,7 +63,7 @@ export function gerarNomeArquivo(arquivo: File, idUsuario: string, prefixo: stri
 // Upload de arquivo de jogo
 export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promise<ResultadoUpload> {
   try {
-    // Validações
+    // Valida tipo do arquivo
     if (!validarTipoArquivo(arquivo.name, TIPOS_ARQUIVO_PERMITIDOS.JOGOS)) {
       return {
         data: null,
@@ -71,6 +71,7 @@ export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promi
       };
     }
 
+    // Valida tamanho do arquivo
     if (!validarTamanhoArquivo(arquivo, TAMANHO_MAXIMO.JOGO)) {
       return {
         data: null,
@@ -81,9 +82,10 @@ export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promi
     // Gera caminho simples: {idUsuario}/{timestamp}_{nome}.ext
     const caminhoArquivo = gerarNomeArquivo(arquivo, idUsuario);
 
-    // Faz upload
+    // Faz upload do arquivo
     const resultado = await uploadArquivo(BUCKETS.JOGOS, caminhoArquivo, arquivo);
 
+    // Verifica se houve erro no upload
     if (resultado.error) {
       return { 
         data: null, 
@@ -91,6 +93,7 @@ export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promi
       };
     }
 
+    // Retorna resultado do upload
     return {
       data: {
         path: resultado.data?.path || caminhoArquivo,
@@ -111,7 +114,7 @@ export async function uploadArquivoJogo(arquivo: File, idUsuario: string): Promi
 // Upload de imagem (capa ou screenshot)
 export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa' | 'screenshot'): Promise<ResultadoUpload> {
   try {
-    // Validações
+    // Valida tipo do arquivo
     if (!validarTipoArquivo(arquivo.name, TIPOS_ARQUIVO_PERMITIDOS.IMAGENS)) {
       return {
         data: null,
@@ -119,6 +122,7 @@ export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa
       };
     }
 
+    // Valida tamanho do arquivo
     if (!validarTamanhoArquivo(arquivo, TAMANHO_MAXIMO.IMAGEM)) {
       return {
         data: null,
@@ -130,9 +134,10 @@ export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa
     const bucket = tipo === 'capa' ? BUCKETS.IMAGENS : BUCKETS.SCREENSHOTS;
     const caminhoArquivo = gerarNomeArquivo(arquivo, idUsuario, `${tipo}/`);
 
-    // Faz upload
+    // Faz upload da imagem
     const resultado = await uploadArquivo(bucket, caminhoArquivo, arquivo);
 
+    // Verifica se houve erro no upload
     if (resultado.error) {
       return { 
         data: null, 
@@ -140,6 +145,7 @@ export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa
       };
     }
 
+    // Retorna resultado do upload
     return {
       data: {
         path: resultado.data?.path || caminhoArquivo,
@@ -158,9 +164,9 @@ export async function uploadImagem(arquivo: File, idUsuario: string, tipo: 'capa
 }
 
 // Deleta arquivo de jogo
-export async function deletarArquivoJogo(caminhoArquivo: string): Promise<ResultadoDelecao> {
+export async function deleteArquivoJogo(caminhoArquivo: string): Promise<ResultadoDelecao> {
   try {
-    const resultado = await deletarArquivo(BUCKETS.JOGOS, caminhoArquivo);
+    const resultado = await deleteArquivo(BUCKETS.JOGOS, caminhoArquivo);
     return resultado;
   } catch (error) {
     console.error('Erro ao deletar arquivo do jogo:', error);
@@ -169,10 +175,13 @@ export async function deletarArquivoJogo(caminhoArquivo: string): Promise<Result
 }
 
 // Deleta imagem (capa ou screenshot)
-export async function deletarImagem(caminhoArquivo: string, tipo: 'capa' | 'screenshot'): Promise<ResultadoDelecao> {
+export async function deleteImagem(caminhoArquivo: string, tipo: 'capa' | 'screenshot'): Promise<ResultadoDelecao> {
   try {
+    // Determina bucket 
     const bucket = tipo === 'capa' ? BUCKETS.IMAGENS : BUCKETS.SCREENSHOTS;
-    const resultado = await deletarArquivo(bucket, caminhoArquivo);
+
+    // Deleta imagem 
+    const resultado = await deleteArquivo(bucket, caminhoArquivo);
     return resultado;
   } catch (error) {
     console.error('Erro ao deletar imagem:', error);
@@ -182,7 +191,7 @@ export async function deletarImagem(caminhoArquivo: string, tipo: 'capa' | 'scre
 
 // Obtém URL pública de qualquer arquivo
 export function obterUrlArquivo(bucket: string, caminho: string): string | null {
-  return obterUrlPublica(bucket, caminho);
+  return getUrlPublica(bucket, caminho);
 }
 
 // Converte bytes em formato legível
@@ -221,14 +230,16 @@ export async function uploadLote(
     
     try {
       let resultado: ResultadoUpload;
-      
+
+      // Faz o upload baseado no tipo do arquivo
       if (tipo === 'jogo') resultado = await uploadArquivoJogo(arquivo, idUsuario);
       else if (tipo === 'imagem' && tipoImagem) resultado = await uploadImagem(arquivo, idUsuario, tipoImagem);
       else {
         erros.push(`Tipo de upload inválido para arquivo: ${arquivo.name}`);
         continue;
       }
-      
+
+      // Verifica se houve erro no upload
       if (resultado.error) erros.push(`Erro ao fazer upload de ${arquivo.name}: ${resultado.error.message}`);
       else resultados.push(resultado);
     } catch (error) {
