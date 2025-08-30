@@ -202,7 +202,7 @@ export default function DetalhesJogoPage() {
           </div>
 
           {/* Informações laterais */}
-          <div className="space-y-6 sticky top-15 self-start">
+          <div className="space-y-6 sticky top-20 self-start">
             {/* Card principal */}
             <div className="rounded-lg">
               <div className="text-center mb-6">
