@@ -83,7 +83,7 @@ export default function CardJogoDev({ jogo, onClick, onDelete, priority = false 
         </div>
 
         {/* Botões de Ação */}
-        <div className="absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute top-2 right-2 z-10 flex gap-1">
           <button
             onClick={handleEdit}
             className="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-full transition-colors"

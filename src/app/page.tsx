@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getJogosEmDestaque } from '@/lib/database';
 import type { Jogo } from '@/types';
 
+// Página inicial
 export default function Home() {
   const router = useRouter();
   const [jogosDestaque, setJogosDestaque] = useState<Jogo[]>([]);
