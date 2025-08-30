@@ -279,7 +279,7 @@ function AreaJogos() {
             /* Estado vazio */
             <div className="text-center py-10">
               <div className="mx-auto max-w-2xl">
-                <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+                <DotLottieReact src={"/assets/lotties/error.lottie"} loop autoplay />
               </div>
               <h3 className="text-xl font-semibold mb-2">
                 Nenhum jogo encontrado

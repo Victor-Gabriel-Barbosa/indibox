@@ -61,7 +61,7 @@ export default function AuthCallback() {
         {exibirSucesso ? (
           <>
             <DotLottieReact
-              src="/assets/success.lottie"
+              src="/assets/lotties/success.lottie"
               loop={false}
               autoplay
               style={{ width: 200, height: 200, margin: '0 auto' }}

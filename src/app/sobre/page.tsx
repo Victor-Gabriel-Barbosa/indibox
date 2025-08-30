@@ -18,7 +18,7 @@ export default function Sobre() {
           <p className="text-xl mb-4 max-w-4xl mx-auto text-gray-600 dark:text-gray-400">
             Uma plataforma criada com paixão para conectar desenvolvedores independentes com jogadores que buscam experiências únicas e inovadoras, totalmente gratuitas.
           </p>
-          <DotLottieReact src={"/assets/game-asset.lottie"} loop autoplay style={{ margin: '0 auto', maxWidth: '900px', width: '100%', height: 'auto' }} />
+          <DotLottieReact src={"/assets/lotties/game-asset.lottie"} loop autoplay style={{ margin: '0 auto', maxWidth: '900px', width: '100%', height: 'auto' }} />
         </div>
       </section>
 
@@ -133,7 +133,7 @@ export default function Sobre() {
           </div>
 
           <div className="mx-auto max-w-2xl overflow-x-clip">
-            <DotLottieReact src="/assets/robot.lottie" loop autoplay
+            <DotLottieReact src="/assets/lotties/robot.lottie" loop autoplay
               style={{
                 margin: '0 auto',
                 maxWidth: '400px',

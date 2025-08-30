@@ -96,7 +96,7 @@ export default function MeusJogosPage() {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center">
             <div className="mx-auto max-w-2xl">
-              <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+              <DotLottieReact src={"/assets/lotties/error.lottie"} loop autoplay />
             </div>
             <h1 className="text-3xl font-bold mb-4">Acesso Restrito</h1>
             <p className="text-xl mb-8">
@@ -184,7 +184,7 @@ export default function MeusJogosPage() {
         ) : jogosFiltrados.length === 0 ? (
           <div className="text-center py-10">
             <div className="mx-auto max-w-2xl">
-              <DotLottieReact src={"/assets/error.lottie"} loop autoplay />
+              <DotLottieReact src={"/assets/lotties/error.lottie"} loop autoplay />
             </div>
             <h2 className="text-2xl font-bold mb-4">
               {filtroStatus === 'todos' ? 'Nenhum jogo encontrado' : `Nenhum jogo ${filtroStatus === 'publicado' ? 'publicado' : filtroStatus === 'rascunho' ? 'em rascunho' : 'arquivado'}`}

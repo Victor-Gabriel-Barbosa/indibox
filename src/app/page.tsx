@@ -247,7 +247,7 @@ export default function Home() {
             <span>Explorar Jogos Agora</span>
           </Link>
           <div className="mx-auto max-w-2xl">
-            <DotLottieReact src={"/assets/game-asset.lottie"} loop autoplay />
+            <DotLottieReact src={"/assets/lotties/game-asset.lottie"} loop autoplay />
           </div>
         </div>
       </section>
