@@ -17,7 +17,37 @@
 
 ## 📷 Capturas de Tela
 
-> *Interface moderna com tema claro/escuro, carrossel de jogos em destaque e design responsivo.*
+> **Página Inicial**
+> <img width="1918" height="975" alt="image" src="https://github.com/user-attachments/assets/3bf5fb11-9bc8-4ff0-9151-ff4f4d1aaf1f" />
+> <img width="1919" height="893" alt="image" src="https://github.com/user-attachments/assets/72fd5175-f642-41b6-b18d-cef524149d89" />
+> <img width="1919" height="885" alt="image" src="https://github.com/user-attachments/assets/1fc4f4b2-37bd-4cf1-a517-8bc7d2c158f4" />
+
+> **Página de Jogos**
+> <img width="1919" height="930" alt="image" src="https://github.com/user-attachments/assets/52dfe130-6ce6-4d96-9aff-1664aade0ed8" />
+> <img width="1919" height="939" alt="image" src="https://github.com/user-attachments/assets/9b655ff2-56c4-4dd5-b17a-244289c7b634" />
+
+> **Página de Desenvolvedores**
+> <img width="1919" height="931" alt="image" src="https://github.com/user-attachments/assets/152c6c30-0c3e-4e69-bd94-a62f5aeb6c4d" />
+> <img width="1919" height="966" alt="image" src="https://github.com/user-attachments/assets/1bb29187-6ebd-472d-a37a-e84f40d5f0cd" />
+> <img width="1919" height="450" alt="image" src="https://github.com/user-attachments/assets/435af9db-4dd8-4ede-8f12-729927553ae8" />
+
+
+> **Página Sobre**
+> <img width="1919" height="884" alt="image" src="https://github.com/user-attachments/assets/cf862f14-e6c1-407a-ac68-01c5ce71a7f2" />
+> <img width="1919" height="784" alt="image" src="https://github.com/user-attachments/assets/a52f4a7f-ecb4-4dd1-b47e-4c607d90a427" />
+> <img width="1919" height="806" alt="image" src="https://github.com/user-attachments/assets/bb686326-0b06-47df-9404-01954fe60669" />
+> <img width="1919" height="733" alt="image" src="https://github.com/user-attachments/assets/14c0c8cc-7192-4cac-868b-8a2d446c6af8" />
+> <img width="1919" height="986" alt="image" src="https://github.com/user-attachments/assets/24526c98-278c-4cb2-a59a-b686cbc1315c" />
+> <img width="1919" height="450" alt="image" src="https://github.com/user-attachments/assets/82c16c20-07b0-40bb-b49c-089f47c77281" />
+
+
+
+
+
+
+
+
+
 
 ---
 
