@@ -4,7 +4,6 @@ export { default as Footer } from "./Footer";
 export { default as Layout } from "./Layout";
 export { default as LoginModal } from "./LoginModal";
 export { default as ConfirmModal } from "./ConfirmModal";
-export { default as Providers } from "./Providers";
 export { default as GameCard } from "./CardJogo";
 export { default as GameCardDev } from "./CardJogoDev";
 export { default as Pagination } from "./Paginacao";
