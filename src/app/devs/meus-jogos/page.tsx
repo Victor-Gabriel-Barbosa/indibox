@@ -25,6 +25,7 @@ export default function MeusJogosPage() {
 
       try {
         setLoadingJogos(true);
+        
         // Obtém jogos do usuário
         const { data, error } = await getJogosUsuario(usuario.id);
 

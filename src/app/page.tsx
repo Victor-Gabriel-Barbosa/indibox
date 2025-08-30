@@ -20,9 +20,11 @@ export default function Home() {
     async function carregarJogosDestaque() {
       try {
         setLoadingJogos(true);
-        
+
+        // Obtém jogos em destaque
         const { data, error } = await getJogosEmDestaque();
 
+        // Verifica se houve erro ao carregar jogos
         if (error) console.error('Erro ao carregar jogos em destaque:', error);
         else if (data) setJogosDestaque(data);
       } catch (error) {

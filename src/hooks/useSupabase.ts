@@ -23,6 +23,7 @@ export function useJogos() {
   const fetchJogos = async () => {
     try {
       setLoading(true);
+
       // Busca jogos publicados
       const { data, error } = await getJogosPublicados();
 
@@ -33,7 +34,7 @@ export function useJogos() {
       }
 
       // Atualiza o estado com os jogos publicados
-      setJogos(data ?? []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos');
@@ -70,7 +71,7 @@ export function useJogosEmDestaque() {
         return;
       }
 
-      setJogos(data ?? []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro ao carregar jogos em destaque');
@@ -125,6 +126,7 @@ export function useJogo(idJogo: string | null) {
 
   // Executa a busca ao montar o componente
   useEffect(() => {
+    // Faz a busca do jogo se o ID estiver disponível
     if (idJogo) fetchJogo();
     else {
       setJogo(null);
@@ -162,7 +164,7 @@ export function useBuscarJogos() {
       }
 
       // Atualiza os jogos encontrados
-      setJogos(data ?? []);
+      setJogos(data || []);
       setError(null);
     } catch (err) {
       setError('Erro na pesquisa');
@@ -199,7 +201,7 @@ export function useFavoritos() {
       }
 
       // Extrai apenas os jogos dos favoritos
-      const jogosFavoritos = data?.map(fav => fav.jogos).filter(Boolean) ?? [];
+      const jogosFavoritos = data?.map(fav => fav.jogos).filter(Boolean) || [];
 
       // Atualiza o estado com os jogos favoritos
       setFavoritos(jogosFavoritos as Jogo[]);

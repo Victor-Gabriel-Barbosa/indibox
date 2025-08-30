@@ -1,3 +1,4 @@
+// Tipos JSON suportados
 export type Json =
   | string
   | number
@@ -6,6 +7,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+// Interface para o banco de dados
 export interface Database {
   public: {
     Tables: {

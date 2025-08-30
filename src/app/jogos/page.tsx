@@ -38,7 +38,7 @@ function AreaJogos() {
   const carregarJogos = async (pagina: number = 1, novosFiltros?: FiltrosState) => {
     try {
       setCarregando(true);
-      const filtrosParaUsar = novosFiltros ?? filtros;
+      const filtrosParaUsar = novosFiltros || filtros;
       
       const { data, error, totalJogos, totalPaginas } = await getJogosComPaginacao(
         pagina,

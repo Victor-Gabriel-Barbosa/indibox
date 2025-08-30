@@ -62,8 +62,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email_verificado: usuario.email_confirmed_at ? true : false,
       };
 
+      // Sincroniza dados do usuário no banco
       const { data, error } = await upsertUsuario(dadosUsuario);
-      
+
+      // Verifica se houve erro na sincronização
       if (error) {
         console.error('Erro ao sincronizar usuário:', error);
         return null;
@@ -164,6 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Login com Google
   const signInGoogle = async () => {
+    // Verifica se o Supabase está disponível
     if (!sb) {
       console.error('Supabase não configurado');
       return;
@@ -171,7 +174,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     // Armazena a URL atual para redirecionamento após login
     salvarUrlRedir();
-    
+
+    // Inicia o login com Google
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -194,14 +198,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     // Armazena a URL atual para redirecionamento após login
     salvarUrlRedir();
-    
+
+    // Inicia o login com GitHub
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'github',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`
       }
     });
-    
+
+    // Verifica se houve erro no login
     if (error) {
       console.error('Erro no login com GitHub:', error);
       throw error;
@@ -218,7 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Faz o logout
     const { error } = await sb.auth.signOut();
 
-    // V
+    // Verifica se houve erro no logout
     if (error) {
       console.error('Erro no logout:', error);
       throw error;

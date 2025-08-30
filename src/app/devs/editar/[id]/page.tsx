@@ -80,7 +80,7 @@ export default function EditarJogoPage() {
           descricao: data.descricao || '',
           descricao_curta: data.descricao_curta || '',
           desenvolvedor: data.desenvolvedor || '',
-          data_lancamento: data.data_lancamento ?? '',
+          data_lancamento: data.data_lancamento || '',
           genero: data.genero || [],
           tags: data.tags?.join(', ') || '',
           url_download: data.url_download || '',

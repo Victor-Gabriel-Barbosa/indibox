@@ -1,4 +1,4 @@
-// Dados centralizados de gêneros e plataformas
+// Exporta gêneros disponíveis
 export const GENEROS_DISPONIVEIS = [
   'Ação',
   'Aventura',
@@ -23,6 +23,7 @@ export const GENEROS_DISPONIVEIS = [
   'Survival Horror'
 ] as const;
 
+// Exporta plataformas disponíveis
 export const PLATAFORMAS_DISPONIVEIS = [
   'Windows',
   'Linux',
@@ -43,6 +44,6 @@ export interface GameData {
   plataformas: Plataforma[];
 }
 
-// Funções utilitárias
+// Exporta funções para obter os dados
 export const getGeneros = (): readonly Genero[] => GENEROS_DISPONIVEIS;
 export const getPlataformas = (): readonly Plataforma[] => PLATAFORMAS_DISPONIVEIS;

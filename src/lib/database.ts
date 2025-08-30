@@ -11,12 +11,14 @@ export async function getJogosPublicados() {
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca dos jogos
     const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('status', 'publicado')
       .order('criado_em', { ascending: false });
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar jogos:', error);
       return { data: null, error };
@@ -34,6 +36,7 @@ export async function getJogosEmDestaque() {
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca dos jogos em destaque
     const { data, error } = await sb
       .from('jogos')
       .select('*')
@@ -42,6 +45,7 @@ export async function getJogosEmDestaque() {
       .order('contador_download', { ascending: false })
       .limit(10);
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar jogos em destaque:', error);
       return { data: null, error };
@@ -79,6 +83,7 @@ export async function getJogosComPaginacao(
   }
 
   try {
+    // Faz a busca dos jogos
     let query = sb
       .from('jogos')
       .select('*', { count: 'exact' })
@@ -101,6 +106,7 @@ export async function getJogosComPaginacao(
 
     const { data, error, count } = await query;
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar jogos com paginação:', error);
       return { data: null, error, totalJogos: 0, totalPaginas: 0, paginaAtual: pagina };
@@ -127,12 +133,14 @@ export async function getJogoPorID(id: string) {
   if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca do jogo
     const { data, error } = await sb
       .from('jogos')
       .select('*, usuarios(*)')
       .eq('id', id)
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar jogo:', error);
       return { data: null, error };
@@ -150,6 +158,7 @@ export async function getJogos(query: string) {
   if (!sbConfig || !sb) return { data: [], error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca dos jogos
     const { data, error } = await sb
       .from('jogos')
       .select('*')
@@ -211,6 +220,7 @@ export async function upsertUsuario(usuario: UsuarioInsert) {
           .select()
           .single();
 
+        // Verifica se houve erro mesmo com admin
         if (adminError) {
           console.error('❌ Erro mesmo com cliente Admin:', adminError);
           return { data: null, error: adminError };
@@ -224,7 +234,6 @@ export async function upsertUsuario(usuario: UsuarioInsert) {
     }
 
     return { data, error: null };
-
   } catch (error) {
     console.error('❌ Erro exceção ao criar/atualizar usuário:', error);
     return { data: null, error: { message: 'Erro interno do servidor' } };
@@ -242,13 +251,15 @@ export async function getFavoritosUsuario(idUsuario: string) {
   try {
     // Valida se é um UUID válido
     if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    
+
+    // Faz a busca dos jogos favoritos
     const { data, error } = await sb
       .from('favoritos')
       .select('*, jogos(*)')
       .eq('id_usuario', idUsuario)
       .order('criado_em', { ascending: false });
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar favoritos:', error);
       return { data: null, error };
@@ -268,7 +279,8 @@ export async function ehJogoFavorito(idUsuario: string, idJogo: string) {
   try {
     // Valida se é um UUID válido
     if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    
+
+    // Faz a busca do jogo favorito
     const { data, error } = await sb
       .from('favoritos')
       .select('id')
@@ -276,6 +288,7 @@ export async function ehJogoFavorito(idUsuario: string, idJogo: string) {
       .eq('id_jogo', idJogo)
       .maybeSingle();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao verificar favorito:', error);
       return { ehFavorito: false, error };
@@ -295,13 +308,15 @@ export async function insertJogoFavorito(idUsuario: string, idJogo: string) {
   try {
     // Valida se é um UUID válido
     if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    
+
+    // Faz a busca do jogo favorito
     const { data, error } = await sb
       .from('favoritos')
       .insert({ id_usuario: idUsuario, id_jogo: idJogo })
       .select()
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao adicionar aos favoritos:', error);
       return { data: null, error };
@@ -321,13 +336,15 @@ export async function deleteJogoFavorito(idUsuario: string, idJogo: string) {
   try {
     // Valida se é um UUID válido
     if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    
+
+    // Faz a busca do jogo favorito
     const { error } = await sb
       .from('favoritos')
       .delete()
       .eq('id_usuario', idUsuario)
       .eq('id_jogo', idJogo);
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao remover dos favoritos:', error);
       return { success: false, error };
@@ -348,12 +365,14 @@ export async function insertJogo(dadosJogo: Omit<JogoInsert, 'id' | 'criado_em' 
     // Valida se o ID do usuário é um UUID válido
     if (!validate(dadosJogo.id_usuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
 
+    // Faz a busca do jogo
     const { data, error } = await sb
       .from('jogos')
       .insert(dadosJogo)
       .select()
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao inserir jogo:', error);
       return { data: null, error };
@@ -371,6 +390,7 @@ export async function updateJogo(id: string, dadosJogo: JogoUpdate) {
   if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca do jogo
     const { data, error } = await sb
       .from('jogos')
       .update(dadosJogo)
@@ -378,6 +398,7 @@ export async function updateJogo(id: string, dadosJogo: JogoUpdate) {
       .select()
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao atualizar jogo:', error);
       return { data: null, error };
@@ -397,13 +418,15 @@ export async function getJogosUsuario(idUsuario: string) {
   try {
     // Valida se é um UUID válido
     if (!validate(idUsuario)) throw new Error('ID de usuário inválido - deve ser um UUID válido');
-    
+
+    // Faz a busca dos jogos 
     const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('id_usuario', idUsuario)
       .order('criado_em', { ascending: false });
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao obter jogos do usuário:', error);
       return { data: null, error };
@@ -421,12 +444,14 @@ export async function getJogoPorId(idJogo: string) {
   if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca do jogo
     const { data, error } = await sb
       .from('jogos')
       .select('*')
       .eq('id', idJogo)
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao obter jogo:', error);
       return { data: null, error };
@@ -459,6 +484,7 @@ export async function getDev() {
       .eq('papel', 'desenvolvedor')
       .eq('jogos.status', 'publicado');
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao obter desenvolvedores:', error);
       return { data: null, error };
@@ -490,6 +516,7 @@ export async function getDevPorId(idDesenvolvedor: string) {
   if (!sbConfig || !sb) return { data: null, error: { message: 'Banco de dados não configurado' } };
 
   try {
+    // Faz a busca do desenvolvedor
     const { data, error } = await sb
       .from('usuarios')
       .select(`
@@ -506,6 +533,7 @@ export async function getDevPorId(idDesenvolvedor: string) {
       .eq('jogos.status', 'publicado')
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao obter desenvolvedor:', error);
       return { data: null, error };
@@ -516,6 +544,7 @@ export async function getDevPorId(idDesenvolvedor: string) {
     const totalDownloads = data?.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.contador_download || 0), 0) || 0;
     const avaliacaoMedia = jogosPublicados > 0 ? (data?.jogos?.reduce((total: number, jogo: JogoEstatistica) => total + (jogo.avaliacao || 0), 0) / jogosPublicados) || 0 : 0;
 
+    // Cria objeto com estatísticas do desenvolvedor
     const desenvolvedorComEstatisticas = {
       ...data,
       jogosPublicados,
@@ -544,20 +573,23 @@ export async function deleteJogo(idJogo: string, idUsuario: string) {
       .eq('id_usuario', idUsuario)
       .single();
 
+    // Verifica se houve erro na busca
     if (erro) {
       console.error('Erro ao verificar jogo:', erro);
       return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
     }
 
+    // Verifica se o jogo existe
     if (!jogoExistente) return { error: { message: 'Jogo não encontrado ou você não tem permissão para deletá-lo' } };
 
-    // Se chegou até aqui o usuário tem permissão para deletar o jogo
+    // Deleta o jogo
     const { error } = await sb
       .from('jogos')
       .delete()
       .eq('id', idJogo)
       .eq('id_usuario', idUsuario);
 
+    // Verifica se houve erro na deleção
     if (error) {
       console.error('Erro ao deletar jogo:', error);
       return { error };
@@ -580,6 +612,7 @@ export async function getAvaliacoesJogo(idJogo: string) {
   if (!validate(idJogo)) return { data: [], error: { message: 'ID do jogo inválido' } };
 
   try {
+    // Faz a busca das avaliações
     const { data, error } = await sb
       .from('avaliacoes')
       .select(`
@@ -592,6 +625,7 @@ export async function getAvaliacoesJogo(idJogo: string) {
       .eq('id_jogo', idJogo)
       .order('criado_em', { ascending: false });
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar avaliações:', error);
       return { data: null, error };
@@ -610,6 +644,7 @@ export async function getAvaliacaoUsuario(idJogo: string, idUsuario: string) {
   if (!validate(idJogo) || !validate(idUsuario)) return { data: null, error: { message: 'IDs inválidos' } };
 
   try {
+    // Faz a busca da avaliação
     const { data, error } = await sb
       .from('avaliacoes')
       .select('*')
@@ -617,6 +652,7 @@ export async function getAvaliacaoUsuario(idJogo: string, idUsuario: string) {
       .eq('id_usuario', idUsuario)
       .maybeSingle();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao buscar avaliação do usuário:', error);
       return { data: null, error };
@@ -641,6 +677,7 @@ export async function upsertAvaliacao(
   if (avaliacao < 1 || avaliacao > 5) return { data: null, error: { message: 'Avaliação deve ser entre 1 e 5 estrelas' } };
 
   try {
+    // Faz a busca da avaliação
     const { data, error } = await sb
       .from('avaliacoes')
       .upsert({
@@ -654,6 +691,7 @@ export async function upsertAvaliacao(
       .select()
       .single();
 
+    // Verifica se houve erro na busca
     if (error) {
       console.error('Erro ao salvar avaliação:', error);
       return { data: null, error };
@@ -672,12 +710,14 @@ export async function deleteAvaliacao(idJogo: string, idUsuario: string) {
   if (!validate(idJogo) || !validate(idUsuario)) return { error: { message: 'IDs inválidos' } };
 
   try {
+    // Faz a busca da avaliação
     const { error } = await sb
       .from('avaliacoes')
       .delete()
       .eq('id_jogo', idJogo)
       .eq('id_usuario', idUsuario);
 
+    // Verifica se houve erro na deleção
     if (error) {
       console.error('Erro ao deletar avaliação:', error);
       return { error };

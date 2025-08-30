@@ -76,9 +76,8 @@ const uploadArquivo = async (bucket: string, caminho: string, arquivo: File) => 
         upsert: false
       });
 
-    if (error) {
-      return { data: null, error: { message: error.message || 'Erro no upload' } };
-    }
+    // Verifica se houve erro no upload
+    if (error) return { data: null, error: { message: error.message || 'Erro no upload' } };
 
     // Obtém URL pública do arquivo
     const { data: urlData } = sb.storage
