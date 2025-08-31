@@ -2,6 +2,12 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer base {
+  button, select:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -32,10 +38,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-button, select {
-  cursor: pointer;
 }
 
 .bg-background {
@@ -73,9 +75,9 @@ button, select {
   }
 
   &:hover img {
-  transform: scale(1.1);
-  transition: all 1s ease;
-}
+    transform: scale(1.1);
+    transition: all 1s ease;
+  }
 }
 
 .swiper-top-games {
@@ -89,12 +91,13 @@ button, select {
   height: 100%;
 }
 
-.swiper-button-next, .swiper-button-prev {
+.swiper-button-next,
+.swiper-button-prev {
   color: var(--color-indigo-600);
   font-weight: 1000;
 
   &:hover {
-   color: var(--color-indigo-700); 
+    color: var(--color-indigo-700);
   }
 }
 
@@ -102,6 +105,7 @@ button, select {
   &\:scale-110 {
     transform: scale(1.1);
   }
+
   &\:scale-150 {
     transform: scale(1.5);
   }
@@ -129,8 +133,13 @@ button, select {
 }
 
 @keyframes shine {
-  0% { transform: translateX(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) rotate(45deg); }
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
 }
 
 .line-clamp-1 {

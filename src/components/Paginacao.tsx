@@ -38,7 +38,7 @@ export default function Paginacao({ paginaAtual, totalPaginas, onMudarPagina }: 
         disabled={paginaAtual === 1}
         className="px-3 py-2 text-sm font-medium text-gray-500 bg-white dark:bg-gray-800 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        ← Anterior
+        ←
       </button>
 
       {/* Primeira página se não estiver visível */}
@@ -92,7 +92,7 @@ export default function Paginacao({ paginaAtual, totalPaginas, onMudarPagina }: 
         disabled={paginaAtual === totalPaginas}
         className="px-3 py-2 text-sm font-medium text-gray-500 bg-white dark:bg-gray-800 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        Próximo →
+        →
       </button>
     </div>
   );
