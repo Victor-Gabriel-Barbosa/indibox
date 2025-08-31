@@ -83,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!sb) return null;
     
     try {
+      // Busca dados do usuário no banco
       const { data } = await sb
         .from('usuarios')
         .select('*')
@@ -106,23 +107,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Busca sessão inicial
     sb.auth.getSession().then(({ data: { session } }) => {
       setSessao(session);
-      
+
+      // Sincroniza dados do usuário com o banco
       if (session?.user) {
         syncUsuarioDB(session.user).then(async () => {
           const idUsuario = session.user.id;
-          const userData = await fetchDadosUsuario(idUsuario);
-          
-          if (userData) {
+          const dadosUsuario = await fetchDadosUsuario(idUsuario);
+
+          // Sincroniza dados do usuário no contexto se existir
+          if (dadosUsuario) {
             setUsuario({
-              id: userData.id,
-              email: userData.email,
-              name: userData.nome || undefined,
-              image: userData.url_avatar || undefined,
-              papel: userData.papel,
-              biografia: userData.biografia,
-              site: userData.site,
-              nome_usuario_github: userData.nome_usuario_github,
-              nome_usuario_twitter: userData.nome_usuario_twitter,
+              id: dadosUsuario.id,
+              email: dadosUsuario.email,
+              name: dadosUsuario.nome || undefined,
+              image: dadosUsuario.url_avatar || undefined,
+              papel: dadosUsuario.papel,
+              biografia: dadosUsuario.biografia,
+              site: dadosUsuario.site,
+              nome_usuario_github: dadosUsuario.nome_usuario_github,
+              nome_usuario_twitter: dadosUsuario.nome_usuario_twitter,
             });
             setAutenticado(true);
           }
@@ -137,22 +140,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event, session) => {
         setSessao(session);
         
+        // Sincroniza dados do usuário com o banco
         if (event === 'SIGNED_IN' && session?.user) {
           await syncUsuarioDB(session.user);
           const idUsuario = session.user.id;
-          const userData = await fetchDadosUsuario(idUsuario);
+          const dadosUsuario = await fetchDadosUsuario(idUsuario);
           
-          if (userData) {
+          // Sincroniza dados do usuário no contexto se existir
+          if (dadosUsuario) {
             setUsuario({
-              id: userData.id,
-              email: userData.email,
-              name: userData.nome || undefined,
-              image: userData.url_avatar || undefined,
-              papel: userData.papel,
-              biografia: userData.biografia,
-              site: userData.site,
-              nome_usuario_github: userData.nome_usuario_github,
-              nome_usuario_twitter: userData.nome_usuario_twitter,
+              id: dadosUsuario.id,
+              email: dadosUsuario.email,
+              name: dadosUsuario.nome || undefined,
+              image: dadosUsuario.url_avatar || undefined,
+              papel: dadosUsuario.papel,
+              biografia: dadosUsuario.biografia,
+              site: dadosUsuario.site,
+              nome_usuario_github: dadosUsuario.nome_usuario_github,
+              nome_usuario_twitter: dadosUsuario.nome_usuario_twitter,
             });
           }
         } else if (event === 'SIGNED_OUT') setUsuario(null);
@@ -182,7 +187,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         redirectTo: `${window.location.origin}/auth/callback`
       }
     });
-    
+
+    // Verifica se houve erro no login
     if (error) {
       console.error('Erro no login com Google:', error);
       throw error;
