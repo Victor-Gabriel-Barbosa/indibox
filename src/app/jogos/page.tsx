@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Header, Footer, GameCard, Pagination, Icons, DotLottieReact } from '@/components';
+import { Header, Footer, CardJogo, Pagination, Icons, DotLottieReact } from '@/components';
 import { getJogosComPaginacao } from '@/lib/database';
 import type { Jogo } from '@/types';
 import { GENEROS_DISPONIVEIS } from '@/lib/dadosJogos';
@@ -267,7 +267,7 @@ function AreaJogos() {
             /* Grade de jogos */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {jogos.map((jogo, index) => (
-                <GameCard
+                <CardJogo
                   key={jogo.id}
                   jogo={jogo}
                   priority={index === 0} // Primeira imagem tem prioridade para LCP

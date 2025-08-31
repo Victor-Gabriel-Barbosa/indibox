@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, GameCardDev, Breadcrumb, DotLottieReact } from '@/components';
+import { Header, Footer, Icons, CardJogoDev, Breadcrumb, DotLottieReact } from '@/components';
 import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
@@ -205,7 +205,7 @@ export default function MeusJogosPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {jogosFiltrados.map((jogo, index) => (
-              <GameCardDev 
+              <CardJogoDev 
                 key={jogo.id} 
                 jogo={jogo}
                 priority={index === 0}

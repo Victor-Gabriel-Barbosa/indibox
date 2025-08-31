@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { Header, Footer, Icons, GameCardDev, DotLottieReact } from '@/components';
+import { Header, Footer, Icons, CardJogoDev, DotLottieReact } from '@/components';
 import Link from 'next/link';
 import { getJogosUsuario, deleteJogo } from '@/lib/database';
 import type { Jogo } from '@/types';
@@ -175,7 +175,7 @@ export default function DevsPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {jogosDoUsuario.slice(0, 4).map((jogo, index) => (
-                <GameCardDev
+                <CardJogoDev
                   key={jogo.id}
                   jogo={jogo}
                   priority={index === 0}
