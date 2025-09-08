@@ -42,9 +42,39 @@ export default function Footer() {
           <div>
             <h6 className="font-semibold mb-4">Suporte</h6>
             <ul className="space-y-2 text-md">
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Ajuda</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Contato</a></li>
-              <li><a href="#" className="hover:text-indigo-600 transition-colors">Reportar Bug</a></li>
+              <li>
+                <a className="hover:text-indigo-600 transition-colors" 
+                  href="mailto:indiboxsuporte@yahoo.com
+                  ?subject=Ajuda%20no%20IndiBox
+                  &body=Olá%20equipe%20IndiBox%2C%0D%0A%0D%0A
+                  Estou%20precisando%20de%20ajuda%20com%3A%20
+                  %0D%0A%0D%0A
+                  Obrigado!"
+                >
+                  Ajuda
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-indigo-600 transition-colors" href="mailto:indiboxsuporte@yahoo.com">
+                  Contato
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-indigo-600 transition-colors"
+                  href="mailto:indiboxsuporte@yahoo.com
+                  ?subject=Reporte%20de%20Bug%20no%20IndiBox
+                  &body=Olá%2C%20encontrei%20um%20bug%20no%20IndiBox.%0D%0A%0D%0A
+                  Descrição%3A%20
+                  %0D%0A
+                  Passos%20para%20reproduzir%3A%20
+                  %0D%0A
+                  Navegador%20ou%20Dispositivo%3A%20
+                  %0D%0A
+                  %0D%0AObrigado!"
+                >
+                  Reportar Bug
+                </a>
+              </li>
             </ul>
           </div>
         </div>

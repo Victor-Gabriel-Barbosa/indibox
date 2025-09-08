@@ -28,7 +28,7 @@ export function TemaProvider({ children }: TemaProviderProps) {
 
   // Carrega o tema salvo do localStorage
   useEffect(() => {
-    const temaSalvo = localStorage.getItem('indibox-theme') as Tema | null;
+    const temaSalvo = localStorage.getItem('indibox-tema') as Tema | null;
     if (temaSalvo && ['light', 'dark', 'system'].includes(temaSalvo)) setTema(temaSalvo);
   }, []);
 
@@ -56,7 +56,7 @@ export function TemaProvider({ children }: TemaProviderProps) {
 
   // Atualiza o estado e salva a preferência no localStorage
   const handleSetTema = (novoTema: Tema) => {
-    localStorage.setItem('indibox-theme', novoTema);
+    localStorage.setItem('indibox-tema', novoTema);
     setTema(novoTema);
   };
 

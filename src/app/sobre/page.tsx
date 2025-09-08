@@ -313,10 +313,10 @@ export default function Sobre() {
               <Link href="https://github.com/Victor-Gabriel-Barbosa/indibox" target="_blank" className="text-foreground/60 hover:text-indigo-600 transition-colors">
                 <Icons.BsGithub className="w-6 h-6" />
               </Link>
-              <Link href="#" className="text-foreground/60 hover:text-indigo-600 transition-colors">
-                <Icons.BsTwitter className="w-6 h-6" />
+              <Link href="https://instagram.com/victorgbor" target="_blank" className="text-foreground/60 hover:text-indigo-600 transition-colors">
+                <Icons.BsInstagram className="w-6 h-6" />
               </Link>
-              <Link href="#" className="text-foreground/60 hover:text-indigo-600 transition-colors">
+              <Link href="https://discord.com/users/759943114705338405" target="_blank" className="text-foreground/60 hover:text-indigo-600 transition-colors">
                 <Icons.BsDiscord className="w-6 h-6" />
               </Link>
             </div>
