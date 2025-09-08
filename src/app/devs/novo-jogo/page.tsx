@@ -99,8 +99,21 @@ export default function NovoJogoPage() {
   // Processa envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Previne múltiplos cliques durante o loading
+    if (enviando) return;
+    
+    // Aguarda a sincronização completa do contexto de autenticação
+    if (loading) {
+      setError('Aguarde a inicialização do sistema...');
+      return;
+    }
+    
     // Verifica se o usuário está autenticado
-    if (!usuario?.id) return;
+    if (!usuario?.id) {
+      setError('Usuário não está autenticado. Faça login novamente.');
+      return;
+    }
 
     // Valida arquivo do jogo
     if (!arquivosSelecionados.arquivoJogo) {
@@ -572,7 +585,7 @@ export default function NovoJogoPage() {
               </Link>
               <button
                 type="submit"
-                disabled={enviando || !formData.titulo || !formData.desenvolvedor || formData.genero.length === 0 || formData.plataforma.length === 0 || !arquivosSelecionados.arquivoJogo || !arquivosSelecionados.imagemCapa}
+                disabled={loading || enviando || !formData.titulo || !formData.desenvolvedor || formData.genero.length === 0 || formData.plataforma.length === 0 || !arquivosSelecionados.arquivoJogo || !arquivosSelecionados.imagemCapa}
                 className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg transition-colors flex items-center justify-center relative overflow-hidden"
               >
                 {enviando && progressoUpload > 0 && (
@@ -582,7 +595,12 @@ export default function NovoJogoPage() {
                   />
                 )}
                 <div className="relative z-10 flex items-center">
-                  {enviando ? (
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Inicializando...
+                    </>
+                  ) : enviando ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       {progressoUpload > 0 ? `Fazendo Upload... ${Math.round(progressoUpload)}%` : 'Publicando...'}
