@@ -1,6 +1,6 @@
-# 🎮 IndieBox
+# 🎮 IndiBox
 
-**IndieBox** é uma plataforma web inspirada no [itch.io](https://itch.io), dedicada exclusivamente a **jogos indie gratuitos**. Nosso objetivo é criar um espaço acessível onde desenvolvedores independentes possam compartilhar suas criações e jogadores descubram experiências únicas, criativas e **100% sem custo**.
+**IndiBox** é uma plataforma web inspirada no [itch.io](https://itch.io), dedicada exclusivamente a **jogos indie gratuitos**. Nosso objetivo é criar um espaço acessível onde desenvolvedores independentes possam compartilhar suas criações e jogadores descubram experiências únicas, criativas e **100% sem custo**.
 
 **🌐 Acesse a plataforma:** [indibox.vercel.app](https://indibox.vercel.app/)
 
